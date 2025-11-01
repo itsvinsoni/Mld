@@ -1,42 +1,39 @@
 import React, { useState } from 'react';
-import type { Student, UserRole } from '../types';
+import type { Faculty, UserRole } from '../types';
 import { UserRole as Roles } from '../types';
 import { SearchIcon } from '../components/icons';
 
-interface StudentManagementProps {
-    students: Student[];
+interface FacultyManagementProps {
+    faculty: Faculty[];
     userRole: UserRole;
 }
 
-const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRole }) => {
+const FacultyManagement: React.FC<FacultyManagementProps> = ({ faculty, userRole }) => {
     const [searchTerm, setSearchTerm] = useState('');
     
     const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD].includes(userRole);
 
-    const filteredStudents = students.filter(student =>
-        student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.rollNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.course.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredFaculty = faculty.filter(f =>
+        f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        f.course.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    const getStatusChipClass = (status: 'Paid' | 'Pending' | 'Partial') => {
-        switch (status) {
-            case 'Paid': return 'bg-green-500/20 text-green-600 dark:text-green-300';
-            case 'Pending': return 'bg-red-500/20 text-red-600 dark:text-red-300';
-            case 'Partial': return 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-300';
-        }
-    };
+    
+    const getProgressBarColor = (progress: number) => {
+        if (progress > 80) return 'bg-green-500';
+        if (progress > 50) return 'bg-yellow-500';
+        return 'bg-red-500';
+    }
 
     return (
         <div className="bg-light-surface dark:bg-dark-surface p-6 rounded-2xl shadow-lg">
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                <h2 className="text-2xl font-bold text-light-textPrimary dark:text-dark-textPrimary">Student Management</h2>
+                <h2 className="text-2xl font-bold text-light-textPrimary dark:text-dark-textPrimary">Faculty Management</h2>
                 <div className="w-full md:w-auto flex items-center gap-4">
                     <div className="relative w-full md:w-64">
                         <SearchIcon className="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" />
                         <input
                             type="text"
-                            placeholder="Search students..."
+                            placeholder="Search faculty..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-700 border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
@@ -44,7 +41,7 @@ const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRol
                     </div>
                     {canEdit && (
                         <button className="bg-brand-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-orange-dark transition duration-300 whitespace-nowrap">
-                            + Add Student
+                            + Add Faculty
                         </button>
                     )}
                 </div>
@@ -55,30 +52,26 @@ const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRol
                     <thead className="text-xs uppercase bg-slate-50 dark:bg-dark-surface/50 text-slate-500 dark:text-slate-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">Name</th>
-                            <th scope="col" className="px-6 py-3">Roll No</th>
-                            <th scope="col" className="px-6 py-3">Course</th>
-                            <th scope="col" className="px-6 py-3">Fee Status</th>
-                            <th scope="col" className="px-6 py-3">Attendance</th>
+                            <th scope="col" className="px-6 py-3">Department</th>
+                            <th scope="col" className="px-6 py-3">Contact</th>
+                            <th scope="col" className="px-6 py-3">Syllabus Progress</th>
                             <th scope="col" className="px-6 py-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredStudents.map(student => (
-                            <tr key={student.id} className="border-b border-light-border dark:border-dark-border hover:bg-slate-50 dark:hover:bg-dark-surface/50">
-                                <td className="px-6 py-4 font-medium text-light-textPrimary dark:text-dark-textPrimary">
-                                    <div className="flex items-center gap-3">
-                                        <img className="w-8 h-8 rounded-full object-cover" src={`https://picsum.photos/seed/${student.name.split(' ')[0]}/40/40`} alt={student.name} />
-                                        <span>{student.name}</span>
+                        {filteredFaculty.map(member => (
+                            <tr key={member.id} className="border-b border-light-border dark:border-dark-border hover:bg-slate-50 dark:hover:bg-dark-surface/50">
+                                <td className="px-6 py-4 font-medium text-light-textPrimary dark:text-dark-textPrimary">{member.name}</td>
+                                <td className="px-6 py-4">{member.course}</td>
+                                <td className="px-6 py-4">{member.contact}</td>
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center">
+                                        <div className="w-full bg-slate-200 dark:bg-slate-600 rounded-full h-2.5 mr-2">
+                                            <div className={`${getProgressBarColor(member.syllabusProgress)} h-2.5 rounded-full`} style={{ width: `${member.syllabusProgress}%` }}></div>
+                                        </div>
+                                        <span>{member.syllabusProgress}%</span>
                                     </div>
                                 </td>
-                                <td className="px-6 py-4">{student.rollNo}</td>
-                                <td className="px-6 py-4">{student.course}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusChipClass(student.feeStatus)}`}>
-                                        {student.feeStatus}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4">{student.attendancePercentage}%</td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center space-x-2">
                                         <button className="text-blue-500 hover:underline text-xs">View</button>
@@ -94,4 +87,4 @@ const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRol
     );
 };
 
-export default StudentManagement;
+export default FacultyManagement;

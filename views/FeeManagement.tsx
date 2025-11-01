@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Fee, Student, UserRole } from '../types';
 import { UserRole as Roles } from '../types';
@@ -26,9 +25,9 @@ const FeeManagement: React.FC<FeeManagementProps> = ({ fees, students, userRole 
     }
 
     return (
-        <div className="bg-slate-800 p-6 rounded-2xl shadow-lg">
+        <div className="bg-light-surface dark:bg-dark-surface p-6 rounded-2xl shadow-lg">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-slate-100">Fee Management</h2>
+                <h2 className="text-2xl font-bold text-light-textPrimary dark:text-dark-textPrimary">Fee Management</h2>
                 {canEdit && (
                     <button className="bg-brand-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-orange-dark transition duration-300">
                         + Add Fee Entry
@@ -36,8 +35,8 @@ const FeeManagement: React.FC<FeeManagementProps> = ({ fees, students, userRole 
                 )}
             </div>
             <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left text-slate-400">
-                    <thead className="text-xs text-slate-400 uppercase bg-slate-700/50">
+                <table className="w-full text-sm text-left text-light-textSecondary dark:text-dark-textSecondary">
+                    <thead className="text-xs uppercase bg-slate-50 dark:bg-dark-surface/50 text-slate-500 dark:text-slate-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">Student Name</th>
                             <th scope="col" className="px-6 py-3">Roll No</th>
@@ -50,16 +49,16 @@ const FeeManagement: React.FC<FeeManagementProps> = ({ fees, students, userRole 
                     </thead>
                     <tbody>
                         {feeRecords.map(record => (
-                            <tr key={record.id} className="border-b border-slate-700 hover:bg-slate-700/50">
-                                <td className="px-6 py-4 font-medium text-slate-200">{record.studentName}</td>
+                            <tr key={record.id} className="border-b border-light-border dark:border-dark-border hover:bg-slate-50 dark:hover:bg-dark-surface/50">
+                                <td className="px-6 py-4 font-medium text-light-textPrimary dark:text-dark-textPrimary">{record.studentName}</td>
                                 <td className="px-6 py-4">{record.rollNo}</td>
                                 <td className="px-6 py-4">{record.date}</td>
-                                <td className="px-6 py-4 text-green-400 font-medium">{formatCurrency(record.amountPaid)}</td>
-                                <td className={`px-6 py-4 font-medium ${record.remainingDue > 0 ? 'text-red-400' : 'text-slate-400'}`}>{formatCurrency(record.remainingDue)}</td>
+                                <td className="px-6 py-4 text-green-600 dark:text-green-400 font-medium">{formatCurrency(record.amountPaid)}</td>
+                                <td className={`px-6 py-4 font-medium ${record.remainingDue > 0 ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}>{formatCurrency(record.remainingDue)}</td>
                                 <td className="px-6 py-4">{formatCurrency(record.totalFee)}</td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center space-x-2">
-                                        <button className="text-blue-400 hover:underline text-xs">Receipt</button>
+                                        <button className="text-blue-500 hover:underline text-xs">Receipt</button>
                                         {canEdit && <button className="text-brand-orange hover:underline text-xs">Edit</button>}
                                     </div>
                                 </td>

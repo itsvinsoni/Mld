@@ -1,5 +1,4 @@
-
-import type { User, Student, Faculty, Fee, Notice } from './types';
+import type { User, Student, Faculty, Fee, Notice, College, Course, Book } from './types';
 import { UserRole } from './types';
 
 export const MOCK_USERS: User[] = [
@@ -12,34 +11,58 @@ export const MOCK_USERS: User[] = [
 ];
 
 export const MOCK_STUDENTS: Student[] = [
-    { id: 's1', name: 'Priya Sharma', rollNo: 'CS101', course: 'Computer Science', batch: '2024', admissionDate: '2024-01-15', feeStatus: 'Paid', attendancePercentage: 92, booksIssued: [{ bookName: 'Intro to Algorithms', issueDate: '2024-03-10' }], contact: '555-0101' },
+    { id: 's1', name: 'Priya Sharma', rollNo: 'CS101', course: 'Computer Science', batch: '2024', admissionDate: '2024-01-15', feeStatus: 'Paid', attendancePercentage: 92, booksIssued: [{ bookId: 'b1', bookName: 'Intro to Algorithms', issueDate: '2024-03-10', studentId: 's1' }], contact: '555-0101' },
     { id: 's2', name: 'Amit Singh', rollNo: 'ME202', course: 'Mechanical Eng.', batch: '2023', admissionDate: '2023-08-20', feeStatus: 'Pending', attendancePercentage: 78, booksIssued: [], contact: '555-0102' },
-    { id: 's3', name: 'Sneha Gupta', rollNo: 'EE303', course: 'Electrical Eng.', batch: '2024', admissionDate: '2024-01-20', feeStatus: 'Partial', attendancePercentage: 85, booksIssued: [{ bookName: 'Circuit Analysis', issueDate: '2024-04-01' }], contact: '555-0103' },
+    { id: 's3', name: 'Sneha Gupta', rollNo: 'EE303', course: 'Electrical Eng.', batch: '2024', admissionDate: '2024-01-20', feeStatus: 'Partial', attendancePercentage: 85, booksIssued: [{ bookId: 'b3', bookName: 'Circuit Analysis', issueDate: '2024-04-01', studentId: 's3' }], contact: '555-0103' },
     { id: 's4', name: 'Vikram Rathore', rollNo: 'CS102', course: 'Computer Science', batch: '2024', admissionDate: '2024-01-18', feeStatus: 'Paid', attendancePercentage: 95, booksIssued: [], contact: '555-0104' },
-    { id: 's5', name: 'Anjali Mehta', rollNo: 'CE401', course: 'Civil Engineering', batch: '2022', admissionDate: '2022-09-01', feeStatus: 'Paid', attendancePercentage: 88, booksIssued: [{ bookName: 'Structural Design', issueDate: '2024-02-15' }], contact: '555-0105' },
+    { id: 's5', name: 'Anjali Mehta', rollNo: 'CE401', course: 'Civil Engineering', batch: '2022', admissionDate: '2022-09-01', feeStatus: 'Paid', attendancePercentage: 88, booksIssued: [{ bookId: 'b5', bookName: 'Structural Design', issueDate: '2024-02-15', studentId: 's5' }], contact: '555-0105' },
     { id: 's6', name: 'Rajesh Kumar', rollNo: 'IT201', course: 'Information Tech.', batch: '2023', admissionDate: '2023-08-22', feeStatus: 'Paid', attendancePercentage: 91, booksIssued: [], contact: '555-0106' },
-    { id: 's7', name: 'Kavita Joshi', rollNo: 'ME205', course: 'Mechanical Eng.', batch: '2023', admissionDate: '2023-08-21', feeStatus: 'Pending', attendancePercentage: 72, booksIssued: [{ bookName: 'Thermodynamics', issueDate: '2024-03-05' }], contact: '555-0107' },
+    { id: 's7', name: 'Kavita Joshi', rollNo: 'ME205', course: 'Mechanical Eng.', batch: '2023', admissionDate: '2023-08-21', feeStatus: 'Pending', attendancePercentage: 72, booksIssued: [{ bookId: 'b2', bookName: 'Thermodynamics', issueDate: '2024-03-05', studentId: 's7' }], contact: '555-0107' },
     { id: 's8', name: 'Sandeep Verma', rollNo: 'CS105', course: 'Computer Science', batch: '2024', admissionDate: '2024-01-25', feeStatus: 'Partial', attendancePercentage: 89, booksIssued: [], contact: '555-0108' },
-    { id: 's9', name: 'Pooja Desai', rollNo: 'EE308', course: 'Electrical Eng.', batch: '2024', admissionDate: '2024-01-22', feeStatus: 'Paid', attendancePercentage: 96, booksIssued: [{ bookName: 'Digital Electronics', issueDate: '2024-04-10' }], contact: '555-0109' },
+    { id: 's9', name: 'Pooja Desai', rollNo: 'EE308', course: 'Electrical Eng.', batch: '2024', admissionDate: '2024-01-22', feeStatus: 'Paid', attendancePercentage: 96, booksIssued: [{ bookId: 'b4', bookName: 'Digital Electronics', issueDate: '2024-04-10', studentId: 's9' }], contact: '555-0109' },
     { id: 's10', name: 'Harish Nair', rollNo: 'CE404', course: 'Civil Engineering', batch: '2022', admissionDate: '2022-09-05', feeStatus: 'Paid', attendancePercentage: 84, booksIssued: [], contact: '555-0110' },
     { id: 's11', name: 'Ravi Kumar', rollNo: 'IT301', course: 'Information Tech.', batch: '2023', admissionDate: '2023-08-25', feeStatus: 'Paid', attendancePercentage: 85, booksIssued: [], contact: '555-0111' },
-    { id: 's12', name: 'Sunita Sharma', rollNo: 'CS205', course: 'Computer Science', batch: '2023', admissionDate: '2023-08-26', feeStatus: 'Pending', attendancePercentage: 75, booksIssued: [{ bookName: 'Data Structures', issueDate: '2024-03-12' }], contact: '555-0112' },
+    { id: 's12', name: 'Sunita Sharma', rollNo: 'CS205', course: 'Computer Science', batch: '2023', admissionDate: '2023-08-26', feeStatus: 'Pending', attendancePercentage: 75, booksIssued: [{ bookId: 'b7', bookName: 'Data Structures', issueDate: '2024-03-12', studentId: 's12' }], contact: '555-0112' },
     { id: 's13', name: 'Mohan Verma', rollNo: 'ME301', course: 'Mechanical Eng.', batch: '2022', admissionDate: '2022-09-10', feeStatus: 'Partial', attendancePercentage: 82, booksIssued: [], contact: '555-0113' },
     { id: 's14', name: 'Geeta Kumari', rollNo: 'EE402', course: 'Electrical Eng.', batch: '2022', admissionDate: '2022-09-12', feeStatus: 'Paid', attendancePercentage: 93, booksIssued: [], contact: '555-0114' },
-    { id: 's15', name: 'Anil Kapoor', rollNo: 'CE101', course: 'Civil Engineering', batch: '2024', admissionDate: '2024-01-30', feeStatus: 'Pending', attendancePercentage: 88, booksIssued: [{ bookName: 'Building Materials', issueDate: '2024-04-15' }], contact: '555-0115' },
+    { id: 's15', name: 'Anil Kapoor', rollNo: 'CE101', course: 'Civil Engineering', batch: '2024', admissionDate: '2024-01-30', feeStatus: 'Pending', attendancePercentage: 88, booksIssued: [{ bookId: 'b6', bookName: 'Building Materials', issueDate: '2024-04-15', studentId: 's15' }], contact: '555-0115' },
     { id: 's16', name: 'Alok Nath', rollNo: 'CS301', course: 'Computer Science', batch: '2023', admissionDate: '2023-08-15', feeStatus: 'Paid', attendancePercentage: 88, booksIssued: [], contact: '555-0116' },
-    { id: 's17', name: 'Meera Bai', rollNo: 'EE210', course: 'Electrical Eng.', batch: '2023', admissionDate: '2023-08-18', feeStatus: 'Partial', attendancePercentage: 91, booksIssued: [{ bookName: 'Power Systems', issueDate: '2024-03-20' }], contact: '555-0117' },
+    { id: 's17', name: 'Meera Bai', rollNo: 'EE210', course: 'Electrical Eng.', batch: '2023', admissionDate: '2023-08-18', feeStatus: 'Partial', attendancePercentage: 91, booksIssued: [{ bookId: 'b8', bookName: 'Power Systems', issueDate: '2024-03-20', studentId: 's17' }], contact: '555-0117' },
     { id: 's18', name: 'Rakesh Sharma', rollNo: 'ME405', course: 'Mechanical Eng.', batch: '2022', admissionDate: '2022-09-02', feeStatus: 'Pending', attendancePercentage: 65, booksIssued: [], contact: '555-0118' },
-    { id: 's19', name: 'Sonia Singh', rollNo: 'IT105', course: 'Information Tech.', batch: '2024', admissionDate: '2024-02-01', feeStatus: 'Paid', attendancePercentage: 97, booksIssued: [{ bookName: 'Web Development', issueDate: '2024-04-05' }], contact: '555-0119' },
+    { id: 's19', name: 'Sonia Singh', rollNo: 'IT105', course: 'Information Tech.', batch: '2024', admissionDate: '2024-02-01', feeStatus: 'Paid', attendancePercentage: 97, booksIssued: [{ bookId: 'b9', bookName: 'Web Development', issueDate: '2024-04-05', studentId: 's19' }], contact: '555-0119' },
     { id: 's20', name: 'Deepak Chopra', rollNo: 'CE303', course: 'Civil Engineering', batch: '2023', admissionDate: '2023-08-30', feeStatus: 'Partial', attendancePercentage: 81, booksIssued: [], contact: '555-0120' },
-    { id: 's21', name: 'Neha Reddy', rollNo: 'CS401', course: 'Computer Science', batch: '2022', admissionDate: '2022-09-03', feeStatus: 'Paid', attendancePercentage: 94, booksIssued: [{ bookName: 'AI Concepts', issueDate: '2024-02-20' }], contact: '555-0121' },
+    { id: 's21', name: 'Neha Reddy', rollNo: 'CS401', course: 'Computer Science', batch: '2022', admissionDate: '2022-09-03', feeStatus: 'Paid', attendancePercentage: 94, booksIssued: [{ bookId: 'b10', bookName: 'AI Concepts', issueDate: '2024-02-20', studentId: 's21' }], contact: '555-0121' },
     { id: 's22', name: 'Arjun Desai', rollNo: 'ME101', course: 'Mechanical Eng.', batch: '2024', admissionDate: '2024-02-05', feeStatus: 'Paid', attendancePercentage: 90, booksIssued: [], contact: '555-0122' },
     { id: 's23', name: 'Lalita Iyer', rollNo: 'EE102', course: 'Electrical Eng.', batch: '2024', admissionDate: '2024-02-06', feeStatus: 'Pending', attendancePercentage: 76, booksIssued: [], contact: '555-0123' },
-    { id: 's24', name: 'Mahesh Babu', rollNo: 'IT402', course: 'Information Tech.', batch: '2022', admissionDate: '2022-09-08', feeStatus: 'Partial', attendancePercentage: 83, booksIssued: [{ bookName: 'Cyber Security', issueDate: '2024-03-25' }], contact: '555-0124' },
+    { id: 's24', name: 'Mahesh Babu', rollNo: 'IT402', course: 'Information Tech.', batch: '2022', admissionDate: '2022-09-08', feeStatus: 'Partial', attendancePercentage: 83, booksIssued: [{ bookId: 'b11', bookName: 'Cyber Security', issueDate: '2024-03-25', studentId: 's24' }], contact: '555-0124' },
     { id: 's25', name: 'Kiran Bedi', rollNo: 'CE201', course: 'Civil Engineering', batch: '2023', admissionDate: '2023-08-28', feeStatus: 'Paid', attendancePercentage: 95, booksIssued: [], contact: '555-0125' },
     { id: 's26', name: 'Zoya Akhtar', rollNo: 'CS210', course: 'Computer Science', batch: '2023', admissionDate: '2023-08-29', feeStatus: 'Paid', attendancePercentage: 88, booksIssued: [], contact: '555-0126' },
     { id: 's27', name: 'Irfan Khan', rollNo: 'ME310', course: 'Mechanical Eng.', batch: '2022', admissionDate: '2022-09-15', feeStatus: 'Pending', attendancePercentage: 68, booksIssued: [], contact: '555-0127' },
-
+    { id: 's28', name: 'Aditi Rao', rollNo: 'CS111', course: 'Computer Science', batch: '2024', admissionDate: '2024-02-10', feeStatus: 'Paid', attendancePercentage: 98, booksIssued: [], contact: '555-0128' },
+    { id: 's29', name: 'Farhan Ali', rollNo: 'ME212', course: 'Mechanical Eng.', batch: '2023', admissionDate: '2023-09-01', feeStatus: 'Partial', attendancePercentage: 80, booksIssued: [], contact: '555-0129' },
+    { id: 's30', name: 'Juhi Chawla', rollNo: 'EE313', course: 'Electrical Eng.', batch: '2024', admissionDate: '2024-02-12', feeStatus: 'Pending', attendancePercentage: 71, booksIssued: [], contact: '555-0130' },
+    { id: 's31', name: 'Kabir Bedi', rollNo: 'CE414', course: 'Civil Engineering', batch: '2022', admissionDate: '2022-09-20', feeStatus: 'Paid', attendancePercentage: 91, booksIssued: [], contact: '555-0131' },
+    { id: 's32', name: 'Nandita Das', rollNo: 'IT215', course: 'Information Tech.', batch: '2023', admissionDate: '2023-09-02', feeStatus: 'Partial', attendancePercentage: 86, booksIssued: [{ bookId: 'b7', bookName: 'Data Structures', issueDate: '2024-04-18', studentId: 's32' }], contact: '555-0132' },
+    { id: 's33', name: 'Ritu Singh', rollNo: 'CS501', course: 'Computer Science', batch: '2021', admissionDate: '2021-08-10', feeStatus: 'Paid', attendancePercentage: 88, booksIssued: [], contact: '555-0133' },
+    { id: 's34', name: 'Manish Malhotra', rollNo: 'BBA101', course: 'Business Administration', batch: '2022', admissionDate: '2022-08-15', feeStatus: 'Paid', attendancePercentage: 92, booksIssued: [], contact: '555-0134' },
+    { id: 's35', name: 'Kareena Kapoor', rollNo: 'BPH202', course: 'B. Pharmacy', batch: '2022', admissionDate: '2022-08-20', feeStatus: 'Partial', attendancePercentage: 78, booksIssued: [], contact: '555-0135' },
+    { id: 's36', name: 'Sanjay Dutt', rollNo: 'ME505', course: 'Mechanical Eng.', batch: '2021', admissionDate: '2021-08-12', feeStatus: 'Pending', attendancePercentage: 65, booksIssued: [], contact: '555-0136' },
+    { id: 's37', name: 'Aishwarya Rai', rollNo: 'CE601', course: 'Civil Engineering', batch: '2020', admissionDate: '2020-09-01', feeStatus: 'Paid', attendancePercentage: 95, booksIssued: [], contact: '555-0137' },
+    { id: 's38', name: 'Hrithik Roshan', rollNo: 'IT502', course: 'Information Tech.', batch: '2021', admissionDate: '2021-08-18', feeStatus: 'Paid', attendancePercentage: 91, booksIssued: [], contact: '555-0138' },
+    { id: 's39', name: 'Preity Zinta', rollNo: 'CS605', course: 'Computer Science', batch: '2020', admissionDate: '2020-08-21', feeStatus: 'Partial', attendancePercentage: 82, booksIssued: [], contact: '555-0139' },
+    { id: 's40', name: 'Shahid Kapoor', rollNo: 'EE608', course: 'Electrical Eng.', batch: '2020', admissionDate: '2020-08-25', feeStatus: 'Paid', attendancePercentage: 90, booksIssued: [], contact: '555-0140' },
+    { id: 's41', name: 'Deepika Padukone', rollNo: 'BBA201', course: 'Business Administration', batch: '2023', admissionDate: '2023-08-10', feeStatus: 'Paid', attendancePercentage: 94, booksIssued: [], contact: '555-0141' },
+    { id: 's42', name: 'Ranbir Kapoor', rollNo: 'CS701', course: 'Computer Science', batch: '2020', admissionDate: '2020-09-02', feeStatus: 'Pending', attendancePercentage: 70, booksIssued: [], contact: '555-0142' },
+    { id: 's43', name: 'Priyanka Chopra', rollNo: 'ME610', course: 'Mechanical Eng.', batch: '2020', admissionDate: '2020-09-05', feeStatus: 'Paid', attendancePercentage: 88, booksIssued: [], contact: '555-0143' },
+    { id: 's44', name: 'Salman Khan', rollNo: 'CE704', course: 'Civil Engineering', batch: '2021', admissionDate: '2021-08-11', feeStatus: 'Partial', attendancePercentage: 75, booksIssued: [], contact: '555-0144' },
+    { id: 's45', name: 'Katrina Kaif', rollNo: 'IT606', course: 'Information Tech.', batch: '2020', admissionDate: '2020-09-10', feeStatus: 'Paid', attendancePercentage: 96, booksIssued: [], contact: '555-0145' },
+    { id: 's46', name: 'Akshay Kumar', rollNo: 'BPH301', course: 'B. Pharmacy', batch: '2021', admissionDate: '2021-08-22', feeStatus: 'Pending', attendancePercentage: 68, booksIssued: [], contact: '555-0146' },
+    { id: 's47', name: 'Anushka Sharma', rollNo: 'EE702', course: 'Electrical Eng.', batch: '2021', admissionDate: '2021-08-15', feeStatus: 'Paid', attendancePercentage: 93, booksIssued: [], contact: '555-0147' },
+    { id: 's48', name: 'Varun Dhawan', rollNo: 'CS801', course: 'Computer Science', batch: '2021', admissionDate: '2021-08-16', feeStatus: 'Partial', attendancePercentage: 81, booksIssued: [], contact: '555-0148' },
+    { id: 's49', name: 'Alia Bhatt', rollNo: 'BBA305', course: 'Business Administration', batch: '2024', admissionDate: '2024-01-28', feeStatus: 'Paid', attendancePercentage: 99, booksIssued: [], contact: '555-0149' },
+    { id: 's50', name: 'Sidharth Malhotra', rollNo: 'ME705', course: 'Mechanical Eng.', batch: '2021', admissionDate: '2021-08-20', feeStatus: 'Pending', attendancePercentage: 72, booksIssued: [], contact: '555-0150' },
+    { id: 's51', name: 'Shraddha Kapoor', rollNo: 'CS810', course: 'Computer Science', batch: '2021', admissionDate: '2021-08-25', feeStatus: 'Paid', attendancePercentage: 91, booksIssued: [], contact: '555-0151' },
+    { id: 's52', name: 'Tiger Shroff', rollNo: 'CE808', course: 'Civil Engineering', batch: '2020', admissionDate: '2020-09-15', feeStatus: 'Paid', attendancePercentage: 89, booksIssued: [], contact: '555-0152' },
 ];
 
 export const MOCK_FACULTY: Faculty[] = [
@@ -51,6 +74,8 @@ export const MOCK_FACULTY: Faculty[] = [
     { id: 'f6', name: 'Dr. Anjali Rao', course: 'Computer Science', contact: '555-0206', syllabusProgress: 95 },
     { id: 'f7', name: 'Prof. Vikram Singh', course: 'Mechanical Eng.', contact: '555-0207', syllabusProgress: 80 },
     { id: 'f8', name: 'Dr. Priya Desai', course: 'Electrical Eng.', contact: '555-0208', syllabusProgress: 78 },
+    { id: 'f9', name: 'Dr. Ramesh Kumar', course: 'B. Pharmacy', contact: '555-0209', syllabusProgress: 88 },
+    { id: 'f10', name: 'Prof. Anjali Desai', course: 'Business Administration', contact: '555-0210', syllabusProgress: 92 },
 ];
 
 export const MOCK_FEES: Fee[] = [
@@ -81,6 +106,31 @@ export const MOCK_FEES: Fee[] = [
     { id: 'fee25', studentId: 's25', amountPaid: 40000, totalFee: 40000, paymentType: 'DD', date: '2023-08-28', remainingDue: 0 },
     { id: 'fee26', studentId: 's26', amountPaid: 50000, totalFee: 50000, paymentType: 'Cash', date: '2023-08-29', remainingDue: 0 },
     { id: 'fee27', studentId: 's27', amountPaid: 15000, totalFee: 45000, paymentType: 'DD', date: '2022-09-15', remainingDue: 30000 },
+    { id: 'fee28', studentId: 's28', amountPaid: 50000, totalFee: 50000, paymentType: 'Cash', date: '2024-02-10', remainingDue: 0 },
+    { id: 'fee29', studentId: 's29', amountPaid: 22500, totalFee: 45000, paymentType: 'DD', date: '2023-09-01', remainingDue: 22500 },
+    { id: 'fee30', studentId: 's30', amountPaid: 0, totalFee: 60000, paymentType: 'Cash', date: '2024-02-12', remainingDue: 60000 },
+    { id: 'fee31', studentId: 's31', amountPaid: 40000, totalFee: 40000, paymentType: 'DD', date: '2022-09-20', remainingDue: 0 },
+    { id: 'fee32', studentId: 's32', amountPaid: 24000, totalFee: 48000, paymentType: 'Cash', date: '2023-09-02', remainingDue: 24000 },
+    { id: 'fee33', studentId: 's33', amountPaid: 45000, totalFee: 45000, paymentType: 'Cash', date: '2021-08-10', remainingDue: 0 },
+    { id: 'fee34', studentId: 's34', amountPaid: 55000, totalFee: 55000, paymentType: 'DD', date: '2022-08-15', remainingDue: 0 },
+    { id: 'fee35', studentId: 's35', amountPaid: 30000, totalFee: 60000, paymentType: 'Cash', date: '2022-08-20', remainingDue: 30000 },
+    { id: 'fee36', studentId: 's36', amountPaid: 20000, totalFee: 45000, paymentType: 'Cash', date: '2021-08-12', remainingDue: 25000 },
+    { id: 'fee37', studentId: 's37', amountPaid: 40000, totalFee: 40000, paymentType: 'DD', date: '2020-09-01', remainingDue: 0 },
+    { id: 'fee38', studentId: 's38', amountPaid: 48000, totalFee: 48000, paymentType: 'Cash', date: '2021-08-18', remainingDue: 0 },
+    { id: 'fee39', studentId: 's39', amountPaid: 25000, totalFee: 50000, paymentType: 'DD', date: '2020-08-21', remainingDue: 25000 },
+    { id: 'fee40', studentId: 's40', amountPaid: 60000, totalFee: 60000, paymentType: 'Cash', date: '2020-08-25', remainingDue: 0 },
+    { id: 'fee41', studentId: 's41', amountPaid: 55000, totalFee: 55000, paymentType: 'DD', date: '2023-08-10', remainingDue: 0 },
+    { id: 'fee42', studentId: 's42', amountPaid: 10000, totalFee: 50000, paymentType: 'Cash', date: '2020-09-02', remainingDue: 40000 },
+    { id: 'fee43', studentId: 's43', amountPaid: 45000, totalFee: 45000, paymentType: 'DD', date: '2020-09-05', remainingDue: 0 },
+    { id: 'fee44', studentId: 's44', amountPaid: 20000, totalFee: 40000, paymentType: 'Cash', date: '2021-08-11', remainingDue: 20000 },
+    { id: 'fee45', studentId: 's45', amountPaid: 48000, totalFee: 48000, paymentType: 'DD', date: '2020-09-10', remainingDue: 0 },
+    { id: 'fee46', studentId: 's46', amountPaid: 0, totalFee: 60000, paymentType: 'Cash', date: '2021-08-22', remainingDue: 60000 },
+    { id: 'fee47', studentId: 's47', amountPaid: 60000, totalFee: 60000, paymentType: 'DD', date: '2021-08-15', remainingDue: 0 },
+    { id: 'fee48', studentId: 's48', amountPaid: 25000, totalFee: 50000, paymentType: 'Cash', date: '2021-08-16', remainingDue: 25000 },
+    { id: 'fee49', studentId: 's49', amountPaid: 55000, totalFee: 55000, paymentType: 'DD', date: '2024-01-28', remainingDue: 0 },
+    { id: 'fee50', studentId: 's50', amountPaid: 15000, totalFee: 45000, paymentType: 'Cash', date: '2021-08-20', remainingDue: 30000 },
+    { id: 'fee51', studentId: 's51', amountPaid: 50000, totalFee: 50000, paymentType: 'DD', date: '2021-08-25', remainingDue: 0 },
+    { id: 'fee52', studentId: 's52', amountPaid: 40000, totalFee: 40000, paymentType: 'Cash', date: '2020-09-15', remainingDue: 0 },
 ];
 
 export const MOCK_NOTICES: Notice[] = [
@@ -90,4 +140,35 @@ export const MOCK_NOTICES: Notice[] = [
     { id: 'n4', title: 'Annual Sports Day', content: 'The annual sports day will be held on the first weekend of next month. All students are encouraged to participate.', date: '2024-05-12', visibleTo: [UserRole.STUDENT, UserRole.FACULTY, UserRole.HEAD] },
     { id: 'n5', title: 'Library Renovation Update', content: 'The central library will be closed for renovation from 20th to 30th of this month. Please return all books beforehand.', date: '2024-05-11', visibleTo: [UserRole.STUDENT, UserRole.FACULTY, UserRole.HEAD] },
     { id: 'n6', title: 'Q2 Faculty Performance Review', content: 'All HODs are requested to submit the faculty performance review reports by end of this week.', date: '2024-05-09', visibleTo: [UserRole.HEAD, UserRole.MANAGER, UserRole.ADMIN] },
+];
+
+
+export const MOCK_COLLEGES: College[] = [
+    { id: 'c1', name: 'MLD Institute of Technology, Noida', location: 'Noida, UP', principal: 'Dr. R. K. Verma', studentCount: 1250, coursesOffered: 5 },
+    { id: 'c2', name: 'MLD College of Arts & Commerce, Delhi', location: 'Delhi', principal: 'Dr. Sunita Sharma', studentCount: 2100, coursesOffered: 8 },
+    { id: 'c3', name: 'MLD Pharmacy College, Meerut', location: 'Meerut, UP', principal: 'Dr. Alok Mishra', studentCount: 450, coursesOffered: 3 },
+];
+
+export const MOCK_COURSES: Course[] = [
+    { id: 'cr1', name: 'Computer Science', code: 'CSE', durationYears: 4, department: 'Engineering', studentCount: MOCK_STUDENTS.filter(s => s.course === 'Computer Science').length },
+    { id: 'cr2', name: 'Mechanical Eng.', code: 'ME', durationYears: 4, department: 'Engineering', studentCount: MOCK_STUDENTS.filter(s => s.course === 'Mechanical Eng.').length },
+    { id: 'cr3', name: 'Electrical Eng.', code: 'EE', durationYears: 4, department: 'Engineering', studentCount: MOCK_STUDENTS.filter(s => s.course === 'Electrical Eng.').length },
+    { id: 'cr4', name: 'Civil Engineering', code: 'CE', durationYears: 4, department: 'Engineering', studentCount: MOCK_STUDENTS.filter(s => s.course === 'Civil Engineering').length },
+    { id: 'cr5', name: 'Information Tech.', code: 'IT', durationYears: 4, department: 'Engineering', studentCount: MOCK_STUDENTS.filter(s => s.course === 'Information Tech.').length },
+    { id: 'cr6', name: 'B. Pharmacy', code: 'BPH', durationYears: 4, department: 'Pharmacy', studentCount: MOCK_STUDENTS.filter(s => s.course === 'B. Pharmacy').length },
+    { id: 'cr7', name: 'Business Administration', code: 'BBA', durationYears: 3, department: 'Management', studentCount: MOCK_STUDENTS.filter(s => s.course === 'Business Administration').length },
+];
+
+export const MOCK_BOOKS: Book[] = [
+    { id: 'b1', title: 'Intro to Algorithms', author: 'Thomas H. Cormen', isbn: '978-0262033848', availableCopies: 5, totalCopies: 10 },
+    { id: 'b2', title: 'Thermodynamics: An Engineering Approach', author: 'Yunus A. Çengel', isbn: '978-0073398174', availableCopies: 2, totalCopies: 8 },
+    { id: 'b3', title: 'Fundamentals of Electric Circuits', author: 'Charles K. Alexander', isbn: '978-0078028229', availableCopies: 8, totalCopies: 12 },
+    { id: 'b4', title: 'Digital Design', author: 'M. Morris Mano', isbn: '978-0134549897', availableCopies: 4, totalCopies: 10 },
+    { id: 'b5', title: 'Structural Analysis', author: 'R. C. Hibbeler', isbn: '978-0134610672', availableCopies: 6, totalCopies: 10 },
+    { id: 'b6', title: 'Building Construction', author: 'B. C. Punmia', isbn: '978-8170080536', availableCopies: 10, totalCopies: 15 },
+    { id: 'b7', title: 'Data Structures and Algorithms in Java', author: 'Robert Lafore', isbn: '978-0672324536', availableCopies: 1, totalCopies: 7 },
+    { id: 'b8', title: 'Power System Engineering', author: 'D Kothari', isbn: '978-9339203336', availableCopies: 3, totalCopies: 9 },
+    { id: 'b9', title: 'Eloquent JavaScript', author: 'Marijn Haverbeke', isbn: '978-1593279509', availableCopies: 12, totalCopies: 15 },
+    { id: 'b10', title: 'Artificial Intelligence: A Modern Approach', author: 'Stuart Russell', isbn: '978-0136042594', availableCopies: 4, totalCopies: 6 },
+    { id: 'b11', title: 'Cryptography and Network Security', author: 'William Stallings', isbn: '978-9332585225', availableCopies: 7, totalCopies: 10 },
 ];
