@@ -1,0 +1,5 @@
+{
+  "name": "MLD CRM",
+  "description": "A multi-tier college management CRM for MLD Group, managed by Bade Bauji, Avinash Ji, and Golu Ji. Handles non-LMS operations including admin, fees, faculty, and student records.",
+  "requestFramePermissions": []
+}
