@@ -19,10 +19,10 @@ interface MetricCardProps {
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ title, value, change }) => (
-    <div className="bg-white p-6 rounded-2xl shadow-md">
+    <div className="bg-slate-800 p-6 rounded-2xl shadow-lg">
         <h3 className="text-sm font-medium text-brand-secondary">{title}</h3>
-        <p className="text-3xl font-bold mt-2">{value}</p>
-        {change && <p className="text-xs text-green-600 mt-1">{change}</p>}
+        <p className="text-3xl font-bold text-slate-100 mt-2">{value}</p>
+        {change && <p className="text-xs text-green-400 mt-1">{change}</p>}
     </div>
 );
 
@@ -34,6 +34,16 @@ const DashboardHome: React.FC<DashboardHomeProps> = ({ students, faculty, notice
 
     const visibleNotices = notices.filter(n => n.visibleTo.includes(user.role));
 
+    const formatCurrencyShort = (amount: number) => {
+        if (amount >= 100000) {
+            return `₹${(amount / 100000).toFixed(1)}L`;
+        }
+        if (amount >= 1000) {
+            return `₹${(amount / 1000).toFixed(0)}k`;
+        }
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+    };
+
     const feeData = fees.map(fee => {
         const student = students.find(s => s.id === fee.studentId);
         return {
@@ -41,51 +51,51 @@ const DashboardHome: React.FC<DashboardHomeProps> = ({ students, faculty, notice
             Paid: fee.amountPaid,
             Due: fee.remainingDue,
         };
-    }).slice(0, 8);
+    }).slice(0, 15);
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-bold text-slate-800">Welcome, {user.name.split(' ')[0]}!</h1>
+            <h1 className="text-3xl font-bold text-slate-100">Welcome, {user.name.split(' ')[0]}!</h1>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <MetricCard title="Total Students" value={totalStudents} />
                 <MetricCard title="Total Faculty" value={totalFaculty} />
-                <MetricCard title="Fees Collected" value={`₹${(totalFeesCollected / 1000).toFixed(1)}k`} />
-                <MetricCard title="Pending Dues" value={`₹${(pendingDues / 1000).toFixed(1)}k`} />
+                <MetricCard title="Fees Collected" value={formatCurrencyShort(totalFeesCollected)} />
+                <MetricCard title="Pending Dues" value={formatCurrencyShort(pendingDues)} />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md">
-                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Fee Collection Summary</h3>
+                <div className="lg:col-span-2 bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <h3 className="text-lg font-semibold mb-4 text-slate-200">Fee Collection Summary</h3>
                     <div style={{ width: '100%', height: 300 }}>
                         <ResponsiveContainer>
                             <BarChart data={feeData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
+                                <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
+                                <XAxis dataKey="name" tick={{ fill: '#94a3b8' }} />
+                                <YAxis tick={{ fill: '#94a3b8' }} />
                                 <Tooltip
-                                    cursor={{fill: 'rgba(0,0,0,0.05)'}}
+                                    cursor={{fill: 'rgba(255,255,255,0.05)'}}
                                     contentStyle={{
-                                        background: 'white',
-                                        border: '1px solid #e2e8f0',
+                                        background: '#1f2937',
+                                        border: '1px solid #334155',
                                         borderRadius: '0.5rem',
-                                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'
+                                        color: '#cbd5e1'
                                     }}
-                                    labelStyle={{ color: '#475569', fontWeight: 'bold' }}
+                                    labelStyle={{ color: '#f1f5f9', fontWeight: 'bold' }}
                                 />
-                                <Legend />
+                                <Legend wrapperStyle={{ color: '#d1d5db' }} />
                                 <Bar dataKey="Paid" fill="#FB923C" />
-                                <Bar dataKey="Due" fill="#FCA5A5" />
+                                <Bar dataKey="Due" fill="#F87171" />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-md">
-                    <h3 className="text-lg font-semibold mb-4 text-slate-800">Notice Board</h3>
+                <div className="bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <h3 className="text-lg font-semibold mb-4 text-slate-200">Notice Board</h3>
                     <div className="space-y-4">
-                        {visibleNotices.map(notice => (
+                        {visibleNotices.slice(0, 5).map(notice => (
                             <div key={notice.id} className="border-l-4 border-brand-orange pl-4">
-                                <p className="font-semibold text-sm">{notice.title}</p>
+                                <p className="font-semibold text-sm text-slate-200">{notice.title}</p>
                                 <p className="text-xs text-brand-secondary">{notice.date}</p>
                             </div>
                         ))}

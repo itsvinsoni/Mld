@@ -34,8 +34,8 @@ const Sidebar: React.FC<SidebarProps> = ({ userRole, activeView, setActiveView, 
     const filteredNavItems = navItems.filter(item => item.roles.includes(userRole));
 
     return (
-        <aside className={`fixed top-0 left-0 h-full bg-white text-slate-800 flex flex-col shadow-lg transition-all duration-300 z-30 ${isCollapsed ? 'w-20' : 'w-64'}`}>
-            <div className="flex items-center justify-center h-20 border-b border-slate-200">
+        <aside className={`fixed top-0 left-0 h-full bg-slate-800 text-slate-300 flex flex-col shadow-lg transition-all duration-300 z-30 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+            <div className="flex items-center justify-center h-20 border-b border-slate-700">
                 <div className={`font-bold text-2xl text-brand-orange transition-opacity duration-300 ${isCollapsed ? 'opacity-0' : 'opacity-100'}`}>
                     {isCollapsed ? 'M' : 'MLD'}
                 </div>
@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ userRole, activeView, setActiveView, 
                         className={`w-full flex items-center p-3 rounded-lg transition-colors duration-200 ${
                             activeView === item.key
                                 ? 'bg-brand-orange-light text-brand-orange-dark'
-                                : 'hover:bg-slate-100'
+                                : 'hover:bg-slate-700'
                         } ${isCollapsed ? 'justify-center' : ''}`}
                     >
                         <span className="shrink-0">{item.icon}</span>
@@ -56,10 +56,10 @@ const Sidebar: React.FC<SidebarProps> = ({ userRole, activeView, setActiveView, 
                     </button>
                 ))}
             </nav>
-            <div className="px-4 py-4 border-t border-slate-200">
+            <div className="px-4 py-4 border-t border-slate-700">
                  <button
                     onClick={onLogout}
-                    className={`w-full flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-slate-100 ${isCollapsed ? 'justify-center' : ''}`}
+                    className={`w-full flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-slate-700 ${isCollapsed ? 'justify-center' : ''}`}
                 >
                     <span className="shrink-0"><LogoutIcon /></span>
                     {!isCollapsed && <span className="ml-4 font-medium">Logout</span>}

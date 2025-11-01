@@ -36,16 +36,16 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     ];
 
     return (
-        <div className="min-h-screen bg-brand-background flex items-center justify-center p-4">
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
-                <div className="bg-white rounded-2xl shadow-xl p-8">
+                <div className="bg-slate-800 rounded-2xl shadow-xl p-8">
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-slate-800">MLD CRM</h1>
+                        <h1 className="text-3xl font-bold text-slate-100">MLD CRM</h1>
                         <p className="text-brand-secondary mt-2">Unified Management Dashboard</p>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-slate-600 mb-1" htmlFor="email">
+                            <label className="block text-sm font-medium text-slate-400 mb-1" htmlFor="email">
                                 Email
                             </label>
                             <input
@@ -53,12 +53,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
+                                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
                                 placeholder="e.g., admin@college.com"
                             />
                         </div>
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-slate-600 mb-1" htmlFor="password">
+                            <label className="block text-sm font-medium text-slate-400 mb-1" htmlFor="password">
                                 Password
                             </label>
                             <input
@@ -66,11 +66,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
+                                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
                                 placeholder="••••••••"
                             />
                         </div>
-                        {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+                        {error && <p className="text-red-400 text-sm text-center mb-4">{error}</p>}
                         <button
                             type="submit"
                             className="w-full bg-brand-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-orange-dark transition duration-300"
@@ -85,7 +85,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                                 <button
                                     key={user.role}
                                     onClick={() => handleDemoLogin(user.role as UserRole)}
-                                    className="text-xs text-center py-2 px-1 border border-slate-200 rounded-md hover:bg-slate-50 transition"
+                                    className="text-xs text-center py-2 px-1 border border-slate-600 rounded-md text-slate-300 hover:bg-slate-700 transition"
                                 >
                                     {user.role}
                                 </button>

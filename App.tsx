@@ -61,7 +61,7 @@ const App: React.FC = () => {
     }
 
     return (
-        <div className="flex h-screen bg-brand-background font-sans text-slate-800">
+        <div className="flex h-screen bg-slate-900 font-sans text-slate-300">
             <Sidebar 
                 userRole={currentUser.role} 
                 activeView={activeView} 

@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-g" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
@@ -22,7 +23,7 @@
                 orange: '#FB923C',
                 'orange-light': '#FFEDD5',
                 'orange-dark': '#EA580C',
-                secondary: '#64748B',
+                secondary: '#94A3B8', // Lighter for dark mode
                 background: '#F8FAFC',
               }
             }
@@ -41,7 +42,7 @@
 }
 </script>
 </head>
-  <body>
+  <body class="bg-slate-900">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
