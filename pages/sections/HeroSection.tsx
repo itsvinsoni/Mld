@@ -12,16 +12,17 @@ const HeroSection: React.FC = () => {
         <img
           src={heroImg}
           alt="MLD Memorial Sansthan campus"
-          className="w-full h-full object-cover kenburns"
+          className="w-full h-full object-cover"
         />
         {/* Subtle dark overlay for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/55 to-slate-900/40" />
+        <div className="absolute inset-0 bg-slate-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/30 to-slate-900/70" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8 w-full pt-32 pb-24">
         <div className="max-w-3xl">
-          <span className="inline-flex items-center gap-2.5 hero-badge text-white bg-white/10 backdrop-blur px-4 py-2 rounded-full mb-7 rise">
-            <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
+          <span className="inline-flex items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white mb-6 rise">
+            <span className="w-8 h-px bg-brand-orange" />
             {HERO.badge}
           </span>
 
@@ -51,14 +52,6 @@ const HeroSection: React.FC = () => {
             </a>
           </div>
 
-          <div className="mt-10 inline-flex items-center gap-3 bg-white/10 backdrop-blur px-5 py-3 rounded-2xl rise" style={{ animationDelay: '480ms' }}>
-            <span className="inline-flex items-center gap-2 text-brand-orange-light text-xs font-bold uppercase tracking-widest">
-              <Icon id="sparkles" size={16} /> Announcement
-            </span>
-            <span className="text-white text-sm md:text-base font-medium border-l border-white/20 pl-4">
-              {HERO.notice}
-            </span>
-          </div>
         </div>
       </div>
 
