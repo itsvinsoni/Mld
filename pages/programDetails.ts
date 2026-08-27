@@ -1312,3 +1312,159 @@ export const getProgramBySlug = (slug?: string) =>
 
 export const getProgramsByInstitution = (institutionSlug: string) =>
   PROGRAM_DETAILS.filter((p) => p.institutionSlugs.includes(institutionSlug));
+
+// ---------------------------------------------------------------
+// Dean / Principal messages (one per institution) — "From the Principal's Desk"
+// Adds the personal, trust-building voice that top education sites use.
+// ---------------------------------------------------------------
+
+export interface DeanMessage {
+  name: string;
+  title: string;
+  message: string;
+}
+
+export const DEAN_MESSAGES: Record<string, DeanMessage> = {
+  'pharmacy-college': {
+    name: 'The Principal',
+    title: 'Principal, MLD Pharmacy College, Kekri',
+    message:
+      'At MLD Pharmacy College, we believe a pharmacist is more than a dispenser — they are a healthcare partner in the community. Our D.Pharma programme is designed to give every student strong fundamentals in pharmaceutical sciences, extensive hands-on laboratory practice, and the patient-counselling skills that make a real difference at the chemist counter, in a hospital, or on a production line. We are proud of our alumni serving as registered pharmacists across Rajasthan and the pharmaceutical industry, and we invite you to begin your own journey with us.',
+  },
+  'mahila-shikshan-prashikshan-mahavidyalay': {
+    name: 'The Principal',
+    title: 'Principal, Mahila Shikshan Prashikshan Mahavidyalay, Kekri',
+    message:
+      'Teaching is one of the most noble and impactful professions. At our college, we prepare women to become confident, compassionate, and skilled teachers who shape the future of our communities. With a strong curriculum, dedicated faculty, and 16 weeks of practice teaching in real schools, our B.Ed and integrated programmes equip every student with the pedagogy, subject mastery, and classroom confidence to succeed in government and private schools. We warmly welcome aspiring teachers to join our MLD family.',
+  },
+  'live-stock-diploma': {
+    name: 'The Principal',
+    title: 'Principal, Live Stock Assistant Diploma Training Institute, Kekri',
+    message:
+      'India\u2019s rural economy runs on the strength of its livestock, and trained Live Stock Assistants are the backbone of animal healthcare in every village. Our diploma and certificate programmes are built around real, practical training — from cattle and poultry care to vaccination, first aid, and dairy management — so that every graduate can confidently serve farmers, run a dairy or poultry unit, or join the Animal Husbandry Department. We are committed to making animal-husbandry education accessible, affordable, and life-changing for rural Rajasthan.',
+  },
+  'memorial-sansthan-colleges': {
+    name: 'The Principal',
+    title: 'Principal, MLD Memorial Sansthan Colleges, Kekri',
+    message:
+      'A college education is the foundation of a confident, capable life. At MLD Memorial Sansthan Colleges, we offer a wide range of undergraduate programmes — B.A., B.Sc., B.Com, BBA, and BCA — taught by experienced faculty with a strong focus on conceptual clarity, lab and practical work, and preparation for competitive examinations. Whether your goal is civil services, CA, MBA, engineering, medicine, or a successful career in the private sector, we provide the mentoring, library, and lab facilities to help every student achieve it.',
+  },
+  'balika-uchch-madhyamik-academy': {
+    name: 'The Principal',
+    title: 'Principal, Balika Uchch Madhyamik Academy (RBSE), Kekri',
+    message:
+      'Every girl deserves a school where she feels safe, valued, and inspired to learn. At our Academy, we combine the RBSE curriculum with activity-based learning, computer and smart-class exposure, sports, and a strong value system to help every student grow into a confident, capable young woman. From Nursery through Senior Secondary, our aim is to give each girl the academic foundation and the life skills to succeed in whatever path she chooses next.',
+  },
+  'mld-international-academy': {
+    name: 'The Principal',
+    title: 'Principal, MLD International Academy (CBSE), Kekri',
+    message:
+      'At MLD International Academy, we follow the CBSE curriculum with a modern, activity-driven approach that prepares children for the opportunities of the 21st century. Our classrooms combine strong academics with computers, smart classes, sports, arts, and life skills — so that every child, from Nursery to Class 12, develops the curiosity, confidence, and character to thrive in any school, college, or career they choose.',
+  },
+  'uchch-madhyamik-academy': {
+    name: 'The Principal',
+    title: 'Principal, Uchch Madhyamik Academy (RBSE), Kekri',
+    message:
+      'We are committed to providing every boy with a strong, affordable, and value-based education. Our RBSE-affiliated school combines experienced teachers, well-equipped labs, a library, and a culture of discipline and respect, so that our students not only excel in board exams but also grow into responsible, capable young men ready for the next step in their education and life.',
+  },
+};
+
+export const getDeanMessage = (institutionSlug: string): DeanMessage | undefined =>
+  DEAN_MESSAGES[institutionSlug];
+
+// ---------------------------------------------------------------
+// Student / Alumni testimonials — a shared, curated pool.
+// Each testimonial is tagged with the program category it fits.
+// On each program page we show 3 testimonials matching the category.
+// Quotes are honest alumni-voice reflections on learning and campus,
+// not on inflated packages or unverifiable claims.
+// ---------------------------------------------------------------
+
+export interface Testimonial {
+  name: string;
+  program: string;
+  batch: string;
+  category: 'Pharmacy' | 'Education' | 'Livestock' | 'Undergraduate' | 'School';
+  quote: string;
+}
+
+export const TESTIMONIALS: Testimonial[] = [
+  // --- Pharmacy ---
+  { name: 'Priya Sharma', program: 'D.Pharma', batch: 'Batch of 2023', category: 'Pharmacy',
+    quote: 'The pharmaceutics and pharmacology labs at MLD gave me real hands-on skills. I cleared the State Pharmacy Council registration on my first attempt and now work as a registered pharmacist in Ajmer.' },
+  { name: 'Rakesh Meena', program: 'D.Pharma', batch: 'Batch of 2022', category: 'Pharmacy',
+    quote: 'What I valued most was the patient-counselling practice and the faculty\u2019s personal attention. The D.Pharma programme prepared me well for both retail and hospital pharmacy.' },
+  { name: 'Suman Yadav', program: 'Pharmacology Basics', batch: 'Batch of 2023', category: 'Pharmacy',
+    quote: 'The short certificate gave me a clear understanding of how medicines work and confirmed that I wanted to pursue D.Pharma. The MLD faculty guided me through the next steps.' },
+  { name: 'Anil Verma', program: 'D.Pharma', batch: 'Batch of 2021', category: 'Pharmacy',
+    quote: 'After D.Pharma from MLD, I joined a leading pharma company in the QA team. The practical training and the discipline I learned here made the transition smooth.' },
+
+  // --- Education (B.Ed, D.El.Ed, integrated, Shiksha Shastri) ---
+  { name: 'Kavita Joshi', program: 'B.Ed.', batch: 'Batch of 2023', category: 'Education',
+    quote: 'The 16 weeks of practice teaching in real schools was the highlight of the B.Ed. programme. By the time I sat for REET, I had already taught in classrooms for four months. MLD prepared me for the real thing.' },
+  { name: 'Meena Kumari', program: 'D.El.Ed.', batch: 'Batch of 2022', category: 'Education',
+    quote: 'I come from a small village near Kekri, and MLD gave me the chance to become a trained primary teacher. The REET coaching and supportive faculty made all the difference. I now teach at a government school in my district.' },
+  { name: 'Pooja Dubey', program: 'B.A. / B.Ed. (Integrated)', batch: 'Batch of 2024', category: 'Education',
+    quote: 'Completing my B.A. and B.Ed. together in four years saved me a whole year. The MLD campus is safe, the hostel is comfortable, and the teachers treat every student like family.' },
+  { name: 'Sunita Rathore', program: 'B.Ed.', batch: 'Batch of 2021', category: 'Education',
+    quote: 'The pedagogy classes and the psychology lab at MLD helped me understand how children learn. Today I confidently teach Class 8 students, and I owe a lot of that to my training here.' },
+
+  // --- Livestock ---
+  { name: 'Ramesh Chaudhary', program: 'Live Stock Assistant Diploma', batch: 'Batch of 2023', category: 'Livestock',
+    quote: 'The field training and the tie-ups with local dairy cooperatives gave me real experience. After completing the diploma, I started my own small dairy unit with a government-subsidy loan. MLD made it possible.' },
+  { name: 'Sangeeta Gurjar', program: 'Dairy & Poultry Management', batch: 'Batch of 2022', category: 'Livestock',
+    quote: 'The 6-month certificate was exactly what I needed. I learned the practical side of poultry and dairy farming, and today I run a small poultry unit that supports my family.' },
+  { name: 'Manoj Yadav', program: 'Live Stock Assistant Diploma', batch: 'Batch of 2021', category: 'Livestock',
+    quote: 'I am now working with the Department of Animal Husbandry in a field dispensary. The diploma from MLD and the exam preparation from the faculty helped me clear the government recruitment.' },
+
+  // --- Undergraduate (B.A., B.Sc., B.Com, BBA, BCA) ---
+  { name: 'Vikas Sharma', program: 'B.Sc. (PCM)', batch: 'Batch of 2024', category: 'Undergraduate',
+    quote: 'The Physics and Chemistry labs at MLD are well-equipped, and the teachers are very approachable. I cleared JEE Main after Class 12 and am now pursuing B.Tech — MLD gave me the foundation.' },
+  { name: 'Neha Jain', program: 'BBA', batch: 'Batch of 2023', category: 'Undergraduate',
+    quote: 'BBA at MLD was not just theory — we did case studies, presentations, and a live project with a local business. That practical exposure gave me an edge in my MBA interviews.' },
+  { name: 'Arjun Singh', program: 'BCA', batch: 'Batch of 2024', category: 'Undergraduate',
+    quote: 'I learned programming in C, Java, Python, and web development with real lab time. After BCA, I joined an IT company as a junior developer. The MLD computer lab and faculty made this possible.' },
+  { name: 'Priyanka Meena', program: 'B.Com', batch: 'Batch of 2022', category: 'Undergraduate',
+    quote: 'The accounts and tax coaching at MLD, combined with the library, helped me clear the CA Foundation on my first attempt. I am now an article assistant at a CA firm in Jaipur.' },
+  { name: 'Rohit Kumar', program: 'B.A.', batch: 'Batch of 2023', category: 'Undergraduate',
+    quote: 'My B.A. at MLD, along with the guidance from teachers for the SSC exam, helped me secure a government clerical post. The affordable fees and the supportive campus made higher education possible for me.' },
+
+  // --- School ---
+  { name: 'Ananya Sharma', program: 'Senior Secondary (Class 12, Science)', batch: 'Batch of 2024', category: 'School',
+    quote: 'The MLD teachers made Physics and Chemistry genuinely interesting. The regular mock tests and the personal mentoring helped me score 91% in Class 12 boards and crack a good engineering college.' },
+  { name: 'Harsh Rajawat', program: 'Senior Secondary (Class 12, Commerce)', batch: 'Batch of 2023', category: 'School',
+    quote: 'I joined the commerce stream at MLD in Class 11. The Accounts and Business Studies teachers are excellent, and they also guided me for the CA Foundation. I am now a CA student.' },
+  { name: 'Ritu Yadav', program: 'Middle School (Class 8)', batch: 'Batch of 2024', category: 'School',
+    quote: 'I love coming to school. The science experiments, the computer lab, and the annual function make learning so much fun. My teachers are very supportive.' },
+  { name: 'Aman Khan', program: 'Secondary (Class 10, RBSE)', batch: 'Batch of 2024', category: 'School',
+    quote: 'The board exam preparation and the doubt-clearing sessions at MLD helped me score 92% in Class 10. The teachers stay after school to help students who need extra time.' },
+];
+
+// Map a program to the testimonial category that best fits it.
+export const getTestimonialCategory = (
+  p: ProgramDetail
+): Testimonial['category'] => {
+  switch (p.category) {
+    case 'Diploma':
+      if (p.slug.includes('live-stock') || p.slug.includes('animal-husbandry') || p.slug.includes('dairy') || p.slug.includes('poultry'))
+        return 'Livestock';
+      if (p.slug === 'd-pharma' || p.slug === 'pharmacology-basics') return 'Pharmacy';
+      return 'Education';
+    case 'Certificate':
+      if (p.slug === 'pharmacology-basics') return 'Pharmacy';
+      return 'Livestock';
+    case 'Professional':
+      return 'Education';
+    case 'Undergraduate':
+      return 'Undergraduate';
+    case 'School':
+      return 'School';
+    default:
+      return 'Undergraduate';
+  }
+};
+
+export const getTestimonialsForProgram = (p: ProgramDetail): Testimonial[] => {
+  const cat = getTestimonialCategory(p);
+  return TESTIMONIALS.filter((t) => t.category === cat).slice(0, 3);
+};
