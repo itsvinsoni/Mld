@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Icon } from './icons';
 import { NAV_LINKS, SITE, INSTITUTIONS } from './data';
 import { useRoute, getSegments } from './router';
+import { ScrollProgress } from './effects';
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -40,10 +41,10 @@ const Navbar: React.FC = () => {
             <img
               src={SITE.logo}
               alt="MLD logo"
-              className="h-10 w-10 md:h-11 md:w-11 rounded-xl shadow-lg"
+              className="h-10 w-10 md:h-11 md:w-11 rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3"
             />
             <span className="leading-tight">
-              <span className="block font-serif font-bold text-base md:text-lg">
+              <span className="block font-serif font-bold text-base md:text-lg transition-colors group-hover:text-brand-orange">
                 MLD Memorial Sansthan
               </span>
               <span className="block text-[10px] md:text-[11px] tracking-widest uppercase opacity-70">
@@ -71,7 +72,7 @@ const Navbar: React.FC = () => {
           <div className="hidden lg:flex items-center gap-3">
             <a
               href="/admin"
-              className="btn-orange inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm"
+              className="btn-orange magnetic inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm"
             >
               Login
               <Icon id="arrow-right" size={16} />
@@ -142,7 +143,7 @@ const Footer: React.FC = () => {
                 <a
                   key={icon}
                   href="/contact"
-                  className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-slate-800 hover:bg-brand-orange transition-colors text-white"
+                  className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-slate-800 hover:bg-brand-orange transition-all duration-300 text-white hover:scale-110 hover:shadow-lg hover:shadow-brand-orange/40"
                   aria-label={icon}
                 >
                   <Icon id={icon} size={18} />
@@ -246,8 +247,9 @@ export const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <div className="min-h-screen bg-[#F7F3EE] text-light-textPrimary font-sans overflow-x-hidden">
+      <ScrollProgress />
       <Navbar />
-      <main>{children}</main>
+      <main key={segments.join('/') || 'home'} className="page-in">{children}</main>
       <Footer />
     </div>
   );

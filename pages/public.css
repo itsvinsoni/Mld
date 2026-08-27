@@ -1,6 +1,6 @@
 /* =====================
    MLD Memorial Sansthan — Public Styles
-   Clean, photo-forward, white + orange brand
+   Rich animations, satisfying hovers, white + orange brand
    ===================== */
 
 :root {
@@ -33,18 +33,32 @@ body { background-color: var(--warm-bg); color: var(--brand-ink); }
   color: transparent;
 }
 
-/* ---------- Orange gradient button ---------- */
+/* ---------- Orange gradient button (with shine sweep) ---------- */
 .btn-orange {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, #fb923c 0%, #F97316 48%, #ea580c 100%);
   color: #fff;
   font-weight: 700;
-  transition: all 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
   box-shadow: 0 10px 24px rgba(249, 115, 22, 0.28);
 }
-.btn-orange:hover {
-  box-shadow: 0 14px 32px rgba(249, 115, 22, 0.42);
-  transform: translateY(-2px);
+.btn-orange::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
+.btn-orange:hover {
+  box-shadow: 0 18px 40px rgba(249, 115, 22, 0.5);
+  transform: translateY(-3px) scale(1.02);
+}
+.btn-orange:hover::after { left: 140%; }
+.btn-orange:active { transform: translateY(-1px) scale(1.0); }
 
 /* ---------- Section label ---------- */
 .section-label {
@@ -58,13 +72,16 @@ body { background-color: var(--warm-bg); color: var(--brand-ink); }
   color: var(--brand);
 }
 
-/* ---------- Orange divider ---------- */
+/* ---------- Orange divider (draws in on view) ---------- */
 .orange-divider {
   width: 72px;
   height: 3px;
   background: linear-gradient(90deg, #F97316, #c2410c);
   border-radius: 999px;
+  transform-origin: left center;
+  animation: draw-line 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+@keyframes draw-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* ---------- Big stat number ---------- */
 .stat-number {
@@ -73,35 +90,64 @@ body { background-color: var(--warm-bg); color: var(--brand-ink); }
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Card hover lift (orange) ---------- */
+/* ---------- Card hover lift (rich) ---------- */
 .card-glow {
-  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  will-change: transform;
 }
 .card-glow:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 48px rgba(249, 115, 22, 0.16);
-  border-color: rgba(249, 115, 22, 0.4) !important;
+  transform: translateY(-8px);
+  box-shadow: 0 28px 56px rgba(249, 115, 22, 0.18), 0 8px 20px rgba(31, 41, 55, 0.08);
+  border-color: rgba(249, 115, 22, 0.45) !important;
 }
 
-/* ---------- Gallery image hover zoom ---------- */
+/* ---------- 3D tilt card ---------- */
+.tilt-card { transform-style: preserve-3d; perspective: 1000px; transition: transform 0.4s ease; }
+.tilt-inner { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
+
+/* ---------- Shine / shimmer sweep across a card ---------- */
+.shine { position: relative; overflow: hidden; }
+.shine::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+.shine:hover::before { transform: translateX(120%); }
+
+/* ---------- Gallery image hover zoom + overlay ---------- */
 .gallery-img { position: relative; overflow: hidden; }
-.gallery-img img { transition: transform 0.5s ease; }
-.gallery-img:hover img { transform: scale(1.1); }
+.gallery-img img { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.gallery-img:hover img { transform: scale(1.12); }
+.gallery-img .gallery-caption {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+}
+.gallery-img:hover .gallery-caption { transform: translateY(0); opacity: 1; }
 
 /* ---------- Lightbox ---------- */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes zoomIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 .lightbox-backdrop { animation: fadeIn 0.3s ease both; }
-.lightbox-image { animation: zoomIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.lightbox-image { animation: zoomIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-/* ---------- Animations ---------- */
+/* ---------- Float / Kenburns / Marquee ---------- */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  50% { transform: translateY(-14px); }
 }
 .float-slow { animation: float 6s ease-in-out infinite; }
+
+@keyframes float-lg {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(8px, -18px); }
+}
+.float-lg { animation: float-lg 8s ease-in-out infinite; }
 
 @keyframes kenburns {
   0% { transform: scale(1) translate(0, 0); }
@@ -116,12 +162,143 @@ body { background-color: var(--warm-bg); color: var(--brand-ink); }
 .marquee { animation: marquee 40s linear infinite; }
 .marquee:hover { animation-play-state: paused; }
 
+/* ---------- Rise variants (smoother, longer) ---------- */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(22px); }
+  from { opacity: 0; transform: translateY(28px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.rise { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.rise { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
+@keyframes rise-sm {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-sm { animation: rise-sm 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes rise-lg {
+  from { opacity: 0; transform: translateY(44px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-lg { animation: rise-lg 1s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+.scale-in { animation: scale-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.slide-right { animation: slide-right 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ---------- Pulse glow (for CTAs / highlights) ---------- */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 10px 24px rgba(249, 115, 22, 0.32); }
+  50% { box-shadow: 0 14px 36px rgba(249, 115, 22, 0.5); }
+}
+.pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.5; }
+}
+.pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+/* ---------- Ring spin (for avatars / icons) ---------- */
+@keyframes ring-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.ring-spin { animation: ring-spin 12s linear infinite; }
+
+/* ---------- Scroll progress bar ---------- */
+.scroll-progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0%;
+  background: linear-gradient(90deg, #F97316, #ea580c, #c2410c);
+  z-index: 60;
+  box-shadow: 0 0 12px rgba(249,115,22,0.6);
+  transition: width 0.1s linear;
+}
+
+/* ---------- Page transition (route change) ---------- */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-in { animation: page-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ---------- Nav link dot indicator ---------- */
+.nav-link { position: relative; transition: color 0.3s ease; }
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 50%; bottom: -6px;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, #F97316, #c2410c);
+  border-radius: 999px;
+  transform: translateX(-50%);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after { width: 70%; }
+.nav-link.nav-active { color: var(--brand); }
+.nav-link.nav-active::after { width: 100%; }
+
+/* ---------- Magnetic button (subtle scale on hover) ---------- */
+.magnetic { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+.magnetic:hover { transform: scale(1.04); }
+
+/* ---------- Glass shine (for glass elements) ---------- */
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+}
+.glass-light {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+}
+
+/* ---------- Gradient border (animated) ---------- */
+@keyframes border-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.gradient-border {
+  position: relative;
+  background: white;
+  border-radius: 1rem;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #F97316, #FFEDD5, #F97316, #D97706);
+  background-size: 300% 300%;
+  z-index: -1;
+  animation: border-rotate 6s ease infinite;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.gradient-border:hover::before { opacity: 1; }
+
+/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .float-slow, .kenburns, .marquee, .rise { animation: none !important; }
+  .float-slow, .float-lg, .kenburns, .marquee, .rise, .rise-sm, .rise-lg,
+  .fade-up, .scale-in, .slide-right, .pulse-glow, .pulse-dot, .ring-spin,
+  .page-in, .gradient-border::before, .shine::before {
+    animation: none !important;
+  }
+  .card-glow:hover { transform: none; }
+  .btn-orange:hover { transform: none; }
 }

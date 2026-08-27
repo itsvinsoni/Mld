@@ -92,7 +92,7 @@ const GalleryItem: React.FC<{ img: GalleryImage; index: number; onClick: () => v
     <button
       ref={ref}
       onClick={onClick}
-      className={`gallery-img group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow border border-slate-100 bg-slate-100 ${className}`}
+      className={`gallery-img shine group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow border border-slate-100 bg-slate-100 ${className}`}
       style={{ transitionDelay: `${index * 60}ms` }}
       aria-label={`View ${img.caption}`}
     >
