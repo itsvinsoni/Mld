@@ -16,6 +16,7 @@ export interface InstitutionAction {
 
 export interface Program {
   name: string;
+  slug: string;
   level: string;
   duration: string;
 }
@@ -164,11 +165,11 @@ export const INSTITUTIONS: Institution[] = [
     gallery: [pbig('mld-school-1'), pbig('mld-school-2'), pbig('mld-school-3'), pbig('mld-school-4')],
     icon: 'school',
     programs: [
-      { name: 'Nursery & Kindergarten', level: 'Primary', duration: '2 years' },
-      { name: 'Primary School', level: 'Class 1–5', duration: '5 years' },
-      { name: 'Middle School', level: 'Class 6–8', duration: '3 years' },
-      { name: 'Secondary', level: 'Class 9–10 (RBSE)', duration: '2 years' },
-      { name: 'Senior Secondary', level: 'Class 11–12 (RBSE)', duration: '2 years' },
+      { name: 'Nursery & Kindergarten', slug: 'nursery-kindergarten', level: 'Primary', duration: '2 years' },
+      { name: 'Primary School', slug: 'primary-school', level: 'Class 1–5', duration: '5 years' },
+      { name: 'Middle School', slug: 'middle-school', level: 'Class 6–8', duration: '3 years' },
+      { name: 'Secondary', slug: 'secondary', level: 'Class 9–10 (RBSE)', duration: '2 years' },
+      { name: 'Senior Secondary', slug: 'senior-secondary', level: 'Class 11–12 (RBSE)', duration: '2 years' },
     ],
     facilities: COMMON_FACILITIES,
     highlights: [
@@ -200,11 +201,11 @@ export const INSTITUTIONS: Institution[] = [
     gallery: [pbig('mld-intl-1'), pbig('mld-intl-2'), pbig('mld-intl-3'), pbig('mld-intl-4')],
     icon: 'globe',
     programs: [
-      { name: 'Nursery & Kindergarten', level: 'Primary', duration: '2 years' },
-      { name: 'Primary School', level: 'Class 1–5', duration: '5 years' },
-      { name: 'Middle School', level: 'Class 6–8', duration: '3 years' },
-      { name: 'Secondary', level: 'Class 9–10 (CBSE)', duration: '2 years' },
-      { name: 'Senior Secondary', level: 'Class 11–12 (CBSE)', duration: '2 years' },
+      { name: 'Nursery & Kindergarten', slug: 'nursery-kindergarten', level: 'Primary', duration: '2 years' },
+      { name: 'Primary School', slug: 'primary-school', level: 'Class 1–5', duration: '5 years' },
+      { name: 'Middle School', slug: 'middle-school', level: 'Class 6–8', duration: '3 years' },
+      { name: 'Secondary', slug: 'secondary', level: 'Class 9–10 (CBSE)', duration: '2 years' },
+      { name: 'Senior Secondary', slug: 'senior-secondary', level: 'Class 11–12 (CBSE)', duration: '2 years' },
     ],
     facilities: COMMON_FACILITIES,
     highlights: [
@@ -236,10 +237,10 @@ export const INSTITUTIONS: Institution[] = [
     gallery: [pbig('mld-uppermid-1'), pbig('mld-uppermid-2'), pbig('mld-uppermid-3')],
     icon: 'school',
     programs: [
-      { name: 'Primary School', level: 'Class 1–5', duration: '5 years' },
-      { name: 'Middle School', level: 'Class 6–8', duration: '3 years' },
-      { name: 'Secondary', level: 'Class 9–10 (RBSE)', duration: '2 years' },
-      { name: 'Senior Secondary', level: 'Class 11–12 (RBSE)', duration: '2 years' },
+      { name: 'Primary School', slug: 'primary-school', level: 'Class 1–5', duration: '5 years' },
+      { name: 'Middle School', slug: 'middle-school', level: 'Class 6–8', duration: '3 years' },
+      { name: 'Secondary', slug: 'secondary', level: 'Class 9–10 (RBSE)', duration: '2 years' },
+      { name: 'Senior Secondary', slug: 'senior-secondary', level: 'Class 11–12 (RBSE)', duration: '2 years' },
     ],
     facilities: COMMON_FACILITIES,
     highlights: [
@@ -271,11 +272,11 @@ export const INSTITUTIONS: Institution[] = [
     gallery: [pbig('mld-college-1'), pbig('mld-college-2'), pbig('mld-college-3')],
     icon: 'building',
     programs: [
-      { name: 'B.A. (Bachelor of Arts)', level: 'Undergraduate', duration: '3 years' },
-      { name: 'B.Sc. (Bachelor of Science)', level: 'Undergraduate', duration: '3 years' },
-      { name: 'B.Com (Bachelor of Commerce)', level: 'Undergraduate', duration: '3 years' },
-      { name: 'BBA (Business Administration)', level: 'Undergraduate', duration: '3 years' },
-      { name: 'BCA (Computer Applications)', level: 'Undergraduate', duration: '3 years' },
+      { name: 'B.A. (Bachelor of Arts)', slug: 'ba-arts', level: 'Undergraduate', duration: '3 years' },
+      { name: 'B.Sc. (Bachelor of Science)', slug: 'bsc-science', level: 'Undergraduate', duration: '3 years' },
+      { name: 'B.Com (Bachelor of Commerce)', slug: 'bcom-commerce', level: 'Undergraduate', duration: '3 years' },
+      { name: 'BBA (Business Administration)', slug: 'bba', level: 'Undergraduate', duration: '3 years' },
+      { name: 'BCA (Computer Applications)', slug: 'bca', level: 'Undergraduate', duration: '3 years' },
     ],
     facilities: COMMON_FACILITIES,
     highlights: [
@@ -304,9 +305,9 @@ export const INSTITUTIONS: Institution[] = [
     gallery: [pbig('mld-livestock-1'), pbig('mld-livestock-2'), pbig('mld-livestock-3')],
     icon: 'flask',
     programs: [
-      { name: 'Live Stock Assistant Diploma', level: 'Diploma', duration: '2 years' },
-      { name: 'Animal Husbandry Basics', level: 'Certificate', duration: '1 year' },
-      { name: 'Dairy & Poultry Management', level: 'Certificate', duration: '6 months' },
+      { name: 'Live Stock Assistant Diploma', slug: 'live-stock-assistant-diploma', level: 'Diploma', duration: '2 years' },
+      { name: 'Animal Husbandry Basics', slug: 'animal-husbandry-basics', level: 'Certificate', duration: '1 year' },
+      { name: 'Dairy & Poultry Management', slug: 'dairy-poultry-management', level: 'Certificate', duration: '6 months' },
     ],
     facilities: [
       { label: 'Practical Labs', icon: 'flask' },
@@ -341,8 +342,8 @@ export const INSTITUTIONS: Institution[] = [
     gallery: [pbig('mld-pharmacy-1'), pbig('mld-pharmacy-2'), pbig('mld-pharmacy-3')],
     icon: 'capsule',
     programs: [
-      { name: 'Diploma in Pharmacy (D.Pharma)', level: 'Diploma', duration: '2 years' },
-      { name: 'Pharmacology Basics', level: 'Certificate', duration: '6 months' },
+      { name: 'Diploma in Pharmacy (D.Pharma)', slug: 'd-pharma', level: 'Diploma', duration: '2 years' },
+      { name: 'Pharmacology Basics', slug: 'pharmacology-basics', level: 'Certificate', duration: '6 months' },
     ],
     facilities: [
       { label: 'Pharmacy Lab', icon: 'capsule' },
@@ -377,11 +378,11 @@ export const INSTITUTIONS: Institution[] = [
     gallery: [pbig('mld-teacher-1'), pbig('mld-teacher-2'), pbig('mld-teacher-3')],
     icon: 'graduation',
     programs: [
-      { name: 'B.Ed. (Bachelor of Education)', level: 'Undergraduate', duration: '2 years' },
-      { name: 'B.A. / B.Ed.', level: 'Integrated', duration: '4 years' },
-      { name: 'B.Sc. / B.Ed.', level: 'Integrated', duration: '4 years' },
-      { name: 'D.El.Ed. (Diploma in Elementary Education)', level: 'Diploma', duration: '2 years' },
-      { name: 'Shiksha Shastri', level: 'Diploma', duration: '2 years' },
+      { name: 'B.Ed. (Bachelor of Education)', slug: 'b-ed', level: 'Undergraduate', duration: '2 years' },
+      { name: 'B.A. / B.Ed.', slug: 'ba-b-ed-integrated', level: 'Integrated', duration: '4 years' },
+      { name: 'B.Sc. / B.Ed.', slug: 'bsc-b-ed-integrated', level: 'Integrated', duration: '4 years' },
+      { name: 'D.El.Ed. (Diploma in Elementary Education)', slug: 'd-el-ed', level: 'Diploma', duration: '2 years' },
+      { name: 'Shiksha Shastri', slug: 'shiksha-shastri', level: 'Diploma', duration: '2 years' },
     ],
     facilities: [
       { label: 'Teaching Practice', icon: 'school' },

@@ -120,24 +120,32 @@ const Programs: React.FC<{ inst: Institution }> = ({ inst }) => {
         <SectionHeading label="Programmes" heading={`Courses & Programs`} subtext={`Programmes offered at ${inst.shortName}.`} />
         <div ref={ref} className={`max-w-4xl mx-auto space-y-3 ${className}`}>
           {inst.programs.map((p, i) => (
-            <div
-              key={p.name}
-              className="flex items-center justify-between gap-4 bg-white rounded-2xl border border-slate-100 p-5 card-glow"
+            <a
+              key={p.slug || p.name}
+              href={`/programs/${p.slug}`}
+              className="group flex items-center justify-between gap-4 bg-white rounded-2xl border border-slate-100 p-5 card-glow"
               style={{ transitionDelay: `${i * 50}ms` }}
             >
-              <div className="flex items-center gap-4">
-                <span className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-brand-orange-light text-brand-orange shrink-0">
+              <div className="flex items-center gap-4 min-w-0">
+                <span className="inline-flex items-center justify-center h-12 w-12 rounded-xl bg-brand-orange-light text-brand-orange shrink-0 group-hover:bg-brand-orange group-hover:text-white transition-colors">
                   <Icon id="book" size={20} />
                 </span>
-                <div>
-                  <div className="font-bold text-light-textPrimary">{p.name}</div>
-                  <div className="text-sm text-light-textSecondary">{p.level}</div>
+                <div className="min-w-0">
+                  <div className="font-bold text-light-textPrimary leading-snug group-hover:text-brand-orange transition-colors">
+                    {p.name}
+                  </div>
+                  <div className="text-sm text-light-textSecondary mt-0.5">{p.level}</div>
                 </div>
               </div>
-              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange-dark bg-brand-orange-light px-3 py-1.5 rounded-full whitespace-nowrap">
-                <Icon id="clock" size={14} /> {p.duration}
-              </span>
-            </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-orange-dark bg-brand-orange-light px-3 py-1.5 rounded-full whitespace-nowrap">
+                  <Icon id="clock" size={14} /> {p.duration}
+                </span>
+                <span className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-slate-100 text-slate-600 group-hover:bg-brand-orange group-hover:text-white transition-colors">
+                  <Icon id="arrow-right" size={16} />
+                </span>
+              </div>
+            </a>
           ))}
         </div>
       </div>

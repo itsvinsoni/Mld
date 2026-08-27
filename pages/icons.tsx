@@ -39,7 +39,14 @@ export type LucideId =
   | 'tractor'
   | 'briefcase'
   | 'camera'
-  | 'image';
+  | 'image'
+  | 'trending-up'
+  | 'tool'
+  | 'wifi'
+  | 'shield'
+  | 'activity'
+  | 'monitor'
+  | 'leaf';
 
 interface IconProps {
   id: LucideId;
@@ -230,6 +237,49 @@ const paths: Record<LucideId, React.ReactNode> = {
       <rect x="3" y="4" width="18" height="16" rx="2" />
       <circle cx="8.5" cy="9.5" r="1.5" />
       <path d="M4 17l5-5 4 4 3-3 4 4" />
+    </>
+  ),
+  'trending-up': (
+    <>
+      <path d="M3 17l6-6 4 4 8-8" />
+      <path d="M14 7h7v7" />
+    </>
+  ),
+  tool: (
+    <>
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.8-2.8 2.5-2.5Z" />
+    </>
+  ),
+  wifi: (
+    <>
+      <path d="M2 8.5a14 14 0 0 1 20 0" />
+      <path d="M5 12a10 10 0 0 1 14 0" />
+      <path d="M8.5 15.5a5 5 0 0 1 7 0" />
+      <circle cx="12" cy="19" r="1" fill="currentColor" />
+    </>
+  ),
+  shield: (
+    <>
+      <path d="M12 3l8 3v6c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V6l8-3Z" />
+      <path d="M9 12l2 2 4-4" />
+    </>
+  ),
+  activity: (
+    <>
+      <path d="M3 12h4l3-8 4 16 3-8h4" />
+    </>
+  ),
+  monitor: (
+    <>
+      <rect x="3" y="4" width="18" height="13" rx="2" />
+      <path d="M8 20h8" />
+      <path d="M12 17v3" />
+    </>
+  ),
+  leaf: (
+    <>
+      <path d="M4 20s8-1 12-5 4-12 4-12-8 1-12 5-4 12-4 12Z" />
+      <path d="M4 20l9-9" />
     </>
   ),
 };

@@ -22,6 +22,7 @@ import { GalleryPage } from './pages/GalleryPage';
 import { MessagesPage } from './pages/MessagesPage';
 import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { ProgramDetailPage } from './pages/ProgramDetailPage';
 import { useRoute, getSegments, navigate, installLinkInterceptor } from './pages/router';
 
 type Theme = 'light' | 'dark';
@@ -162,6 +163,8 @@ const App: React.FC = () => {
         page = <MessagesPage />;
     } else if (segments[0] === 'contact') {
         page = <ContactPage />;
+    } else if (segments[0] === 'programs' && segments[1]) {
+        page = <ProgramDetailPage slug={segments[1]} />;
     } else {
         page = <NotFoundPage />;
     }
