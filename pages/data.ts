@@ -92,8 +92,51 @@ export const STATS: Stat[] = [
   { id: 'st4', value: 20, suffix: '+', label: 'Years of Legacy', icon: 'award' },
 ];
 
-const pimg = (seed: string) => `https://picsum.photos/seed/${seed}/600/400`;
-const pbig = (seed: string) => `https://picsum.photos/seed/${seed}/1200/720`;
+const MLD = 'https://mldmemorialsansthan.com';
+
+// Real MLD Memorial Sansthan photos (hot-linked from the live site).
+export const HERO_IMAGES = [
+  `${MLD}/images/slider/9a789b89-7748-4de3-8ec1-fa0a1139d9a1.jpeg`,
+  `${MLD}/images/slider/66e1aa4d-5177-4241-9012-e1d5a7fe0a6d.jpeg`,
+  `${MLD}/images/slider/c4efed92-c510-4031-b994-355b347cfa96.jpeg`,
+  `${MLD}/images/slider/b6c273b4-92ee-4c43-bafc-eae011065b0a.jpg`,
+  `${MLD}/images/slider/992d4a05-0fb8-4b5f-baf9-951e3904a345.jpg`,
+  `${MLD}/images/slider/79ad1cef-6702-4647-b3c0-4d4f36f7dbdb.jpg`,
+  `${MLD}/images/slider/d8a6b469-7f89-4b89-ae0e-287f06394774.png`,
+  `${MLD}/images/slider/5e28635f-48f8-4677-ab3d-3edbe215d919.jpeg`,
+];
+
+const REAL_GALLERY = [
+  `${MLD}/images/gallery/08e05197-73da-430c-9f76-b5ceabf65156.jpeg`,
+  `${MLD}/images/gallery/c440c433-2a1f-4078-846e-591f8cd765cf.jpeg`,
+  `${MLD}/images/gallery/bc91becf-6891-4f10-8121-4933e87b16b8.jpeg`,
+  `${MLD}/images/gallery/800a9b04-a73d-4905-b6b1-6c2df8a2dc79.jpeg`,
+  `${MLD}/images/gallery/305d6bd7-fea9-4dd7-8a0e-1b9f907ed029.jpeg`,
+  `${MLD}/images/gallery/6f508d71-e7bc-43a4-a20c-62142ced8067.jpeg`,
+  `${MLD}/images/gallery/9df71f9c-b955-4294-8019-e934f5d5a09b.jpeg`,
+  `${MLD}/images/gallery/c0c68168-527e-48fa-90e3-92bf06981333.jpeg`,
+  `${MLD}/images/gallery/42ac84c9-2802-4fa8-815e-5159c89db97b.jpeg`,
+  `${MLD}/images/gallery/388ad6b8-e8af-4048-9944-8c88fc1a9440.jpeg`,
+  `${MLD}/images/gallery/26847b69-2d2a-48b7-a209-ebe7804146c0.png`,
+  `${MLD}/images/gallery/197fed72-2b80-45b0-b2ee-d600c36592db.jpg`,
+  `${MLD}/images/gallery/4f0fcdd6-e216-4135-bf68-2c5b12c68833.jpg`,
+  `${MLD}/images/gallery/2bf8186b-e8d2-4e25-ac5f-b6d99d884ffe.jpg`,
+  `${MLD}/images/gallery/589db550-affc-40c3-b62c-e22bbc902fdd.jpg`,
+  `${MLD}/images/gallery/b87ae710-377f-4219-9733-60e6c8ce9ade.jpg`,
+  `${MLD}/Images/studentImage.jpg`,
+  `${MLD}/Images/studentImage2.jpg`,
+];
+
+const hashStr = (s: string) => {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return h;
+};
+
+// Stable mapping from a seed string to a real MLD photo.
+const pimg = (seed: string) => REAL_GALLERY[hashStr(seed) % REAL_GALLERY.length];
+const pbig = (seed: string) => REAL_GALLERY[hashStr(seed) % REAL_GALLERY.length];
+export const ABOUT_IMAGE = `${MLD}/Images/studentImage.jpg`;
 
 const COMMON_FACILITIES: { label: string; icon: LucideId }[] = [
   { label: 'Smart Classrooms', icon: 'school' },
@@ -374,7 +417,7 @@ export const ABOUT = {
     { label: 'Modern Curriculum', icon: 'book' },
     { label: 'Successful Alumni', icon: 'users' },
   ] as { label: string; icon: LucideId }[],
-  image: pimg('mld-about'),
+  image: ABOUT_IMAGE,
   badgeValue: '20+',
   badgeLabel: 'Years of Legacy',
 };
@@ -412,16 +455,23 @@ export const MESSAGES: LeadershipMessage[] = [
   },
 ];
 
-export const GALLERY: GalleryImage[] = [
-  { id: 'g1', src: 'https://picsum.photos/seed/mld-campus/700/500', caption: 'Our vibrant campus', alt: 'Campus building' },
-  { id: 'g2', src: 'https://picsum.photos/seed/mld-class/700/500', caption: 'Interactive classrooms', alt: 'Students in classroom' },
-  { id: 'g3', src: 'https://picsum.photos/seed/mld-lab/700/500', caption: 'Modern laboratories', alt: 'Science laboratory' },
-  { id: 'g4', src: 'https://picsum.photos/seed/mld-library/700/500', caption: 'Central library', alt: 'Library shelves' },
-  { id: 'g5', src: 'https://picsum.photos/seed/mld-sports/700/500', caption: 'Sports & recreation', alt: 'Sports ground' },
-  { id: 'g6', src: 'https://picsum.photos/seed/mld-event/700/500', caption: 'Annual celebrations', alt: 'Celebration event' },
-  { id: 'g7', src: 'https://picsum.photos/seed/mld-grad/700/500', caption: 'Graduation day', alt: 'Graduates' },
-  { id: 'g8', src: 'https://picsum.photos/seed/mld-culture/700/500', caption: 'Cultural programmes', alt: 'Cultural performance' },
+const GALLERY_CAPTIONS = [
+  'Our vibrant campus',
+  'Interactive classrooms',
+  'Modern laboratories',
+  'Central library',
+  'Sports & recreation',
+  'Annual celebrations',
+  'Graduation day',
+  'Cultural programmes',
 ];
+
+export const GALLERY: GalleryImage[] = REAL_GALLERY.slice(0, 8).map((src, i) => ({
+  id: `g${i + 1}`,
+  src,
+  caption: GALLERY_CAPTIONS[i] || 'MLD Memorial Sansthan',
+  alt: GALLERY_CAPTIONS[i] || 'MLD campus',
+}));
 
 export const NAV_LINKS = [
   { label: 'Home', href: '/' },

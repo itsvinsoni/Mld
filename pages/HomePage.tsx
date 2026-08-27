@@ -5,7 +5,7 @@ import { InstitutionCard } from './sections/InstitutionsSection';
 import { SectionHeading } from './SectionHeading';
 import { Icon } from './icons';
 import { useReveal } from './hooks';
-import { INSTITUTIONS, GALLERY, MESSAGES, ABOUT } from './data';
+import { INSTITUTIONS, GALLERY, MESSAGES, ABOUT, ABOUT_IMAGE } from './data';
 
 const InstitutionsPreview: React.FC = () => {
   return (
@@ -42,23 +42,14 @@ const AboutPreview: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div ref={ref} className={`relative ${className}`}>
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl hero-gradient aspect-[4/3]">
-              <div className="absolute inset-0 hero-grid opacity-30" />
-              <div className="absolute -top-10 -left-10 h-44 w-44 rounded-full bg-brand-orange/30 blur-3xl" />
-              <div className="absolute bottom-0 right-0 h-52 w-52 rounded-full bg-brand-orange-dark/30 blur-3xl" />
-              <div className="absolute inset-0 flex flex-col justify-between p-8">
-                <span className="inline-flex items-center gap-2 text-white/80 text-xs font-bold uppercase tracking-widest">
-                  <Icon id="sparkles" size={16} className="text-orange-300" /> Shaping Futures
-                </span>
-                <div className="glass rounded-3xl p-6">
-                  <span className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-brand-orange text-white mb-4">
-                    <Icon id="graduation" size={28} />
-                  </span>
-                  <div className="font-serif text-white text-3xl md:text-4xl font-bold">
-                    Education that <span className="text-orange-gradient">transforms lives</span>
-                  </div>
-                </div>
-              </div>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-slate-100">
+              <img
+                src={ABOUT_IMAGE}
+                alt="Students at MLD Memorial Sansthan"
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/35 to-transparent" />
             </div>
             <div className="absolute -bottom-6 -right-3 float-slow">
               <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center">
@@ -128,17 +119,20 @@ const GalleryPreview: React.FC = () => {
             <a
               key={img.id}
               href="/gallery"
-              className="group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow hero-gradient"
+              className="group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow bg-slate-100"
               style={{ animationDelay: `${i * 60}ms` }}
             >
-              <div className="absolute inset-0 hero-grid opacity-30" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <span className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-white/15 text-white backdrop-blur group-hover:bg-brand-orange transition-colors">
-                  <Icon id={i % 2 === 0 ? 'camera' : 'image'} size={28} />
-                </span>
-                <span className="text-white/80 text-sm font-medium px-4 text-center">{img.caption}</span>
-              </div>
-              <span className="absolute top-3 right-3 inline-flex items-center justify-center h-8 w-8 rounded-full bg-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="absolute bottom-3 left-3 text-white/95 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                {img.caption}
+              </span>
+              <span className="absolute top-3 right-3 inline-flex items-center justify-center h-9 w-9 rounded-full bg-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                 <Icon id="plus" size={16} />
               </span>
             </a>

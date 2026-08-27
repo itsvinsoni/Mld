@@ -3,26 +3,18 @@ import { AboutSection } from './sections/AboutSection';
 import { StatsStrip } from './sections/HeroSection';
 import { ContactCta } from './shared/ContactCta';
 import { Icon } from './icons';
-import { ABOUT } from './data';
+import { ABOUT, ABOUT_IMAGE } from './data';
+import { PageHero } from './sections/PageHero';
 
 export const AboutPage: React.FC = () => {
   return (
     <>
-      <section className="relative pt-32 md:pt-40 pb-16 bg-slate-900 overflow-hidden">
-        <div className="absolute inset-0 hero-overlay" />
-        <div className="absolute top-20 -right-24 h-80 w-80 rounded-full bg-brand-orange/20 blur-3xl float-slow" />
-        <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8 text-center">
-          <span className="section-label mb-4">
-            <span className="block w-8 h-px bg-brand-orange" />
-            About Us
-            <span className="block w-8 h-px bg-brand-orange" />
-          </span>
-          <h1 className="font-serif text-white text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-            A Legacy of <span className="text-orange-gradient">Quality Education</span>
-          </h1>
-          <p className="mt-5 text-white/85 text-lg max-w-2xl mx-auto">{ABOUT.paragraph}</p>
-        </div>
-      </section>
+      <PageHero
+        label="About Us"
+        title={<>A Legacy of <span className="text-orange-gradient">Quality Education</span></>}
+        subtitle={ABOUT.paragraph}
+        image={ABOUT_IMAGE}
+      />
 
       <AboutSection />
       <StatsStrip />

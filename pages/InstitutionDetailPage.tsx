@@ -7,31 +7,33 @@ import { ContactCta } from './shared/ContactCta';
 
 const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
   return (
-    <section className="relative pt-32 md:pt-40 pb-16 overflow-hidden hero-gradient text-white">
-      <div className="absolute inset-0 hero-grid opacity-30" />
-      <div className="absolute -top-20 right-0 h-72 w-72 rounded-full bg-brand-orange/30 blur-3xl" />
+    <section className="relative pt-32 md:pt-40 pb-16 overflow-hidden text-white">
+      <div className="absolute inset-0">
+        <img src={inst.image} alt={inst.name} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/55 to-slate-900/35" />
+      </div>
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <nav className="flex items-center gap-2 text-sm text-white/70 mb-6">
+        <nav className="flex items-center gap-2 text-sm text-white/80 mb-6">
           <a href="/" className="hover:text-white transition">Home</a>
           <Icon id="chevron-right" size={14} />
           <a href="/institutions" className="hover:text-white transition">Institutions</a>
           <Icon id="chevron-right" size={14} />
-          <span className="text-brand-orange">{inst.shortName}</span>
+          <span className="text-white">{inst.shortName}</span>
         </nav>
         <div className="flex items-center gap-4 mb-5">
-          <span className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-brand-orange text-white shadow-lg">
+          <span className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-white/15 text-white backdrop-blur shadow-lg">
             <Icon id={inst.icon} size={30} />
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/15 text-white backdrop-blur">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-brand-orange text-white">
             {inst.typeLabel}
           </span>
         </div>
         <h1 className="mt-2 font-serif text-3xl md:text-5xl font-bold leading-tight max-w-4xl">
           {inst.name}
         </h1>
-        <div className="mt-5 flex flex-wrap items-center gap-4 text-white/85">
+        <div className="mt-5 flex flex-wrap items-center gap-4 text-white/90">
           <span className="inline-flex items-center gap-1.5">
-            <Icon id="map-pin" size={16} className="text-brand-orange" /> {inst.location}
+            <Icon id="map-pin" size={16} className="text-brand-orange-light" /> {inst.location}
           </span>
         </div>
         <div className="mt-7 flex flex-wrap gap-3">
@@ -44,7 +46,7 @@ const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
               className={
                 action.label.toLowerCase().includes('enquiry') || action.label.includes('Admission')
                   ? 'btn-orange inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm'
-                  : 'inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white border-2 border-white/25 hover:bg-white hover:text-slate-900 transition-colors'
+                  : 'inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white border-2 border-white/40 hover:bg-white hover:text-slate-900 transition-colors'
               }
             >
               {action.label}
@@ -155,9 +157,12 @@ const OtherInstitutions: React.FC<{ current: Institution }> = ({ current }) => {
               href={`/institutions/${inst.slug}`}
               className="card-glow group bg-[#F7F3EE] rounded-2xl overflow-hidden flex items-center gap-4 p-4"
             >
-              <span className={`inline-flex items-center justify-center h-20 w-20 rounded-xl shrink-0 hero-gradient text-white`}>
-                <Icon id={inst.icon} size={30} />
-              </span>
+              <img
+                src={inst.image}
+                alt={inst.name}
+                className="h-20 w-20 rounded-xl object-cover shrink-0"
+                loading="lazy"
+              />
               <div>
                 <span className="text-xs font-bold text-brand-orange uppercase tracking-wide">
                   {inst.typeLabel}

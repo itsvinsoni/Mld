@@ -32,7 +32,9 @@ const Navbar: React.FC = () => {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? 'navbar-scrolled text-light-textPrimary' : 'bg-transparent text-white'
+        scrolled
+          ? 'bg-white/95 backdrop-blur-md text-light-textPrimary shadow-md border-b border-slate-100'
+          : 'bg-white/5 backdrop-blur-md text-white'
       }`}
     >
       <nav className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
@@ -46,7 +48,7 @@ const Navbar: React.FC = () => {
             />
             <span className="leading-tight">
               <span className="block font-serif font-bold text-base md:text-lg">
-                MLD <span className="text-brand-orange">Memorial Sansthan</span>
+                MLD Memorial Sansthan
               </span>
               <span className="block text-[10px] md:text-[11px] tracking-widest uppercase opacity-70">
                 Kekri · Rajasthan
@@ -60,10 +62,8 @@ const Navbar: React.FC = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className={`nav-link text-sm font-medium tracking-wide transition-colors ${
-                  isActive(link.href)
-                    ? 'nav-active text-brand-orange'
-                    : 'hover:text-brand-orange'
+                className={`nav-link text-sm font-medium tracking-wide transition-colors hover:text-brand-orange ${
+                  isActive(link.href) ? 'nav-active text-brand-orange' : ''
                 }`}
               >
                 {link.label}
@@ -94,19 +94,19 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — clean white, no orange backgrounds on items */}
       {menuOpen && (
         <div className="lg:hidden absolute inset-x-0 top-16 md:top-20 bg-white text-light-textPrimary shadow-2xl border-t border-slate-100">
-          <div className="px-5 py-4 flex flex-col gap-1">
+          <div className="px-5 py-4 flex flex-col">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className={`py-3 px-2 rounded-lg text-base font-medium transition-colors ${
+                className={`py-3 text-base font-medium border-b border-slate-100 transition-colors ${
                   isActive(link.href)
-                    ? 'bg-brand-orange-light text-brand-orange-dark'
-                    : 'hover:bg-brand-orange-light hover:text-brand-orange-dark'
+                    ? 'text-brand-orange'
+                    : 'text-light-textPrimary hover:text-brand-orange'
                 }`}
               >
                 {link.label}
@@ -115,7 +115,7 @@ const Navbar: React.FC = () => {
             <a
               href="/admin"
               onClick={() => setMenuOpen(false)}
-              className="btn-orange mt-3 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-base"
+              className="btn-orange mt-4 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-base"
             >
               Login
               <Icon id="arrow-right" size={18} />

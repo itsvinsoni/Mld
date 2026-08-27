@@ -14,18 +14,21 @@ const InstitutionCard: React.FC<{ inst: Institution; index: number }> = ({ inst,
       className={`card-glow group bg-white rounded-2xl border border-slate-100 overflow-hidden flex flex-col ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      {/* Gradient header */}
-      <a href={`/institutions/${inst.slug}`} className="inst-header relative h-44 overflow-hidden block">
-        <div className="absolute inset-0" />
-        <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/20 text-white backdrop-blur">
+      {/* Photo header */}
+      <a href={`/institutions/${inst.slug}`} className="relative h-44 overflow-hidden block bg-slate-100">
+        <img
+          src={inst.image}
+          alt={inst.name}
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent" />
+        <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/95 text-brand-orange-dark backdrop-blur">
           {inst.typeLabel}
         </span>
-        <span className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 text-white/90 text-xs">
+        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-white/95 text-xs">
           <Icon id="map-pin" size={14} />
           {inst.location}
-        </span>
-        <span className="relative inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-brand-orange text-white shadow-lg mt-7 ml-5">
-          <Icon id={inst.icon} size={26} />
         </span>
       </a>
 
