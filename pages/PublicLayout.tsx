@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
-                href={`#${link.href}`}
+                href={link.href}
                 className={`nav-link text-sm font-medium tracking-wide transition-colors ${
                   isActive(link.href)
                     ? 'nav-active text-brand-orange'
@@ -101,7 +101,7 @@ const Navbar: React.FC = () => {
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
-                href={`#${link.href}`}
+                href={link.href}
                 onClick={() => setMenuOpen(false)}
                 className={`py-3 px-2 rounded-lg text-base font-medium transition-colors ${
                   isActive(link.href)
@@ -163,7 +163,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-sm">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a href={`#${link.href}`} className="hover:text-brand-orange transition-colors">
+                  <a href={link.href} className="hover:text-brand-orange transition-colors">
                     {link.label}
                   </a>
                 </li>
@@ -188,7 +188,7 @@ const Footer: React.FC = () => {
               {INSTITUTIONS.slice(0, 6).map((inst) => (
                 <li key={inst.id}>
                   <a
-                    href={`#/institutions/${inst.slug}`}
+                    href={`/institutions/${inst.slug}`}
                     className="hover:text-brand-orange transition-colors"
                   >
                     {inst.shortName}
@@ -249,7 +249,7 @@ export const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children
   }, [segments.join('/')]);
 
   return (
-    <div className="min-h-screen bg-light-background text-light-textPrimary font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#F7F3EE] text-light-textPrimary font-sans overflow-x-hidden">
       <Navbar />
       <main>{children}</main>
       <Footer />

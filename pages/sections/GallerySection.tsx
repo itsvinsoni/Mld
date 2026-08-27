@@ -92,15 +92,20 @@ const GalleryItem: React.FC<{ img: GalleryImage; index: number; onClick: () => v
     <button
       ref={ref}
       onClick={onClick}
-      className={`gallery-img group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow border border-slate-100 ${className}`}
+      className={`gallery-img group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow border border-slate-100 hero-gradient ${className}`}
       style={{ transitionDelay: `${index * 60}ms` }}
       aria-label={`View ${img.caption}`}
     >
+      <div className="absolute inset-0 hero-grid opacity-20" />
       <img
         src={img.src}
         alt={img.alt}
         loading="lazy"
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        className="relative w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        onError={(e) => {
+          const el = e.currentTarget;
+          el.style.display = 'none';
+        }}
       />
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-slate-900/80 to-transparent" />
       <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
@@ -128,7 +133,7 @@ export const GallerySection: React.FC = () => {
   );
 
   return (
-    <section id="gallery" className="py-20 md:py-28 bg-light-background">
+    <section id="gallery" className="py-20 md:py-28 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
           label="Photo Gallery"

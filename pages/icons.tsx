@@ -37,7 +37,9 @@ export type LucideId =
   | 'astronaut'
   | 'bus'
   | 'tractor'
-  | 'briefcase';
+  | 'briefcase'
+  | 'camera'
+  | 'image';
 
 interface IconProps {
   id: LucideId;
@@ -215,6 +217,19 @@ const paths: Record<LucideId, React.ReactNode> = {
       <rect x="3" y="8" width="18" height="11" rx="2" />
       <path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
       <path d="M3 13h18" />
+    </>
+  ),
+  camera: (
+    <>
+      <path d="M4 7h3l2-2h6l2 2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z" />
+      <circle cx="12" cy="13" r="3.5" />
+    </>
+  ),
+  image: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="8.5" cy="9.5" r="1.5" />
+      <path d="M4 17l5-5 4 4 3-3 4 4" />
     </>
   ),
 };

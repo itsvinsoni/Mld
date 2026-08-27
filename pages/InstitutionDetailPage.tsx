@@ -7,11 +7,9 @@ import { ContactCta } from './shared/ContactCta';
 
 const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
   return (
-    <section className="relative pt-32 md:pt-44 pb-16 overflow-hidden bg-slate-900 text-white">
-      <div className="absolute inset-0">
-        <img src={inst.image} alt={inst.name} className="w-full h-full object-cover opacity-30" />
-        <div className="absolute inset-0 hero-overlay" />
-      </div>
+    <section className="relative pt-32 md:pt-40 pb-16 overflow-hidden hero-gradient text-white">
+      <div className="absolute inset-0 hero-grid opacity-30" />
+      <div className="absolute -top-20 right-0 h-72 w-72 rounded-full bg-brand-orange/30 blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <nav className="flex items-center gap-2 text-sm text-white/70 mb-6">
           <a href="/" className="hover:text-white transition">Home</a>
@@ -20,10 +18,15 @@ const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
           <Icon id="chevron-right" size={14} />
           <span className="text-brand-orange">{inst.shortName}</span>
         </nav>
-        <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/15 text-white`}>
-          {inst.typeLabel}
-        </span>
-        <h1 className="mt-4 font-serif text-3xl md:text-5xl font-bold leading-tight max-w-4xl">
+        <div className="flex items-center gap-4 mb-5">
+          <span className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-brand-orange text-white shadow-lg">
+            <Icon id={inst.icon} size={30} />
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/15 text-white backdrop-blur">
+            {inst.typeLabel}
+          </span>
+        </div>
+        <h1 className="mt-2 font-serif text-3xl md:text-5xl font-bold leading-tight max-w-4xl">
           {inst.name}
         </h1>
         <div className="mt-5 flex flex-wrap items-center gap-4 text-white/85">
@@ -41,7 +44,7 @@ const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
               className={
                 action.label.toLowerCase().includes('enquiry') || action.label.includes('Admission')
                   ? 'btn-orange inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm'
-                  : 'inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white border-2 border-white/30 hover:bg-white hover:text-slate-900 transition-colors'
+                  : 'inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white border-2 border-white/25 hover:bg-white hover:text-slate-900 transition-colors'
               }
             >
               {action.label}
@@ -91,7 +94,7 @@ const AboutBlock: React.FC<{ inst: Institution }> = ({ inst }) => {
             {inst.facilities.map((f) => (
               <div
                 key={f.label}
-                className="flex items-center gap-3 bg-light-background rounded-xl px-4 py-4 hover:bg-brand-orange-light hover:-translate-y-0.5 transition-all"
+                className="flex items-center gap-3 bg-[#F7F3EE] rounded-xl px-4 py-4 hover:bg-brand-orange-light hover:-translate-y-0.5 transition-all"
               >
                 <span className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white text-brand-orange shadow-sm shrink-0">
                   <Icon id={f.icon} size={20} />
@@ -109,7 +112,7 @@ const AboutBlock: React.FC<{ inst: Institution }> = ({ inst }) => {
 const Programs: React.FC<{ inst: Institution }> = ({ inst }) => {
   const { ref, className } = useReveal('up');
   return (
-    <section className="py-16 md:py-20 bg-light-background">
+    <section className="py-16 md:py-20 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading label="Programmes" heading={`Courses & Programs`} subtext={`Programmes offered at ${inst.shortName}.`} />
         <div ref={ref} className={`max-w-4xl mx-auto space-y-3 ${className}`}>
@@ -149,15 +152,12 @@ const OtherInstitutions: React.FC<{ current: Institution }> = ({ current }) => {
           {others.map((inst) => (
             <a
               key={inst.id}
-              href={`#/institutions/${inst.slug}`}
-              className="card-glow group bg-light-background rounded-2xl overflow-hidden flex items-center gap-4 p-4"
+              href={`/institutions/${inst.slug}`}
+              className="card-glow group bg-[#F7F3EE] rounded-2xl overflow-hidden flex items-center gap-4 p-4"
             >
-              <img
-                src={inst.image}
-                alt={inst.name}
-                className="h-20 w-20 rounded-xl object-cover shrink-0"
-                loading="lazy"
-              />
+              <span className={`inline-flex items-center justify-center h-20 w-20 rounded-xl shrink-0 hero-gradient text-white`}>
+                <Icon id={inst.icon} size={30} />
+              </span>
               <div>
                 <span className="text-xs font-bold text-brand-orange uppercase tracking-wide">
                   {inst.typeLabel}

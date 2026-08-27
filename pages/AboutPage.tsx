@@ -28,7 +28,7 @@ export const AboutPage: React.FC = () => {
       <StatsStrip />
 
       {/* Mission / Vision */}
-      <section className="py-20 md:py-28 bg-light-background">
+      <section className="py-20 md:py-28 bg-[#F7F3EE]">
         <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[

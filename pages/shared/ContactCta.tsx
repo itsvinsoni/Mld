@@ -3,7 +3,7 @@ import { Icon } from '../icons';
 
 export const ContactCta: React.FC = () => {
   return (
-    <section className="py-20 md:py-24 bg-light-background">
+    <section className="py-20 md:py-24 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white p-8 md:p-14">
           <div className="absolute -right-10 -top-10 h-52 w-52 rounded-full bg-white/10 blur-2xl" />

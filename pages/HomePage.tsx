@@ -9,7 +9,7 @@ import { INSTITUTIONS, GALLERY, MESSAGES, ABOUT } from './data';
 
 const InstitutionsPreview: React.FC = () => {
   return (
-    <section className="py-20 md:py-28 bg-light-background">
+    <section className="py-20 md:py-28 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
           label="Our Institutions"
@@ -42,9 +42,23 @@ const AboutPreview: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div ref={ref} className={`relative ${className}`}>
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-              <img src={ABOUT.image} alt="Campus" className="w-full h-[420px] object-cover" loading="lazy" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-brand-orange/25 to-transparent mix-blend-multiply" />
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl hero-gradient aspect-[4/3]">
+              <div className="absolute inset-0 hero-grid opacity-30" />
+              <div className="absolute -top-10 -left-10 h-44 w-44 rounded-full bg-brand-orange/30 blur-3xl" />
+              <div className="absolute bottom-0 right-0 h-52 w-52 rounded-full bg-brand-orange-dark/30 blur-3xl" />
+              <div className="absolute inset-0 flex flex-col justify-between p-8">
+                <span className="inline-flex items-center gap-2 text-white/80 text-xs font-bold uppercase tracking-widest">
+                  <Icon id="sparkles" size={16} className="text-orange-300" /> Shaping Futures
+                </span>
+                <div className="glass rounded-3xl p-6">
+                  <span className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-brand-orange text-white mb-4">
+                    <Icon id="graduation" size={28} />
+                  </span>
+                  <div className="font-serif text-white text-3xl md:text-4xl font-bold">
+                    Education that <span className="text-orange-gradient">transforms lives</span>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="absolute -bottom-6 -right-3 float-slow">
               <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center">
@@ -67,7 +81,7 @@ const AboutPreview: React.FC = () => {
               {ABOUT.features.map((f) => (
                 <div
                   key={f.label}
-                  className="flex items-center gap-3 bg-light-background rounded-xl px-4 py-3 hover:bg-brand-orange-light hover:-translate-y-0.5 transition-all"
+                  className="flex items-center gap-3 bg-[#F7F3EE] rounded-xl px-4 py-3 hover:bg-brand-orange-light hover:-translate-y-0.5 transition-all"
                 >
                   <span className="inline-flex items-center justify-center h-9 w-9 rounded-lg bg-white text-brand-orange shadow-sm">
                     <Icon id={f.icon} size={18} />
@@ -92,7 +106,7 @@ const AboutPreview: React.FC = () => {
 
 const GalleryPreview: React.FC = () => {
   return (
-    <section className="py-20 md:py-28 bg-light-background">
+    <section className="py-20 md:py-28 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div>
@@ -110,21 +124,22 @@ const GalleryPreview: React.FC = () => {
           </a>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {GALLERY.slice(0, 4).map((img) => (
+          {GALLERY.slice(0, 4).map((img, i) => (
             <a
               key={img.id}
               href="/gallery"
-              className="group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow"
+              className="group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow hero-gradient"
+              style={{ animationDelay: `${i * 60}ms` }}
             >
-              <img
-                src={img.src}
-                alt={img.alt}
-                loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-t from-slate-900/70 to-transparent" />
-              <span className="absolute bottom-3 left-3 text-white/95 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                {img.caption}
+              <div className="absolute inset-0 hero-grid opacity-30" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <span className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-white/15 text-white backdrop-blur group-hover:bg-brand-orange transition-colors">
+                  <Icon id={i % 2 === 0 ? 'camera' : 'image'} size={28} />
+                </span>
+                <span className="text-white/80 text-sm font-medium px-4 text-center">{img.caption}</span>
+              </div>
+              <span className="absolute top-3 right-3 inline-flex items-center justify-center h-8 w-8 rounded-full bg-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <Icon id="plus" size={16} />
               </span>
             </a>
           ))}
@@ -175,7 +190,7 @@ const MessagesPreview: React.FC = () => {
 
 const ContactCta: React.FC = () => {
   return (
-    <section className="py-20 md:py-24 bg-light-background">
+    <section className="py-20 md:py-24 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white p-8 md:p-14">
           <div className="absolute -right-10 -top-10 h-52 w-52 rounded-full bg-white/10 blur-2xl" />
