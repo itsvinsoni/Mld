@@ -12,9 +12,10 @@ interface HeaderProps {
     toggleMobileNav: () => void;
     theme: Theme;
     setTheme: (theme: Theme) => void;
+    onBackToSite?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ userName, userRole, isSidebarCollapsed, toggleSidebar, toggleMobileNav, theme, setTheme }) => {
+const Header: React.FC<HeaderProps> = ({ userName, userRole, isSidebarCollapsed, toggleSidebar, toggleMobileNav, theme, setTheme, onBackToSite }) => {
     
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
@@ -41,7 +42,17 @@ const Header: React.FC<HeaderProps> = ({ userName, userRole, isSidebarCollapsed,
                 </div>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
-                 <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700">
+                 {onBackToSite && (
+                    <button
+                        onClick={onBackToSite}
+                        className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-brand-orange hover:bg-brand-orange-light transition"
+                        title="View public website"
+                    >
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7M5 12h14"/></svg>
+                        View Site
+                    </button>
+                 )}
+                 <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 pt-2">
                     {theme === 'light' ? 
                         <MoonIcon className="w-6 h-6 text-slate-500 dark:text-slate-400" /> : 
                         <SunIcon className="w-6 h-6 text-slate-500 dark:text-slate-400" />

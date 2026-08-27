@@ -1,0 +1,14 @@
+# Netlify configuration for the MLD Memorial Sansthan public website + CRM app.
+# SPA (single-page app) served from a clean-URL router — requires a rewrite so
+# client-side routes (/institutions, /about, /admin, ...) all serve index.html.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Cache node_modules between builds for faster deploy times.
+[[plugins]]
+  package = "@netlify/plugin-cache-npm"

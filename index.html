@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-g" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/mld-logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MLD CRM</title>
+    <meta name="description" content="Shri Mishri Lal Dubey Memorial Sansthan, Kekri — a society running multiple educational institutions across Rajasthan, providing quality education to students." />
+    <meta name="keywords" content="MLD Memorial Sansthan, Education, Schools, Colleges, Kekri, Rajasthan, MLD International Academy, Pharmacy College" />
+    <title>MLD Memorial Sansthan | Shri Mishri Lal Dubey Memorial Sansthan, Kekri</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -16,27 +18,30 @@
           extend: {
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+              poppins: ['Poppins', 'sans-serif'],
             },
             colors: {
+              // CRM brand — orange primary (white + orange theme)
               brand: {
                 orange: '#F97316',
                 'orange-light': '#FFEDD5',
                 'orange-dark': '#D97706',
-                secondary: '#64748B', 
+                secondary: '#64748B',
               },
               light: {
-                background: '#F1F5F9', // slate-100
-                surface: '#FFFFFF', // white
-                textPrimary: '#1E293B', // slate-800
-                textSecondary: '#64748B', // slate-500
-                border: '#E2E8F0', // slate-200
+                background: '#F1F5F9',
+                surface: '#FFFFFF',
+                textPrimary: '#1E293B',
+                textSecondary: '#64748B',
+                border: '#E2E8F0',
               },
               dark: {
-                background: '#0F172A', // slate-900
-                surface: '#1E293B', // slate-800
-                textPrimary: '#F1F5F9', // slate-100
-                textSecondary: '#94A3B8', // slate-400
-                border: '#334155', // slate-700
+                background: '#0F172A',
+                surface: '#1E293B',
+                textPrimary: '#F1F5F9',
+                textSecondary: '#94A3B8',
+                border: '#334155',
               }
             }
           }
@@ -53,8 +58,8 @@
   }
 }
 </script>
-</head>
-  <body class="bg-light-background dark:bg-dark-background">
+  </head>
+  <body class="bg-light-background text-light-textPrimary font-sans antialiased">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

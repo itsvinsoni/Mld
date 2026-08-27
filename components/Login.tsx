@@ -4,9 +4,10 @@ import { MOCK_USERS } from '../constants';
 
 interface LoginScreenProps {
     onLogin: (email: string, pass: string) => boolean;
+    onBackToSite?: () => void;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
+const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onBackToSite }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -41,6 +42,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-light-textPrimary dark:text-dark-textPrimary">MLD CRM</h1>
                         <p className="text-brand-secondary mt-2">Unified Management Dashboard</p>
+                        {onBackToSite && (
+                            <button
+                                onClick={onBackToSite}
+                                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand-orange hover:text-brand-orange-dark transition"
+                            >
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7M5 12h14"/></svg>
+                                Back to website
+                            </button>
+                        )}
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
