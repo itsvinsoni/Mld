@@ -48,6 +48,13 @@ const App: React.FC = () => {
         return cleanup;
     }, []);
 
+    // Redirect old /programs/* to /courses/* (route rename)
+    useEffect(() => {
+        if (segments[0] === 'programs' && segments[1]) {
+            navigate(`/courses/${segments.slice(1).join('/')}`, true);
+        }
+    }, [segments]);
+
     const handleLogin = (email: string, pass: string): boolean => {
         const user = MOCK_USERS.find(u => u.email === email);
         if (user) {
@@ -163,7 +170,7 @@ const App: React.FC = () => {
         page = <MessagesPage />;
     } else if (segments[0] === 'contact') {
         page = <ContactPage />;
-    } else if (segments[0] === 'programs' && segments[1]) {
+    } else if (segments[0] === 'courses' && segments[1]) {
         page = <ProgramDetailPage slug={segments[1]} />;
     } else {
         page = <NotFoundPage />;

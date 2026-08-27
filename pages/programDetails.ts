@@ -1,6 +1,6 @@
 // Rich, detailed program data for the public website.
 // Each entry corresponds to a program offered by one or more MLD institutions
-// and renders at /programs/[slug].
+// and renders at /courses/[slug].
 
 export interface ProgramCareer {
   role: string;
@@ -60,7 +60,7 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
     category: 'Diploma',
     level: 'Diploma',
     duration: '2 years (full-time)',
-    eligibility: '12th pass with Physics, Chemistry and Biology/Mathematics (PCB/PCM) from a recognised board. Minimum aggregate as per PCI norms.',
+    eligibility: '12th pass with PCM/PCB (PCI norms apply).',
     mode: 'Full-time, on-campus',
     medium: 'English & Hindi',
     institutionSlugs: ['pharmacy-college'],
@@ -260,7 +260,7 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
     level: 'Diploma',
     duration: '2 years (full-time)',
     eligibility:
-      '12th pass (Science / Agriculture preferred) from a recognised board. Admission on merit as per state norms.',
+      '12th pass (Science/Agriculture preferred).',
     mode: 'Full-time, on-campus',
     medium: 'Hindi & English',
     institutionSlugs: ['live-stock-diploma'],
@@ -690,7 +690,7 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
     category: 'Undergraduate',
     level: 'Undergraduate',
     duration: '3 years (full-time)',
-    eligibility: '12th pass from a recognised board (any stream; basic computer knowledge helpful).',
+    eligibility: '12th pass (any stream).',
     mode: 'Full-time, on-campus',
     medium: 'English & Hindi',
     institutionSlugs: ['memorial-sansthan-colleges'],
@@ -1075,7 +1075,7 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
     level: 'Integrated Undergraduate',
     duration: '4 years (full-time)',
     eligibility:
-      '12th pass from a recognised board with at least 50% marks (45% for reserved categories). Admission as per state / university norms.',
+      '12th pass with 50% aggregate (45% for reserved categories).',
     mode: 'Full-time, on-campus',
     medium: 'Hindi & English',
     institutionSlugs: ['mahila-shikshan-prashikshan-mahavidyalay'],
@@ -1135,7 +1135,7 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
     level: 'Integrated Undergraduate',
     duration: '4 years (full-time)',
     eligibility:
-      '12th pass with Science (PCM / PCB) with at least 50% marks (45% for reserved categories) from a recognised board.',
+      '12th pass (PCM/PCB) with 50% aggregate (45% for reserved categories).',
     mode: 'Full-time, on-campus',
     medium: 'Hindi & English',
     institutionSlugs: ['mahila-shikshan-prashikshan-mahavidyalay'],
@@ -1195,7 +1195,7 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
     level: 'Diploma',
     duration: '2 years (full-time)',
     eligibility:
-      '12th pass with at least 50% marks (45% for reserved categories) from a recognised board. Admission as per state / NCTE norms.',
+      '12th pass with 50% aggregate (45% for reserved categories).',
     mode: 'Full-time, on-campus',
     medium: 'Hindi & English',
     institutionSlugs: ['mahila-shikshan-prashikshan-mahavidyalay'],
@@ -1256,7 +1256,7 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
     level: 'Diploma',
     duration: '2 years (full-time)',
     eligibility:
-      'Acharya / Shastri (traditional Sanskrit / Vedic degree) or equivalent from a recognised university / board, as per NCTE norms.',
+      'Acharya / Shastri (or equivalent Sanskrit/Vedic degree).',
     mode: 'Full-time, on-campus',
     medium: 'Hindi & Sanskrit',
     institutionSlugs: ['mahila-shikshan-prashikshan-mahavidyalay'],

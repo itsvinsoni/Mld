@@ -122,7 +122,7 @@ const Programs: React.FC<{ inst: Institution }> = ({ inst }) => {
           {inst.programs.map((p, i) => (
             <a
               key={p.slug || p.name}
-              href={`/programs/${p.slug}`}
+              href={`/courses/${p.slug}`}
               className="group flex items-center justify-between gap-4 bg-white rounded-2xl border border-slate-100 p-5 card-glow"
               style={{ transitionDelay: `${i * 50}ms` }}
             >

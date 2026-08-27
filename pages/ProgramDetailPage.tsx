@@ -18,20 +18,27 @@ const KeyFacts: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   return (
     <div className="relative -mt-12 z-10">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8">
-          {facts.map((f) => (
-            <div key={f.label} className="flex items-start gap-3">
-              <span className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-brand-orange-light text-brand-orange shrink-0">
-                <Icon id={f.icon} size={20} />
-              </span>
-              <div className="min-w-0">
-                <div className="text-[11px] uppercase tracking-widest font-bold text-slate-500">{f.label}</div>
-                <div className="text-sm md:text-base font-semibold text-light-textPrimary mt-0.5 leading-snug">
-                  {f.value}
+        <div className="relative bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 overflow-hidden">
+          <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full bg-brand-orange/10 blur-3xl pointer-events-none" />
+          <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {facts.map((f, i) => (
+              <div
+                key={f.label}
+                className="flex items-start gap-3 rise"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                <span className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-brand-orange-light text-brand-orange shrink-0">
+                  <Icon id={f.icon} size={20} />
+                </span>
+                <div className="min-w-0">
+                  <div className="text-[11px] uppercase tracking-widest font-bold text-slate-500">{f.label}</div>
+                  <div className="text-sm md:text-base font-semibold text-light-textPrimary mt-0.5 leading-snug">
+                    {f.value}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -63,12 +70,18 @@ const Overview: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const Highlights: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const { ref, className } = useReveal('up');
   return (
-    <section className="py-12 bg-[#F7F3EE] border-y border-slate-100">
-      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {p.highlights.map((h) => (
-            <div key={h.label} className="text-center">
+    <section ref={ref} className={`relative py-14 md:py-16 bg-[#F7F3EE] border-y border-slate-100 overflow-hidden ${className}`}>
+      <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(rgba(249,115,22,0.08) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+      <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {p.highlights.map((h, i) => (
+            <div
+              key={h.label}
+              className="text-center bg-white rounded-2xl py-6 px-3 border border-slate-100 card-glow rise"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
               <div className="stat-number text-3xl md:text-4xl font-bold tabular-nums">{h.value}</div>
               <div className="mt-2 text-xs font-bold uppercase tracking-widest text-slate-500">{h.label}</div>
             </div>
@@ -140,6 +153,85 @@ const Careers: React.FC<{ p: ProgramDetail }> = ({ p }) => {
           {p.careerOptions.map((c, i) => (
             <CareerCard key={c.role} c={c} index={i} />
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ADMISSION_STEPS = [
+  { n: '1', icon: 'check' as const, title: 'Check Eligibility', text: 'Review the eligibility criteria (qualification, minimum marks, age) for the course.' },
+  { n: '2', icon: 'monitor' as const, title: 'Apply Online / Enquire', text: 'Fill the online enquiry or application form on our admissions portal with your details.' },
+  { n: '3', icon: 'book' as const, title: 'Document Verification', text: 'Submit required documents (marksheets, ID, photos, transfer/migration certificate) for verification.' },
+  { n: '4', icon: 'award' as const, title: 'Counselling & Selection', text: 'Attend counselling/merit-list process (and entrance test, where applicable) for seat allotment.' },
+  { n: '5', icon: 'graduation' as const, title: 'Fee Payment & Admission', text: 'Pay the admission fee, complete enrolment, and join the programme on the notified date.' },
+];
+
+const DOCUMENTS = [
+  '10th & 12th marksheets and certificates',
+  'Transfer / Migration certificate (if applicable)',
+  'Aadhaar card / valid photo ID',
+  'Recent passport-size photographs',
+  'Category / Domicile certificate (if applicable)',
+  'Entrance / merit scorecard (where applicable)',
+];
+
+const AdmissionProcess: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const { ref, className } = useReveal('up');
+  return (
+    <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
+      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div>
+            <span className="section-label mb-3">Admissions</span>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
+              How to <span className="text-orange-gradient">get admitted</span>
+            </h2>
+            <span className="orange-divider mt-5" />
+            <div className="mt-6 bg-white rounded-2xl p-6 border border-slate-100 card-glow">
+              <div className="text-[11px] uppercase tracking-widest font-bold text-brand-orange mb-2">Eligibility</div>
+              <p className="text-light-textPrimary font-medium leading-relaxed">{p.eligibility}</p>
+            </div>
+            <div className="mt-6">
+              <h3 className="font-serif text-lg font-bold text-light-textPrimary">Documents you'll need</h3>
+              <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {DOCUMENTS.map((d) => (
+                  <li key={d} className="flex items-start gap-2 text-sm text-light-textSecondary">
+                    <Icon id="check" size={16} className="text-brand-orange mt-0.5 shrink-0" />
+                    <span>{d}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div>
+            <ol className="space-y-4">
+              {ADMISSION_STEPS.map((s, i) => (
+                <li
+                  key={s.n}
+                  className="flex items-start gap-4 bg-white rounded-2xl p-5 border border-slate-100 card-glow"
+                  style={{ transitionDelay: `${i * 80}ms` }}
+                >
+                  <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-brand-orange text-white text-lg font-serif font-bold shrink-0">
+                    {s.n}
+                  </span>
+                  <div>
+                    <div className="font-serif text-lg font-bold text-light-textPrimary">{s.title}</div>
+                    <p className="mt-1 text-sm text-light-textSecondary leading-relaxed">{s.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <a
+              href={p.enquiryHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-orange mt-7 inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-base"
+            >
+              Start Your Application
+              <Icon id="external" size={16} />
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -520,9 +612,10 @@ export const ProgramDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
       <KeyFacts p={p} />
       <DeanMessage p={p} />
       <Overview p={p} />
+      <Careers p={p} />
+      <AdmissionProcess p={p} />
       <Highlights p={p} />
       <WhatYouLearn p={p} />
-      <Careers p={p} />
       <WhyMLD p={p} />
       <Scholarship />
       <Facilities p={p} />
