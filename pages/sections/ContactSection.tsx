@@ -27,7 +27,6 @@ export const ContactSection: React.FC = () => {
           {/* Animated background */}
           <div className="absolute -right-10 -top-10 h-52 w-52 rounded-full bg-white/10 blur-2xl float-slow" />
           <div className="absolute right-20 bottom-0 h-28 w-28 rounded-full bg-white/10 blur-xl float-lg" />
-          <div className="absolute -left-20 top-1/2 h-40 w-40 rounded-full bg-amber-300/15 blur-3xl float-xl" />
           <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -111,7 +110,7 @@ export const ContactSection: React.FC = () => {
           <div className="bg-white rounded-3xl border border-slate-100 p-6 md:p-8 shadow-xl card-glow">
             {submitted ? (
               <div className="h-full min-h-[320px] flex flex-col items-center justify-center text-center scale-in">
-                <span className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-orange text-white mb-4 shadow-lg shadow-brand-orange/40 pulse-glow">
+                <span className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-orange text-white mb-4 shadow-lg shadow-brand-orange/40">
                   <Icon id="check" size={32} />
                 </span>
                 <h3 className="font-serif text-2xl font-bold text-light-textPrimary">{t('contactPage.form.thanks', 'Thank you!')}</h3>

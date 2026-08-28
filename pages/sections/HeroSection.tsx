@@ -9,24 +9,12 @@ const HeroSection: React.FC = () => {
   const heroImg = HERO_IMAGES[0];
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [scrollY, setScrollY] = useState(0);
-  const [mouse, setMouse] = useState({ x: 50, y: 50 });
   const t = useT();
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const onMove = (e: MouseEvent) => {
-      const r = el.getBoundingClientRect();
-      setMouse({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
-    };
-    el.addEventListener('mousemove', onMove);
-    return () => el.removeEventListener('mousemove', onMove);
   }, []);
 
   return (
@@ -40,27 +28,14 @@ const HeroSection: React.FC = () => {
         <img
           src={heroImg}
           alt={t('brand.name', 'MLD Memorial Sansthan')}
-          className="w-full h-full object-cover kenburns"
-          style={{ transform: `translate3d(0, ${scrollY * 0.25}px, 0) scale(1.1)` }}
+          className="w-full h-full object-cover"
+          style={{ transform: `translate3d(0, ${scrollY * 0.25}px, 0) scale(1.08)` }}
         />
         {/* Overlays for legibility */}
         <div className="absolute inset-0 bg-slate-900/55" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-slate-900/70" />
-        {/* Mouse-follow glow */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(600px circle at ${mouse.x}% ${mouse.y}%, rgba(249,115,22,0.25), transparent 60%)`,
-          }}
-        />
-        {/* Decorative dots + orbs */}
-        <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '28px 28px' }}
-        />
-        <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-brand-orange/30 blur-3xl pointer-events-none float-slow" />
-        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-brand-orange/20 blur-3xl pointer-events-none float-lg" />
-        <div className="absolute top-1/3 right-1/4 h-40 w-40 rounded-full bg-amber-400/15 blur-3xl pointer-events-none float-xl" />
+        {/* Single subtle orb (top-right) */}
+        <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-brand-orange/25 blur-3xl pointer-events-none float-slow" />
         {/* Bottom fade */}
         <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-b from-transparent to-slate-900 pointer-events-none" />
       </div>
@@ -68,7 +43,7 @@ const HeroSection: React.FC = () => {
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8 w-full pt-32 pb-24">
         <div className="max-w-3xl">
           <div className="rise" style={{ animationDelay: '0ms' }}>
-            <span className="inline-flex items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white mb-6 px-3.5 py-1.5 rounded-full glass border border-white/20 backdrop-blur-md">
+            <span className="inline-flex items-center gap-2.5 text-xs font-bold uppercase tracking-widest text-white mb-6 px-3.5 py-1.5 rounded-full glass border border-white/20">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-brand-orange pulse-dot" />
               {t('hero.badge', HERO.badge)}
             </span>
@@ -182,13 +157,8 @@ const StatsStrip: React.FC = () => {
   const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.25 });
   return (
     <section id="stats" ref={ref} className="relative bg-white border-y border-slate-100 py-14 md:py-20 overflow-hidden">
-      {/* Background ornaments */}
-      <div
-        className="absolute inset-0 opacity-40 pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(rgba(249,115,22,0.08) 1px, transparent 1px)', backgroundSize: '26px 26px' }}
-      />
-      <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
-      <div className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none float-lg" />
+      {/* Background ornaments removed for performance */}
+      <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-slow" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {STATS.map((stat, i) => (

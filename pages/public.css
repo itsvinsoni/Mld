@@ -201,12 +201,6 @@ body.lang-hi .stat-number { font-family: 'Inter', 'Noto Sans Devanagari', sans-s
 }
 .blob { animation: blob 18s ease-in-out infinite; }
 
-@keyframes kenburns {
-  0% { transform: scale(1) translate(0, 0); }
-  100% { transform: scale(1.12) translate(-2%, -2%); }
-}
-.kenburns { animation: kenburns 20s ease-in-out infinite alternate; }
-
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -382,7 +376,7 @@ body.lang-hi .stat-number { font-family: 'Inter', 'Noto Sans Devanagari', sans-s
 .nav-link.nav-active { color: var(--brand); }
 .nav-link.nav-active::after { width: 100%; }
 
-.navbar-shrink { padding-top: 0.5rem; padding-bottom: 0.5rem; box-shadow: 0 6px 20px rgba(0,0,0,0.06); background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); }
+.navbar-shrink { padding-top: 0.5rem; padding-bottom: 0.5rem; box-shadow: 0 6px 20px rgba(0,0,0,0.06); background: #fff; }
 
 /* ---------- Magnetic / hover-lift / press ---------- */
 .magnetic { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -393,23 +387,18 @@ body.lang-hi .stat-number { font-family: 'Inter', 'Noto Sans Devanagari', sans-s
 .hover-lift { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease; }
 .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,0.1); }
 
-/* ---------- Glass ---------- */
+/* ---------- Glass (no blur — keep visual but skip expensive filter) ---------- */
 .glass {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 .glass-light {
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 .glass-orange {
-  background: rgba(255, 237, 213, 0.6);
+  background: rgba(255, 237, 213, 0.85);
   border: 1px solid rgba(249, 115, 22, 0.25);
-  backdrop-filter: blur(14px);
 }
 
 /* ---------- Gradient border (animated) ---------- */
@@ -545,7 +534,7 @@ body.lang-hi .stat-number { font-family: 'Inter', 'Noto Sans Devanagari', sans-s
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .float-slow, .float-lg, .float-xl, .blob, .kenburns, .marquee, .marquee-y, .rise, .rise-sm, .rise-lg,
+  .float-slow, .float-lg, .float-xl, .blob, .marquee, .marquee-y, .rise, .rise-sm, .rise-lg,
   .fade-up, .scale-in, .slide-right, .slide-left, .clip-up, .clip-down, .pulse-glow, .pulse-dot, .pulse-ring,
   .ring-spin, .ring-spin-rev, .glow-pulse, .gradient-shift, .bg-gradient-shift, .aurora, .wave, .shimmer,
   .word-reveal .word, .page-in, .page-in-zoom, .gradient-border::before, .shine::before, .lightbox-image,

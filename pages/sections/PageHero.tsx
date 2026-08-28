@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 export const PageHero: React.FC<{
   label: string;
@@ -8,37 +8,14 @@ export const PageHero: React.FC<{
   align?: 'center' | 'left';
   breadcrumb?: { label: string; href: string }[];
 }> = ({ label, title, subtitle, image, align = 'center', breadcrumb }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [mouse, setMouse] = useState({ x: 50, y: 50 });
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const onMove = (e: MouseEvent) => {
-      const r = el.getBoundingClientRect();
-      setMouse({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
-    };
-    el.addEventListener('mousemove', onMove);
-    return () => el.removeEventListener('mousemove', onMove);
-  }, []);
   return (
-    <section ref={ref} className="relative pt-32 md:pt-40 pb-16 overflow-hidden text-white">
+    <section className="relative pt-32 md:pt-40 pb-16 overflow-hidden text-white">
       <div className="absolute inset-0">
-        <img src={image} alt="" className="w-full h-full object-cover kenburns" />
+        <img src={image} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-slate-900/65" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/30 to-slate-900/65" />
-        <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.18) 1px, transparent 1px)', backgroundSize: '26px 26px' }}
-        />
-        {/* Mouse-follow glow */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(500px circle at ${mouse.x}% ${mouse.y}%, rgba(249,115,22,0.2), transparent 60%)`,
-          }}
-        />
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-orange/25 blur-3xl pointer-events-none float-slow" />
-        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-amber-400/15 blur-3xl pointer-events-none float-lg" />
+        {/* Single subtle orb */}
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-orange/20 blur-3xl pointer-events-none float-slow" />
       </div>
       <div
         className={`relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8 ${

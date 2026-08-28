@@ -24,7 +24,6 @@ export const MessagesSection: React.FC = () => {
     <section id="messages" className="py-20 md:py-28 bg-slate-900 text-white relative overflow-hidden">
       {/* decorative */}
       <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-brand-orange/15 blur-3xl" />
-      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-brand-orange-dark/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
@@ -43,7 +42,7 @@ export const MessagesSection: React.FC = () => {
           {/* Quote card */}
           <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-8 md:p-12 text-center overflow-hidden group hover:border-brand-orange/40 transition-colors duration-500">
             <div className="absolute -top-5 left-1/2 -translate-x-1/2">
-              <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl pulse-glow">
+              <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl">
                 <Icon id="quote" size={26} />
               </span>
             </div>

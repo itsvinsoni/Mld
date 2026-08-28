@@ -138,7 +138,6 @@ export const GallerySection: React.FC = () => {
   return (
     <section id="gallery" className="relative py-20 md:py-28 bg-[#F7F3EE] overflow-hidden">
       <div className="absolute -top-32 left-1/3 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
-      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none float-lg" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
           label={t('gallery.label', 'Photo Gallery')}

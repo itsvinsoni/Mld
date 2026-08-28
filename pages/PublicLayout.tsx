@@ -209,7 +209,6 @@ const Footer: React.FC = () => {
       {/* Glow background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-32 left-1/4 w-96 h-96 rounded-full bg-brand-orange/10 blur-3xl float-xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-amber-500/10 blur-3xl float-lg" />
       </div>
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-14 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">

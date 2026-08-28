@@ -83,14 +83,13 @@ export { InstitutionCard };
 
 const Marquee: React.FC = () => {
   const names = INSTITUTIONS.map((i) => i.name);
-  const track = [...names, ...names];
   return (
     <div className="mt-16 overflow-hidden border-y border-slate-200 bg-white py-5">
-      <div className="flex w-max marquee items-center gap-10">
-        {track.map((name, i) => (
-          <span key={i} className="flex items-center gap-3 whitespace-nowrap">
-            <Icon id="star" size={16} className="text-brand-orange" />
-            <span className="font-serif font-bold text-slate-500 whitespace-nowrap">{name}</span>
+      <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4">
+        {names.map((name, i) => (
+          <span key={i} className="flex items-center gap-2 whitespace-nowrap hover:text-brand-orange transition-colors">
+            <Icon id="star" size={14} className="text-brand-orange" />
+            <span className="font-serif font-bold text-slate-500 whitespace-nowrap text-sm">{name}</span>
           </span>
         ))}
       </div>

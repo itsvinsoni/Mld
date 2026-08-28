@@ -16,7 +16,6 @@ const InstitutionsPreview: React.FC = () => {
   return (
     <section className="relative py-20 md:py-28 bg-[#F7F3EE] overflow-hidden">
       <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
-      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-amber-400/8 blur-3xl pointer-events-none float-lg" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
           label={t('insts.label', 'Our Institutions')}
@@ -45,7 +44,7 @@ const AboutPreview: React.FC = () => {
   const t = useT();
   return (
     <section className="relative py-20 md:py-28 bg-white overflow-hidden">
-      <div className="absolute inset-0 bg-dots-warm opacity-50 pointer-events-none" />
+      <div className="absolute inset-0" />
       <div className="absolute -top-20 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -61,7 +60,7 @@ const AboutPreview: React.FC = () => {
               <div className="absolute -bottom-4 -left-4 w-32 h-32 rounded-2xl border-2 border-brand-orange/40 -z-0" />
             </div>
             <div className="absolute -bottom-6 -right-3 float-slow z-10">
-              <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center pulse-glow">
+              <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center">
                 <div className="text-4xl font-serif font-bold">{ABOUT.badgeValue}</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-widest">{ABOUT.badgeLabel}</div>
               </div>
@@ -165,13 +164,11 @@ const MessagesPreview: React.FC = () => {
   return (
     <section className="relative py-20 md:py-28 bg-slate-900 text-white overflow-hidden">
       <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-brand-orange/15 blur-3xl float-slow" />
-      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-brand-orange-dark/20 blur-3xl float-lg" />
-      <div className="absolute inset-0 bg-dots-dark opacity-30 pointer-events-none" />
+      <div className="absolute inset-0" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading label={t('msg.label', 'Messages from Leadership')} heading={t('msg.heading', 'Voices of Leadership')} light />
         <div className="max-w-4xl mx-auto relative bg-white/[0.04] border border-white/10 rounded-3xl p-8 md:p-12 text-center overflow-hidden group hover:border-brand-orange/40 transition-colors duration-500">
-          <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-brand-orange/15 blur-3xl float-slow" />
-          <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl mx-auto mb-4 pulse-glow">
+          <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl mx-auto mb-4">
             <Icon id="quote" size={26} />
           </span>
           <div className="text-brand-orange text-xs font-bold uppercase tracking-widest">{first.headline}</div>
