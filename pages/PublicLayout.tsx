@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Icon } from './icons';
 import { NAV_LINKS, SITE, INSTITUTIONS } from './data';
 import { useRoute, getSegments } from './router';
-import { ScrollProgress, BackToTop, CustomCursor } from './effects';
+import { ScrollProgress, BackToTop } from './effects';
 import { useLang, useT } from './i18n';
 
 const LangToggle: React.FC<{ compact?: boolean }> = ({ compact }) => {
@@ -349,7 +349,6 @@ export const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children
       <main key={segments.join('/') || 'home'} className="page-in">{children}</main>
       <Footer />
       <BackToTop />
-      <CustomCursor />
     </div>
   );
 };

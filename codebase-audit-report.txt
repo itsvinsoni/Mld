@@ -1,0 +1,1576 @@
+MLD MEMORIAL SANSTHAN
+COMPLETE CODEBASE AUDIT, BUG REPORT, SECURITY REVIEW AND PRODUCTION READINESS DOCUMENT
+
+Document type: Plain Text (.txt)
+Project: mld-crm
+Repository path: /home/ubuntu/Desktop/mld/Mld
+Review scope: Public education website, CRM/admin dashboard, routing, forms, configuration, deployment, data model, accessibility, performance and security
+Review style: Static code review plus build, type-check, dependency audit and local smoke checks
+Status: Audit completed; no application source files were changed during this review
+
+====================================================================
+1. EXECUTIVE SUMMARY
+====================================================================
+
+MLD Memorial Sansthan ka current project ek React + TypeScript + Vite single-page application hai. Ismein do major experiences hain: public-facing education website aur /admin route ke andar ek CRM-style management dashboard. Public website mein home page, institutions listing, institution detail pages, programme/course detail pages, about, gallery, messages aur contact pages hain. CRM side mein dashboard, students, fees, colleges, courses, faculty, library, reports aur settings views diye gaye hain.
+
+Compilation level par project healthy hai. Production build successfully complete hua, TypeScript noEmit check pass hua, npm audit mein vulnerabilities nahi miliं, Vite development server ne root aur deep route dono serve kiye, aur programme slugs duplicate nahi mile. Iska matlab basic syntax, module resolution aur build pipeline workable hai.
+
+Lekin build pass hona production readiness ka proof nahi hai. Detailed review mein kai user-facing aur security-related problems miliं. Sabse important issue admin login ka hai: login logic email ko check karta hai, password ko ignore karta hai. Isliye kisi valid demo email ke saath arbitrary password use karke access mil sakta hai. Agar is dashboard ko real CRM samjha ja raha hai to ye release-blocking security defect hai.
+
+Doosra major issue routing migration ka hai. Current application clean History API routes use karti hai, jaise /contact aur /admin. Lekin public institution data ke kai action links abhi purane hash format #/contact aur #/admin par hain. Current router un links ko intercept nahi karta. Is wajah se Admission Enquiry aur ERP Login buttons expected page par navigate nahi karte.
+
+Teesra major issue contact form ka hai. User form fill karke submit karta hai, application sirf local submitted state set karti hai aur success message dikha deti hai. Form data kisi API, email service, database, Netlify form ya external form endpoint ko send nahi hota. Iska matlab visitor ko false confirmation milti hai ki message receive ho gaya, jabki institution ko message milta hi nahi.
+
+CRM dashboard ke Add, Edit, View, Receipt aur settings controls largely visual placeholders hain. Buttons render hote hain lekin handlers ya persistence nahi hai. Agar product ko demo/prototype ke roop mein present kiya ja raha hai to ye acceptable ho sakta hai, lekin “management dashboard” ya “CRM” ke roop mein deploy karna misleading hoga.
+
+Kuch external links invalid ya placeholder hain. Pharmacy page ka Visit Web Page link # hai, aur livestock page ka link relative ASPX filename hai jiska current domain par valid destination hone ka evidence nahi hai. Public data aur Hindi/English statistics mein bhi inconsistencies hain. Images external site se hot-link hoti hain, jisse availability aur performance ka operational risk hai.
+
+Final verdict: Project compile-ready hai, demo-ready hai, lekin production-ready nahi. Public website ke visual portions strong hain, routing aur deployment foundation workable hai, par security, form delivery, functional CRM scope, link cleanup aur content/data consistency fix kiye bina release nahi karna chahiye.
+
+====================================================================
+2. AUDIT KA PURPOSE AUR SCOPE
+====================================================================
+
+Is audit ka objective ye determine karna tha ki codebase mein koi bugs, broken user flows, security weaknesses, deployment problems, data inconsistencies ya maintainability risks hain ya nahi. Review ka focus sirf compiler errors par nahi tha. User-facing behavior, navigation, authentication, forms, buttons, data flow, permissions, route refresh, build output aur dependency health bhi dekhe gaye.
+
+Included areas:
+
+1. Repository aur project structure.
+2. package.json, package-lock.json, tsconfig.json, vite.config.ts, netlify.toml, index.html aur public/_redirects.
+3. Root App.tsx aur routing behavior.
+4. Public pages aur reusable components.
+5. Public institution/program data.
+6. Contact form aur enquiry actions.
+7. CRM login, role filtering aur admin views.
+8. Search, tabs, sorting aur displayed data.
+9. Settings controls.
+10. Build, type-check, npm audit aur local HTTP smoke tests.
+11. Programme slug uniqueness aur route/data consistency.
+12. External asset dependency aur deployment implications.
+
+Out of scope:
+
+1. Real production backend, kyunki repository mein backend service present nahi mili.
+2. Real user database, kyunki current data mock constants mein hai.
+3. Browser-based full visual regression across multiple devices.
+4. Third-party external websites ki uptime ya content correctness ka complete verification.
+5. Penetration test of a deployed production environment.
+6. Legal, regulatory ya institutional claims ki independent fact-checking.
+
+Important interpretation: Kai findings code ki current behavior par based hain. Agar project intentionally demo-only prototype hai, to kuch functional gaps “missing feature” hain, security defects phir bhi valid hain agar app public deployment par accessible hai.
+
+====================================================================
+3. PROJECT OVERVIEW AUR ARCHITECTURE
+====================================================================
+
+Project Vite ke through build hota hai aur React 19 use karta hai. package.json mein primary dependencies React, React DOM aur Recharts hain. Dev tooling mein TypeScript, Vite aur React plugin hai. Build command `vite build` hai. Test ya lint scripts package.json mein configured nahi hain.
+
+Application entry flow:
+
+- index.html browser shell provide karta hai.
+- index.tsx React application mount karta hai.
+- App.tsx route read karke public ya admin experience choose karta hai.
+- pages/router.tsx lightweight History API router provide karta hai.
+- PublicLayout navbar, footer, language provider, scroll effects aur cursor effects wrap karta hai.
+- Admin section currentUser state ke basis par LoginScreen ya dashboard shell render karta hai.
+
+Public route behavior:
+
+- `/` HomePage
+- `/institutions` InstitutionsPage
+- `/institutions/:slug` InstitutionDetailPage
+- `/about` AboutPage
+- `/gallery` GalleryPage
+- `/messages` MessagesPage
+- `/contact` ContactPage
+- `/courses/:slug` ProgramDetailPage
+- unknown paths NotFoundPage
+- `/programs/:slug` ko `/courses/:slug` par replace redirect karne ka effect hai
+- `/admin` CRM/login route hai
+
+Admin architecture:
+
+Admin data constants.ts mein mock arrays ke roop mein defined hai. App.tsx currentUser ko local React state mein rakhta hai. Role ke basis par Sidebar nav items filter karta hai. Active view bhi local state mein hai. Browser refresh par currentUser reset ho jayega, kyunki session storage, cookie, token ya backend session integration nahi hai.
+
+Public data architecture:
+
+pages/data.ts mein institutions, navigation, hero, stats, messages aur gallery data hai. pages/programDetails.ts mein programme data hai. Hindi translations aur localized data pages/dataI18n.ts, pages/translations.ts aur pages/i18n.tsx mein hain. Public photos external `mldmemorialsansthan.com` domain se load hoti hain.
+
+Styling:
+
+Application Tailwind-style utility classes aur public.css ke custom classes use karti hai. Visual effects mein reveal animations, aurora backgrounds, custom cursor, magnetic elements, count-up stats, scroll progress aur page transitions hain.
+
+====================================================================
+4. VALIDATION RESULTS
+====================================================================
+
+4.1 Production build
+
+Command:
+`npm run build`
+
+Result: PASS.
+
+Vite ne 660 modules transform kiye aur dist output generate hua. Generated JavaScript bundle ka minified size approximately 954 kB tha. Vite ne 500 kB chunk-size warning di. Ye build failure nahi hai, lekin performance aur caching ke liye code splitting recommend ki gayi hai.
+
+4.2 TypeScript
+
+Command:
+`npx tsc --noEmit`
+
+Result: PASS.
+
+Current TypeScript source mein compile-blocking errors nahi mile. Iska matlab type system ke level par project coherent hai. TypeScript pass runtime logic, API delivery, authorization ya button functionality guarantee nahi karta.
+
+4.3 Dependency audit
+
+Command:
+`npm audit --omit=dev`
+
+Result: PASS.
+
+Reported vulnerabilities:
+- info: 0
+- low: 0
+- moderate: 0
+- high: 0
+- critical: 0
+
+Ye result current installed lockfile dependency graph ke liye hai. Future dependency updates ya transitive package changes ke baad audit repeat karna hoga.
+
+4.4 Local smoke test
+
+Vite development server start hua. Root `/` aur deep route `/institutions` dono ne HTTP 200 response diya. Dev server ke context mein deep route fallback workable hai. Netlify deployment par public/_redirects aur netlify.toml SPA fallback provide karte hain; production deploy ke baad actual deployed URL par manual verification phir bhi zaroori hai.
+
+4.5 Programme slug check
+
+`pages/programDetails.ts` mein 20 programme slugs inspect kiye gaye. Sabhi unique mile. Is specific data issue ka evidence nahi mila.
+
+4.6 Automated test suite
+
+Project mein unit, integration ya end-to-end test script configured nahi hai. Isliye form submission, authentication, route clicks, role access aur responsive behavior ke liye automated regression protection absent hai.
+
+====================================================================
+5. FINDINGS SUMMARY BY PRIORITY
+====================================================================
+
+P0 / Release blocker:
+
+- Publicly accessible admin dashboard with no real authentication boundary, if used beyond demo.
+
+P1 / Urgent:
+
+- Password ignored during login.
+- Old hash-router internal links break Admission Enquiry and ERP Login actions.
+- Contact form displays success without sending data.
+- CRM data mutation buttons do not perform mutations.
+
+P2 / Normal:
+
+- Settings controls do not persist changes.
+- Invalid and placeholder external links.
+- Query parameter `brochure=1` is ignored and brochure CTA has no brochure behavior.
+- Mock dashboard data does not match public institutional context.
+- External hot-linked images create availability and performance risk.
+- No auth persistence and no backend authorization.
+- Search in Header is visual only and does not filter the currently active view.
+
+P3 / Lower priority:
+
+- Large initial JavaScript chunk.
+- Inconsistent public statistics and language content.
+- Some accessibility improvements needed for labels, button names and state communication.
+- Public claims such as 100% results or placement support should be reviewed by content owner before publication.
+
+====================================================================
+6. DETAILED FINDING 1: PASSWORD VERIFICATION MISSING
+====================================================================
+
+Severity: HIGH / P1. If deployed as real CRM: RELEASE BLOCKER.
+
+Files:
+- App.tsx, lines 61-70.
+- components/Login.tsx, lines 15-20 and password input area.
+- constants.ts, MOCK_USERS.
+
+Observed behavior:
+
+App.tsx ka `handleLogin` function email se user find karta hai. `pass` parameter receive hota hai, lekin use nahi kiya jata. User milte hi `setCurrentUser(user)` call hota hai. Login form user ke entered password ko bhi pass nahi karta; hardcoded `'demo123'` pass hota hai.
+
+Impact:
+
+Agar kisi ko valid email address pata hai, to koi bhi password enter karke access mil sakta hai. Password field sirf visual input hai. Ye authentication bypass hai. Demo account email addresses source code mein visible hain, isliye unauthorized visitor ke liye valid identity guess karna trivial hai.
+
+Additional concern:
+
+CurrentUser sirf React memory state mein hai. Browser refresh par state reset hoti hai, lekin isse security problem solve nahi hoti. Real authorization backend par honi chahiye. UI mein role-based menu hide karna access control nahi hai; malicious user browser code modify karke hidden view render kar sakta hai.
+
+Recommended correction:
+
+Demo mode explicitly document karein ya real auth implement karein.
+
+Real implementation ke liye:
+
+1. Login request backend endpoint par bhejein.
+2. Password backend par salted hash ke against verify ho.
+3. Password kabhi frontend constants ya source code mein na rakhein.
+4. Successful login par secure, HttpOnly, SameSite cookie-based session prefer karein.
+5. Backend har protected API request par role authorization check kare.
+6. Frontend sirf UX-level role filtering kare.
+7. Login failures generic message dikhayein.
+8. Rate limiting, lockout aur audit logging add karein.
+9. Logout server-side session invalidate kare.
+10. Session expiry aur refresh handling add karein.
+
+Temporary demo-only correction:
+
+Agar app intentionally demo hai, to login page par prominent “Demo dashboard — no real data or authentication” notice dikhayein. Phir bhi arbitrary password acceptance ko intentionally code comment aur README mein clearly document karein. Public production domain par demo credentials expose karna avoid karein.
+
+Acceptance criteria:
+
+- Wrong password se login fail.
+- Correct password se login success.
+- Direct protected API call without session fail.
+- Role mismatch se unauthorized operation fail.
+- Refresh ke baad session policy expected behavior follow kare.
+
+====================================================================
+7. DETAILED FINDING 2: HASH ROUTER LINKS BROKEN
+====================================================================
+
+Severity: HIGH / P1 for public navigation.
+
+Files:
+- pages/data.ts, lines 181, 185, 217, 221, 252, 256, 326, 360-362, 400.
+- pages/router.tsx, lines 50-63.
+- pages/InstitutionDetailPage.tsx, lines 43-55.
+
+Observed mismatch:
+
+Current router clean URL architecture use karta hai. `readPath()` pathname padhta hai, aur link interceptor sirf un anchors ko handle karta hai jinka href `/` se start hota hai. Public institution data mein old links `#/contact` aur `#/admin` use ho rahe hain.
+
+Example:
+
+` label: 'Admission Enquiry', href: '#/contact' }`
+
+` label: 'ERP Login', href: '#/admin', external: false }`
+
+`#/contact` slash se start nahi hota, isliye global interceptor return kar deta hai. Browser hash update kar sakta hai, lekin History API router `window.location.pathname` se `/` hi read karta rahega. App contact ya admin page render nahi karegi.
+
+Impact:
+
+- Institution detail page ke Admission Enquiry buttons non-functional.
+- ERP Login buttons expected CRM login page par nahi le jate.
+- User ko visible feedback nahi milta ki link invalid hai.
+- Legacy route migration incomplete rehti hai.
+
+Recommended correction:
+
+All internal action hrefs ko clean routes mein replace karein:
+
+- `#/contact` -> `/contact`
+- `#/admin` -> `/admin`
+
+Legacy compatibility ke liye agar old URLs externally used hain to router mein hash migration logic add kar sakte hain, lekin data ko new canonical URLs par migrate karna primary fix hai.
+
+Additional route design recommendation:
+
+`Link` component ko internal navigation ke liye consistently use karein, ya global interceptor ko robustly test karein. Har internal anchor ko raw `<a>` rakhne se behavior duplicate sources mein spread hota hai. Agar raw anchors intentionally use kiye gaye hain, to route contract documented hona chahiye.
+
+Acceptance criteria:
+
+- Har institution ka Admission Enquiry button `/contact` open kare.
+- Har institution ka ERP Login `/admin` open kare.
+- Browser back/forward sahi work kare.
+- Direct refresh par route preserve rahe.
+- Modifier-click (Ctrl/Cmd) normal browser behavior preserve kare.
+
+====================================================================
+8. DETAILED FINDING 3: CONTACT FORM FALSE SUCCESS
+====================================================================
+
+Severity: HIGH / P1 if contact capture business requirement hai.
+
+File:
+- pages/sections/ContactSection.tsx, lines 15-18 and form lines 121-155.
+
+Observed behavior:
+
+Submit handler `preventDefault()` call karta hai, `submitted` state true karta hai aur 4 seconds baad false karta hai. Inputs ke values React state mein bind nahi hain. Na `fetch` call hai, na FormData submission, na email link generation, na backend endpoint.
+
+Success UI text:
+
+“Your message has been received. We'll be in touch soon.”
+
+Ye text actual delivery ke bina show hota hai.
+
+Impact:
+
+Visitor apna naam, phone, email aur message enter karta hai. UI success show hone ke baad data lost ho jata hai. Institution ko enquiry nahi milti. Admissions lead lost ho sakti hai. User trust damage hota hai.
+
+Recommended implementation options:
+
+Option A: Backend API.
+
+- Controlled fields state mein rakhein.
+- Client validation karein.
+- HTTPS POST `/api/contact` endpoint call karein.
+- Server-side validation aur spam protection karein.
+- Server email/CRM/database integration kare.
+- API success ke baad hi success UI show karein.
+- Failure par retryable error show karein.
+
+Option B: Netlify Forms.
+
+- Form ko correct `name` attribute aur Netlify form attributes dein.
+- Production deploy par Netlify dashboard mein submissions monitor karein.
+- Hidden honeypot field add karein.
+- Success redirect ya local success state only after confirmed submission use karein.
+
+Option C: Third-party form provider.
+
+- Formspree ya trusted provider ka endpoint use karein.
+- Privacy policy aur data processor disclosure add karein.
+- Client-side validation ke saath server response check karein.
+
+Option D: Temporary mailto fallback.
+
+- User ke data se `mailto:` URL generate karein.
+- Is approach ki browser/email-client dependency explain karein.
+- “Your email client will open” jaisa accurate message dikhayein, false received message nahi.
+
+Required safeguards:
+
+- Required inputs ke labels aur name attributes.
+- Phone format validation.
+- Maximum message length.
+- Rate limiting.
+- Honeypot/CAPTCHA as required.
+- XSS-safe rendering.
+- PII handling policy.
+- Success and failure analytics without storing sensitive content unnecessarily.
+
+Acceptance criteria:
+
+- Form submit hone par actual network request ya configured provider submission ho.
+- Server success ke bina success message na aaye.
+- Network failure mein data loss risk ke baare mein user ko clear message mile.
+- Duplicate submit prevention ho.
+- Loading state aur disabled submit button ho.
+- Submission test staging environment mein verify ho.
+
+====================================================================
+9. DETAILED FINDING 4: CRM CRUD BUTTONS PLACEHOLDER HAIN
+====================================================================
+
+Severity: HIGH/MEDIUM depending on product promise.
+
+Files:
+- views/StudentManagement.tsx.
+- views/FeeManagement.tsx.
+- views/CollegeManagement.tsx.
+- views/CourseManagement.tsx.
+- views/FacultyManagement.tsx.
+- views/LibraryManagement.tsx.
+
+Observed behavior:
+
+Tables data display aur search karte hain. Add, View, Edit, Receipt aur Add New Book buttons render hote hain, lekin unke onClick handlers nahi hain. Koi modal, route, state update, API request, form submission ya persistence logic nahi hai.
+
+Examples:
+
+- Student Management: `+ Add Student`, `View`, `Edit` inert.
+- Fee Management: `+ Add Fee Entry`, `Receipt`, `Edit` inert.
+- College Management: `+ Add College`, `View`, `Edit` inert.
+- Course Management: `+ Add Course`, `View`, `Edit` inert.
+- Faculty Management: `+ Add Faculty`, `View`, `Edit` inert.
+- Library Management: `+ Add New Book` inert; issued records read-only.
+
+Impact:
+
+Dashboard first glance par functional CRM jaisa lagta hai, par operational task complete nahi hota. Staff data update nahi kar sakta. User confusion aur trust problem create hoti hai.
+
+Recommended product decision:
+
+Team ko pehle scope decide karna chahiye:
+
+1. Real CRM banana hai.
+2. Read-only dashboard banana hai.
+3. Demo prototype ke roop mein rakhna hai.
+
+Real CRM ke liye domain model, API contract, validation, optimistic/pessimistic updates, loading state, errors, audit logs aur permissions add karni hongi.
+
+Suggested phased implementation:
+
+Phase 1: Students.
+- Student list API.
+- Create/edit modal.
+- View detail route.
+- Search and pagination server-side.
+- Validation.
+- Role authorization.
+
+Phase 2: Fees.
+- Fee ledger API.
+- Receipt generation.
+- Payment status calculation server-side.
+- Immutable payment records.
+- Correction workflow.
+
+Phase 3: Institutions, courses aur faculty.
+- Master data CRUD.
+- Relation checks.
+- Deletion safeguards.
+
+Phase 4: Library.
+- Book inventory.
+- Issue/return transaction.
+- Availability calculation.
+- Overdue handling.
+
+Until implemented:
+
+- Buttons ko hide karein, ya disabled state aur “Coming soon” label dikhayein.
+- Read-only dashboard ko clearly “Demo analytics dashboard” bolen.
+- False affordances avoid karein.
+
+====================================================================
+10. DETAILED FINDING 5: SETTINGS SCREEN NON-FUNCTIONAL
+====================================================================
+
+Severity: MEDIUM / P2.
+
+File:
+- views/SettingsView.tsx.
+
+Observed behavior:
+
+Profile inputs readOnly hain. Change Password section mein current aur new password inputs hain, par update button ka handler nahi. Notification toggles visual divs hain; click event, keyboard interaction, state ya persistence nahi.
+
+Impact:
+
+User settings modify karne ki expectation rakhega, lekin kuch save nahi hota. Security section especially misleading hai, kyunki password change feature visible hai par actual update nahi karta.
+
+Recommended correction:
+
+- Profile editing ke liye explicit Edit/Save/Cancel flow.
+- Password change API with current password validation.
+- New password policy and confirmation field.
+- Notification settings as accessible checkbox/switch controls.
+- Persist preferences to backend or explicitly local-only storage.
+- Success/failure feedback.
+- Unsaved changes guard.
+
+Accessibility:
+
+Toggle component ko `button role="switch" aria-checked="..."` ya native checkbox use karna chahiye. Visual div toggle keyboard se operable nahi hai.
+
+====================================================================
+11. DETAILED FINDING 6: INVALID AND PLACEHOLDER LINKS
+====================================================================
+
+Severity: MEDIUM / P2.
+
+File: pages/data.ts.
+
+Observed links:
+
+1. Livestock institution:
+`LiveStockAssistantDiplomaCollege.aspx`
+
+Ismein protocol, hostname aur leading slash nahi hai. `target="_blank"` ke saath browser relative path open karega. Current site par ye file available hone ka evidence nahi mila.
+
+2. Pharmacy institution:
+`#`
+
+Ye placeholder hai. Browser top ya hash state par le ja sakta hai, actual web page nahi.
+
+3. Multiple legacy HTTP links.
+
+Kuch external school links `http://` use karte hain, jabki primary site HTTPS context mein deploy ho sakti hai. Modern browsers mixed content ya security warnings de sakte hain, aur users unencrypted destination par ja sakte hain.
+
+Recommended correction:
+
+- Har external link ka actual canonical HTTPS URL confirm karein.
+- Unknown destination ko button ke roop mein show na karein.
+- Placeholder ko remove karein ya “Details coming soon” clearly show karein.
+- External links ke liye `target="_blank"` aur `rel="noopener noreferrer"` maintain karein.
+- Link checker CI mein add karein.
+- External link metadata mein `verifiedAt` ya owner note optional rakhein.
+
+Acceptance criteria:
+
+- No `href="#"` in production data.
+- No relative `.aspx` external action without confirmed host.
+- No unintended HTTP links where HTTPS available.
+- All CTA links manual smoke test se verify.
+
+====================================================================
+12. DETAILED FINDING 7: QUERY PARAMETER AUR BROCHURE FLOW
+====================================================================
+
+Severity: MEDIUM / P2.
+
+File:
+- pages/ProgramDetailPage.tsx, brochure CTA.
+- pages/router.tsx, readPath.
+
+Observed behavior:
+
+Programme detail CTA `/contact?brochure=1` use karta hai. Router `window.location.pathname` read karta hai aur query string ignore karta hai. ContactPage aur ContactSection query parameter read nahi karte. Isliye application ko pata nahi chalta ki visitor brochure request se aaya hai.
+
+Further issue:
+
+CTA ka label “Download Brochure” hai, lekin actual PDF/file download logic nahi. User contact page par navigate hoga, brochure download nahi karega.
+
+Possible intended behavior choose karein:
+
+Option 1: Actual brochure download.
+- Static PDF asset host karein.
+- `href="/brochures/<slug>.pdf"` use karein.
+- Correct download metadata dein.
+
+Option 2: Brochure enquiry.
+- Label “Request Brochure” karein.
+- Query parameter parse karein.
+- Contact form mein interest field preselect karein.
+- Form submission actual backend par bhejein.
+
+Option 3: Generic contact.
+- Query parameter remove karein aur label “Talk to Counsellor” karein.
+
+Router improvement:
+
+Route abstraction mein pathname, search aur hash separately expose karein. `URL` API use karein. Query parameter parsing centralized ho, taaki future campaigns aur attribution reliably work kare.
+
+====================================================================
+13. DETAILED FINDING 8: NO REAL SESSION OR BACKEND AUTHORIZATION
+====================================================================
+
+Severity: HIGH if dashboard contains real data; MEDIUM for demo.
+
+App.tsx mein currentUser state local memory mein hai. Browser refresh, tab close ya navigation lifecycle par state reset hoti hai. Kisi server se users ya permissions load nahi hote. MOCK_USERS, MOCK_STUDENTS aur fee data bundled JavaScript mein public visitor ko download ho sakta hai.
+
+Role-based Sidebar filtering useful UI behavior hai, lekin security boundary nahi. For example, frontend bundle mein all data aur all view modules present hain. Agar app real confidential student, phone, fee ya faculty data ke saath deploy ki gayi to koi visitor JavaScript inspect karke data access kar sakta hai.
+
+Recommended architecture:
+
+- Public website aur private CRM data services separate karein.
+- Backend authentication mandatory.
+- Data APIs role-scoped hon.
+- Student data least-privilege basis par return ho.
+- Server-side pagination use karein.
+- Audit log maintain karein.
+- PII encryption at rest/in transit requirements review karein.
+- Secrets frontend bundle mein kabhi na rakhein.
+- Environment variables ko public/private boundary ke saath handle karein.
+
+Privacy considerations:
+
+Student names, contacts, fee details aur attendance personal data hain. Real data add karne se pehle retention, access, consent, export, deletion aur breach response policies define honi chahiye.
+
+====================================================================
+14. DETAILED FINDING 9: PUBLIC CONTENT AUR DATA CONSISTENCY
+====================================================================
+
+Severity: MEDIUM/LOW depending on publication standards.
+
+Observed inconsistencies:
+
+- Public stats institutions ko `6+` dikhate hain, jab data array mein 7 institutions present hain.
+- English stats faculty `50+` hai, Hindi stats `100+`.
+- Public institutions Kekri, Ajmer, Rajasthan context mein hain, jab CRM mock colleges Noida, Delhi aur Meerut show karte hain.
+- Public institution descriptions mein board affiliation, placement support aur result claims hain jo business owner ko verify karne chahiye.
+- Legacy content mein “students”, “faculty” aur programme labels English/Hindi mixed hain; language switching incomplete areas mein fallback English return kar sakta hai.
+
+Impact:
+
+Visitor data ko unreliable samajh sakta hai. Admissions website mein incorrect count ya unsupported claim brand risk create kar sakta hai. CRM user ko wrong geography ya wrong institutions dikhne par system trust kam hota hai.
+
+Recommended approach:
+
+- Single source of truth define karein.
+- Institution, campus, course aur CRM organization IDs consistent rakhein.
+- Stats runtime data ya approved content manifest se generate karein.
+- English/Hindi content review workflow rakhein.
+- Claims ke liye content owner approval aur last-reviewed date maintain karein.
+- “+” values ko intentionally approximate batayein; exact count use karna ho to source define karein.
+
+====================================================================
+15. DETAILED FINDING 10: EXTERNAL HOT-LINKED IMAGES
+====================================================================
+
+Severity: MEDIUM operational risk.
+
+Public data mein images direct external MLD domain se load hoti hain. External hosting down hone, DNS issue, URL rename, access policy, CORS/anti-hotlink policy ya slow origin ke karan page images fail ho sakti hain.
+
+Impact:
+
+- Hero section blank ya broken image.
+- Gallery load slow.
+- Largest Contentful Paint worse.
+- Third-party origin dependency.
+- User privacy and caching behavior external host par depend.
+
+Recommended solution:
+
+- Images ko project-owned object storage/CDN par copy karein.
+- Stable asset naming aur responsive variants generate karein.
+- WebP/AVIF versions provide karein.
+- `srcSet` aur width/height attributes add karein.
+- Hero image preload carefully use karein.
+- Fallback background aur meaningful alt text maintain karein.
+- Asset integrity monitoring add karein.
+
+Agar hotlink intentional hai, to at least health check, fallback image aur ownership confirmation add karein.
+
+====================================================================
+16. DETAILED FINDING 11: PERFORMANCE AUR BUNDLE SIZE
+====================================================================
+
+Severity: P2/P3.
+
+Vite output mein JavaScript approximately 954 kB minified hai aur warning 500 kB threshold cross karne ki hai. React, Recharts, public pages, CRM views, icons, data aur effects initial bundle mein include ho rahe hain. Visitor public home page open kare to admin views aur chart dependency bhi load ho sakti hai.
+
+Recommended optimizations:
+
+1. Route-level lazy loading with `React.lazy`.
+2. Public and admin chunks separate.
+3. Recharts only dashboard/report route par load.
+4. Images local CDN se optimized.
+5. Unused imports remove.
+6. Manual chunk configuration evaluate.
+7. Bundle analyzer add.
+8. CSS audit for unused rules.
+9. Third-party fonts subset ya self-host where appropriate.
+10. Prefetch only likely next routes.
+
+Performance acceptance targets:
+
+- Public home initial JS materially reduce.
+- Mobile 4G par meaningful content fast render.
+- Lighthouse Performance baseline capture.
+- LCP, CLS, INP monitor.
+- Admin bundle public visitor ko unnecessary load na ho.
+
+Custom cursor, magnetic effects, continuous animation aur scroll listeners visual quality badhate hain, lekin reduced-motion aur low-power devices par carefully gate kiye jane chahiye. Code mein kuch reduced-motion checks hain; complete visual testing required hai.
+
+====================================================================
+17. DETAILED FINDING 12: HEADER SEARCH NON-FUNCTIONAL
+====================================================================
+
+Admin Header mein search input render hota hai, placeholder “Search by name, roll no, course...” hai, lekin input kisi state ya filtering logic se connected nahi. User type kar sakta hai, par active table/dashboard results change nahi hote.
+
+Ye smaller issue hai, lekin prominent global search affordance ke karan user expectation create hoti hai. Do options:
+
+- Real global search implement karein, jisme current user permissions ke hisaab se results aayein.
+- Search box remove karein ya “Coming soon” disabled state dikhayein.
+
+Agar implementation karni ho to search state App shell mein rakhein aur active view ko query prop dein. Large data ke liye server-side search, debounce aur result keyboard navigation add karein.
+
+====================================================================
+18. ACCESSIBILITY REVIEW
+====================================================================
+
+Positive points:
+
+- Kai images mein alt text present hai.
+- Login inputs labels ke saath associated hain.
+- Back-to-top, menu aur language controls mein kuch aria labels hain.
+- External links mein target aur rel handling ka use hai.
+- Reduced motion detection ke kuch checks present hain.
+
+Improvement areas:
+
+1. Settings toggles native interactive controls nahi hain.
+2. Kuch buttons ka action label generic hai: View, Edit, Receipt; context table row se milta hai par screen reader announcement improve ho sakti hai.
+3. Contact form labels visible hain, par `htmlFor`/id pairing consistently nahi.
+4. Error message ko `role="alert"` dena useful hoga.
+5. Form submission loading aur success status ko `aria-live` region mein announce karein.
+6. Table empty state missing hai; search no-result par blank tbody confusing hai.
+7. Icon-only controls ke accessible names verify karein.
+8. Custom cursor keyboard users ke liye harmless rahe; focus indicators remove nahi hone chahiye.
+9. Colour-only status indication avoid karein; status text present hai, jo positive hai.
+10. Heading hierarchy aur page title per route verify karein.
+
+Accessibility test plan:
+
+- Keyboard-only navigation.
+- Screen reader smoke test.
+- 200% zoom.
+- Contrast test.
+- Reduced-motion mode.
+- Touch target size.
+- Mobile menu focus trap.
+
+====================================================================
+19. ROUTING AND DEPLOYMENT REVIEW
+====================================================================
+
+Netlify configuration mein build command `npm run build`, publish directory `dist`, Node 20 aur cache plugin configured hai. public/_redirects mein SPA fallback `/* /index.html 200` hai. Ye clean History API routes ke liye appropriate foundation hai.
+
+Potential deployment checks:
+
+- Actual Netlify production URL par `/`, `/institutions`, `/about`, `/gallery`, `/messages`, `/contact`, `/admin` direct refresh test.
+- `/institutions/<valid-slug>` direct refresh.
+- `/courses/<valid-slug>` direct refresh.
+- Unknown path NotFoundPage.
+- Old `/programs/<slug>` migration.
+- Browser back/forward.
+- Trailing slash normalization.
+- Query string preservation.
+- HTTPS redirect.
+- External links.
+
+Current router trailing slash remove karta hai. Query/hash handling incomplete hai. Hash legacy links is migration ka central risk hai.
+
+One caution: Vite dev server deep route serve karta hai, lekin development behavior production CDN rewrite behavior ka substitute nahi. Deployment smoke test mandatory hai.
+
+====================================================================
+20. DATA MODEL REVIEW
+====================================================================
+
+Types in types.ts clear aur readable hain. Student, Faculty, Fee, BookIssue, Notice, College, Course aur Book interfaces basic dashboard use cases cover karte hain.
+
+Potential data-model improvements:
+
+1. Dates currently strings hain; ISO format contract explicitly document karein.
+2. Currency amounts integer/decimal handling backend par define karein; paise minor units prefer ho sakte hain.
+3. Fee `remainingDue` derived field hai; amountPaid aur totalFee se calculate karke mismatch avoid karein.
+4. Student `feeStatus` aur Fee records duplicate truth create karte hain.
+5. Book availability derived from total copies minus active issues honi chahiye.
+6. User avatar URL optional ya validated hona chahiye.
+7. College relation aur student relation enforce karein.
+8. Role strings backend enum se synchronized hon.
+9. Phone numbers currently mock values hain; production E.164 normalization define karein.
+10. Notice visibility role array se fine-grained institution/course scope tak expand ho sakta hai.
+
+Current mock data demo ke liye useful hai, lekin real persistence se pehle normalized domain model, database constraints aur API DTOs define karna chahiye.
+
+====================================================================
+21. UI AND UX REVIEW
+====================================================================
+
+Strong aspects:
+
+- Public site ka visual direction coherent hai: orange/white brand, typography, cards aur gradients consistent.
+- Page-level structure clear hai.
+- Public route set broad hai.
+- Responsive utility classes extensively used hain.
+- Institution detail aur programme detail pages content-rich hain.
+- Language provider ka foundation present hai.
+- Mobile menu aur scroll effects implemented hain.
+- External action buttons visually distinct hain.
+
+UX risks:
+
+- False-success contact form.
+- Inert CRM buttons.
+- Broken hash links.
+- Placeholder external links.
+- Header search no-op.
+- Settings no-op.
+- Generic error/no-result states missing in data tables.
+- Admin demo state refresh par disappear ho jata hai.
+- Public site content aur CRM content mismatch.
+
+Product communication recommendation:
+
+If this is a prototype, UI mein “Demo data”, “Preview”, “Coming soon” labels use karein. If this is a live system, missing operations implement karein before launch.
+
+====================================================================
+22. SECURITY REVIEW CHECKLIST
+====================================================================
+
+Current risks:
+
+- Password ignored.
+- No real backend authentication.
+- No authorization enforcement outside UI.
+- Mock personal data bundled in client.
+- Contact form has no server-side validation because no server submission.
+- No visible spam prevention.
+- External HTTP links.
+- Public source contains demo emails and data.
+- No security headers visible in repository configuration.
+
+Recommended production controls:
+
+1. HTTPS only.
+2. Content-Security-Policy tuned for external images/fonts if required.
+3. X-Frame-Options or frame-ancestors.
+4. Referrer-Policy.
+5. Permissions-Policy.
+6. Secure cookie flags.
+7. CSRF protection for cookie-authenticated mutations.
+8. Server-side input validation.
+9. Rate limiting.
+10. Audit logs.
+11. Dependency update policy.
+12. Secret scanning.
+13. Error monitoring without sensitive data.
+14. Backup and restore plan.
+15. Privacy and retention policy.
+
+Do not place real student or fee data into constants.ts or any browser bundle. Frontend code is public by definition.
+
+====================================================================
+23. TESTING GAP ANALYSIS
+====================================================================
+
+Current available scripts:
+
+- dev
+- build
+- preview
+
+Missing scripts:
+
+- test
+- test:unit
+- test:e2e
+- lint
+- format
+- typecheck alias
+- link-check
+- accessibility check
+
+Recommended tooling:
+
+Unit tests:
+- Vitest.
+- React Testing Library.
+
+E2E:
+- Playwright.
+
+Static quality:
+- ESLint.
+- Prettier.
+- TypeScript strict mode review.
+
+Accessibility:
+- axe-playwright.
+- Lighthouse CI.
+
+Suggested minimum tests:
+
+1. Root route renders home.
+2. Institutions route renders list.
+3. Valid institution slug renders detail.
+4. Invalid institution slug renders not found state.
+5. Valid course slug renders programme.
+6. Invalid course slug renders not found state.
+7. `/programs/foo` redirects to `/courses/foo`.
+8. Internal action links use clean routes.
+9. Wrong credentials do not authenticate.
+10. Correct credentials authenticate in demo/backend mode.
+11. Contact submit invokes configured endpoint.
+12. Contact failure shows error.
+13. Role filters sidebar correctly.
+14. Unauthorized view/action is rejected at server boundary.
+15. Settings toggle is keyboard-accessible and persists.
+16. Mobile menu opens/closes and restores body overflow.
+17. Browser back/forward updates route.
+18. Deep link refresh works on deployed environment.
+19. No placeholder href remains.
+20. No critical accessibility violations.
+
+====================================================================
+24. RECOMMENDED REMEDIATION ROADMAP
+====================================================================
+
+Stage 0: Product decision
+
+- Confirm whether app is demo, marketing site, or live CRM.
+- Confirm real authentication requirement.
+- Confirm contact lead delivery channel.
+- Confirm whether CRM mock data should be removed or replaced.
+
+Stage 1: Immediate fixes before any public release
+
+1. Replace `#/contact` with `/contact`.
+2. Replace `#/admin` with `/admin`.
+3. Remove or fix `href="#"`.
+4. Replace invalid relative external link.
+5. Fix password handling or label app as demo-only.
+6. Remove false contact success, or connect a real submission provider.
+7. Add explicit demo-data disclosure.
+8. Review all public claims and counts.
+9. Run production build and manual route smoke test.
+
+Stage 2: Security foundation
+
+1. Add backend auth.
+2. Add session management.
+3. Add server-side role checks.
+4. Remove real data from frontend bundle.
+5. Add rate limiting and audit logs.
+6. Add security headers.
+7. Add secret and dependency scanning.
+
+Stage 3: Core user journeys
+
+1. Contact enquiry delivery.
+2. Admission enquiry routing.
+3. Brochure download/request.
+4. Admin login/logout/session.
+5. Student CRUD.
+6. Fee recording and receipt.
+7. Faculty/course/college management.
+8. Library issue/return.
+9. Settings persistence.
+
+Stage 4: Quality and performance
+
+1. Add unit and E2E tests.
+2. Add route/link checks.
+3. Add lazy loading.
+4. Optimize images.
+5. Add accessibility CI.
+6. Add error monitoring.
+7. Add performance budgets.
+8. Add content review process.
+
+====================================================================
+25. PROPOSED IMPLEMENTATION DETAILS
+====================================================================
+
+25.1 Clean internal route migration
+
+A simple first patch should update action definitions in pages/data.ts. Internal links must be canonical path strings. The external boolean must remain false for internal paths. InstitutionDetailPage already uses target only when external is true, so this change is low risk.
+
+After patch:
+
+- Admission Enquiry: `/contact`
+- ERP Login: `/admin`
+
+Then add a test that renders institution action buttons and asserts the href values.
+
+25.2 Login contract
+
+Current callback signature `onLogin(email, pass)` is a useful starting point, but password should be passed from LoginScreen:
+
+- `onLogin(email, password)`
+- App or auth service validates credentials.
+- Do not hardcode a password in component.
+
+For real deployment, callback should become async and return a structured result:
+
+- `{ ok: true, user }`
+- `{ ok: false, code: 'INVALID_CREDENTIALS' }`
+
+Loading state and error state should be separated. Avoid revealing whether email exists.
+
+25.3 Contact form contract
+
+Define a ContactEnquiry type:
+
+- name
+- phone
+- email
+- interest
+- message
+- sourcePage
+- optional programmeSlug
+
+Use controlled state or FormData. Submit to a typed API. Disable button while submitting. Reset only after confirmed success. Use an accessible status region.
+
+25.4 Admin state
+
+Avoid passing large mock arrays directly from App.tsx once backend exists. Use query hooks or service modules. Keep server state separate from UI state. Add cache invalidation after mutations. Derive permissions from a centralized policy map rather than repeating arrays in every view.
+
+25.5 Route abstraction
+
+Use a route object with:
+
+- pathname
+- searchParams
+- hash
+- segments
+
+Hash migration can inspect initial `window.location.hash` and replace old `#/path` URLs, but canonical links must still be updated.
+
+====================================================================
+26. RELEASE GATE CHECKLIST
+====================================================================
+
+Security:
+
+[ ] Password is verified.
+[ ] Backend authorization is active.
+[ ] No real data in frontend constants.
+[ ] Session expiry works.
+[ ] Logout invalidates session.
+[ ] Rate limiting is active.
+[ ] Security headers configured.
+[ ] Secrets are not committed.
+
+Public navigation:
+
+[ ] All internal links use clean routes.
+[ ] No `href="#"` remains.
+[ ] No invalid relative external links remain.
+[ ] Deep refresh works for all routes.
+[ ] Browser back/forward works.
+[ ] Legacy redirect tested.
+
+Contact and admissions:
+
+[ ] Contact form actually submits.
+[ ] Success only after provider confirmation.
+[ ] Failure and retry states work.
+[ ] Spam prevention works.
+[ ] Admission CTA destinations verified.
+[ ] Brochure CTA behavior matches label.
+
+CRM:
+
+[ ] Demo/live status is clearly communicated.
+[ ] CRUD buttons either work or are hidden/disabled.
+[ ] Fee receipts work.
+[ ] Settings persist.
+[ ] Role authorization tested.
+[ ] Student data scope tested.
+
+Quality:
+
+[ ] Build passes.
+[ ] Type-check passes.
+[ ] Lint passes.
+[ ] Unit tests pass.
+[ ] E2E smoke passes.
+[ ] Accessibility check passes.
+[ ] Dependency audit passes.
+[ ] Lighthouse performance budget passes.
+[ ] External asset fallback tested.
+
+====================================================================
+27. WHAT IS ALREADY DONE WELL
+====================================================================
+
+1. Project structure understandable hai. Public pages, sections, shared components aur admin views separate hain.
+2. TypeScript interfaces basic domain ko readable banati hain.
+3. Vite build cleanly complete hota hai.
+4. Deep-route SPA fallback ka deployment intent clear hai.
+5. Router mein popstate aur custom route event handling present hai.
+6. Browser modifier clicks ko preserve karne ka attempt hai.
+7. External links ke liye noopener/noreferrer pattern use hua hai.
+8. Images par kai locations mein alt text diya gaya hai.
+9. Public site responsive utility classes use karti hai.
+10. Language provider local preference aur browser preference support karta hai.
+11. Reduced-motion checks effects layer mein present hain.
+12. Programme slug uniqueness verified hai.
+13. Dependency audit current lockfile par clean hai.
+14. Institution detail pages content-rich aur navigable hain.
+15. Public site mein NotFoundPage aur legacy programme redirect ka concept present hai.
+
+====================================================================
+28. FINAL VERDICT
+====================================================================
+
+Current codebase ko teen labels mein samjha ja sakta hai:
+
+Build status: PASS.
+Demo website status: GOOD, with broken links and incomplete actions.
+Production CRM status: NOT READY.
+
+Agar objective ek visual prototype ya investor/demo presentation hai, to project ka public experience strong base provide karta hai. Demo disclosure, broken link fixes aur contact form expectation correction ke baad prototype quality improve ho jayegi.
+
+Agar objective real education institution website plus operational CRM hai, to production launch se pehle security aur data delivery issues fix karna mandatory hai. Sabse pehle password bypass aur public mock data exposure address karein. Uske baad contact enquiry delivery aur clean route links fix karein. Phir CRM scope ko either implement karein ya read-only/demo label ke saath narrow karein.
+
+“npm run build pass” ko final approval na samjhein. Is audit ke hisaab se compile-level health achchi hai, lekin correctness ke important user journeys incomplete hain. Production approval tabhi dena chahiye jab release gate checklist ke security, form, routing aur authorization items pass ho jayein.
+
+Recommended immediate order:
+
+1. Decide demo versus production scope.
+2. Fix auth bypass or remove public admin access.
+3. Fix all hash links.
+4. Connect contact form to real delivery channel.
+5. Remove invalid/placeholder links.
+6. Add explicit demo labels or implement CRUD.
+7. Align public and CRM data.
+8. Add automated route, auth and form tests.
+9. Split public/admin bundles and optimize assets.
+10. Perform deployed environment smoke test.
+
+====================================================================
+29. APPENDIX A: IMPORTANT FILE MAP
+====================================================================
+
+Core:
+- App.tsx — route selection, auth state, admin shell.
+- index.tsx — application mount.
+- types.ts — CRM type definitions.
+- constants.ts — mock users and dashboard data.
+
+Authentication/admin:
+- components/Login.tsx — login form and demo buttons.
+- components/Sidebar.tsx — role-filtered navigation.
+- components/Header.tsx — admin header, theme and visual search.
+- views/DashboardHome.tsx — dashboard.
+- views/StudentManagement.tsx — student table.
+- views/FeeManagement.tsx — fee table.
+- views/CollegeManagement.tsx — college table.
+- views/CourseManagement.tsx — course table.
+- views/FacultyManagement.tsx — faculty table.
+- views/LibraryManagement.tsx — books and issued books.
+- views/ReportsView.tsx — reports.
+- views/SettingsView.tsx — profile/security/notifications UI.
+
+Public routing/layout:
+- pages/router.tsx — History API router and link interceptor.
+- pages/PublicLayout.tsx — navbar, footer, language and effects.
+- pages/HomePage.tsx — public home.
+- pages/InstitutionsPage.tsx — institutions listing.
+- pages/InstitutionDetailPage.tsx — institution detail and action links.
+- pages/ProgramDetailPage.tsx — course/program detail.
+- pages/ContactPage.tsx — contact page wrapper.
+- pages/sections/ContactSection.tsx — contact CTA and form.
+- pages/data.ts — public content and institution action URLs.
+- pages/programDetails.ts — detailed programme content.
+- pages/i18n.tsx — language state and translation resolver.
+
+Deployment:
+- package.json — scripts and dependencies.
+- package-lock.json — locked dependency graph.
+- tsconfig.json — TypeScript config.
+- vite.config.ts — Vite config.
+- netlify.toml — Netlify build configuration.
+- public/_redirects — SPA fallback.
+- index.html — browser shell and fonts.
+
+====================================================================
+30. APPENDIX B: AUDIT EVIDENCE SNAPSHOT
+====================================================================
+
+Build command:
+`npm run build`
+Result: successful production build.
+
+Type command:
+`npx tsc --noEmit`
+Result: successful type-check.
+
+Dependency command:
+`npm audit --omit=dev --json`
+Result: zero reported vulnerabilities in current audit output.
+
+Local smoke:
+- `/` returned HTTP 200.
+- `/institutions` returned HTTP 200 in Vite development server.
+
+Data check:
+- Programme slugs checked: 20.
+- Duplicate programme slugs: none.
+
+Known build warning:
+- Main minified JavaScript chunk is above Vite’s 500 kB warning threshold.
+
+Known test limitation:
+- No unit or end-to-end test suite configured.
+
+Known repository status at review time:
+- No source code changes were made by this audit.
+- Audit report is a documentation artifact.
+
+====================================================================
+31. APPENDIX C: OWNER DECISION QUESTIONS
+====================================================================
+
+1. Kya `/admin` publicly accessible demo hona chahiye ya private production CRM?
+2. Kya current mock users aur mock students sirf demonstration ke liye hain?
+3. Contact enquiry kahan receive honi chahiye—email, Netlify Forms, CRM API ya database?
+4. Kya “Download Brochure” actual file download hai ya brochure enquiry?
+5. Har institution ka official canonical website URL kya hai?
+6. Kya public stats approved aur current hain?
+7. Kya Hindi translations content owner ne approve ki hain?
+8. Kya CRM colleges ko public Kekri institutions se synchronize karna hai?
+9. Kya Add/Edit/View features release scope ka part hain?
+10. Student aur fee data ke liye privacy/access policy kya hogi?
+11. Kya external images ko owned CDN par migrate karna hai?
+12. Production monitoring aur backup responsibility kis team ki hogi?
+
+In questions ke answers ke bina technical implementation repeatedly change ho sakti hai. Product scope pehle lock karna engineering rework kam karega.
+
+====================================================================
+32. CLOSING NOTE
+====================================================================
+
+Ye document current repository snapshot ka engineering audit hai. Iska purpose problems ko hide karna nahi, balki release se pehle visible banana hai. Codebase mein achcha visual foundation aur workable build setup hai, lekin user trust, authentication, form delivery aur operational functionality ke areas mein gaps hain.
+
+Sabse important distinction yaad rakhein: successful compilation aur successful product behavior alag cheezein hain. Build pass hona zaroori hai, par sufficient nahi. Is report ke P1 findings fix hone, automated regression checks add hone aur deployed smoke tests pass hone ke baad hi project ko production launch ke liye reconsider karna chahiye.
+
+====================================================================
+33. PRODUCTION OPERATING MODEL
+====================================================================
+
+Production launch ke baad code ko sirf deploy karna enough nahi hoga. Website aur CRM ke liye ownership model define hona chahiye. Technical team, content owner, admissions team aur institutional management ki responsibilities alag honi chahiye.
+
+Suggested ownership:
+
+Technical owner:
+- Deployment, domains, SSL, environment variables aur monitoring.
+- Authentication, API, database aur backups.
+- Security patches aur incident response.
+
+Content owner:
+- Institution names, addresses, phone, email aur programme information.
+- Hindi/English translations.
+- Stats, board-result claims, placement claims aur admission dates.
+- Images, captions aur external website URLs.
+
+Admissions owner:
+- Contact enquiries ka daily response.
+- Lead status tracking.
+- Brochure and application requests.
+- Escalation of failed submissions.
+
+CRM owner:
+- Student, faculty, fee, library aur college master-data rules.
+- Role permissions.
+- Receipt and reporting requirements.
+
+Before launch, ek responsibility matrix document mein attach hona chahiye. Agar contact form fail ho jaye to kaun check karega, agar external links break hon to kaun update karega, aur agar student data unauthorized access mein aa jaye to kaun incident owner hoga—ye questions formally answer hone chahiye.
+
+Operational service targets bhi define karein:
+- Critical authentication incident: immediate acknowledgement.
+- Contact form failure: same business day detection.
+- Broken admission link: 24-hour correction target.
+- Content correction: approved request ke baad defined SLA.
+- Database restore test: scheduled quarterly verification.
+
+====================================================================
+34. CI/CD AUR BRANCH PROTECTION RECOMMENDATIONS
+====================================================================
+
+Current project mein build script available hai, lekin automated quality gates configured nahi. Production reliability improve karne ke liye pull request pipeline mein minimum checks mandatory hone chahiye.
+
+Recommended pipeline sequence:
+
+1. Install exact lockfile dependencies.
+2. TypeScript noEmit check.
+3. ESLint check.
+4. Unit tests.
+5. Production build.
+6. Link and placeholder scan.
+7. Accessibility smoke test.
+8. E2E route smoke test.
+9. Dependency audit.
+10. Preview deployment.
+11. Manual approval for production.
+
+Suggested package scripts:
+- `typecheck`: `tsc --noEmit`
+- `lint`: ESLint source files
+- `test`: unit tests
+- `test:e2e`: Playwright tests
+- `check:links`: internal and external link validation
+- `check:placeholders`: fail on `href="#"`, demo credentials or production TODO markers
+- `build`: production bundle
+
+Branch protection recommendations:
+- Main branch par direct push restrict karein.
+- Pull request review mandatory rakhein.
+- Required checks pass hone ke bina merge block karein.
+- Production deploy ko protected environment banayein.
+- Deployment credentials repository mein commit na karein.
+- Dependency update alerts enable karein.
+- Build artifacts ko source repository mein commit na karein jab tak deliberate requirement na ho.
+
+Every pull request description mein changed routes, permissions, data model, external URLs, environment variables, tests executed aur rollback plan mention hona chahiye.
+
+====================================================================
+35. ENVIRONMENT MANAGEMENT
+====================================================================
+
+Current repository mein public website mostly static data aur client-side constants par based hai. Real backend add karne par development, staging aur production environments separate karne honge.
+
+Development environment:
+- Local mock data allowed.
+- Fake email provider allowed.
+- Debug logging allowed, lekin secrets aur personal data nahi.
+- Test credentials clearly marked.
+
+Staging environment:
+- Production-like routing, authentication aur form provider.
+- Sanitized ya synthetic student data only.
+- Email delivery test inbox par redirect.
+- Real domain ke alag subdomain par deployment.
+- E2E tests staging par run.
+
+Production environment:
+- Real secrets only secure environment manager se.
+- Debug output disabled.
+- Error responses generic.
+- Monitoring and alerting active.
+- Backup and rollback verified.
+
+Vite mein `VITE_` prefix wale variables browser bundle mein expose ho sakte hain. Isliye secret API keys, database credentials, private SMTP credentials ya signing keys ko `VITE_` variables mein kabhi na rakhein. Public analytics ID aur public API base URL secrets nahi hote, lekin unhe bhi purpose ke hisaab se classify karein.
+
+Configuration validation startup par honi chahiye. Missing production API URL ya auth secret hone par application silently demo mode mein switch na ho. Better hai deployment fail ho aur clear configuration error mile.
+
+====================================================================
+36. DATA MIGRATION AUR BACKEND INTRODUCTION PLAN
+====================================================================
+
+Agar mock dashboard ko real CRM mein convert karna hai, to direct frontend mutation se start nahi karna chahiye. Pehle canonical data model aur migration plan define karein.
+
+Recommended entities:
+- User
+- Role
+- Institution
+- Campus
+- Course
+- Student
+- Faculty
+- FeeAccount
+- FeeTransaction
+- Book
+- BookIssue
+- Notice
+- ContactEnquiry
+- AuditEvent
+
+Important relationships:
+- Institution has many campuses.
+- Campus has many courses and users.
+- Course has many students and faculty assignments.
+- Student has one or more fee transactions.
+- Book issue references one student and one book.
+- Contact enquiry optionally institution aur programme ko reference kar sakti hai.
+
+Migration rules:
+1. Mock IDs ko production IDs na samjhein.
+2. Existing real data source identify karein.
+3. Duplicate student records detect karein.
+4. Phone and email normalize karein.
+5. Date formats ISO 8601 mein convert karein.
+6. Fee totals aur due balances reconcile karein.
+7. Role mappings approve karein.
+8. Invalid institution references reject ya quarantine karein.
+9. Import report generate karein.
+10. Import ke baad sample records manually verify karein.
+
+Fee data ke liye `remainingDue` ko blindly import na karein. Total fee minus valid posted transactions se derived balance calculate karein. Correction, refund aur reversal events ko separate immutable transactions ke roop mein store karein. Existing record edit karke financial history overwrite karna audit problem create karega.
+
+Library data ke liye total copies, available copies aur active issues reconcile karein. Negative availability ya duplicate issue records import ke baad allowed nahi hone chahiye.
+
+====================================================================
+37. OBSERVABILITY, LOGGING AUR ALERTING
+====================================================================
+
+Current frontend mein production observability layer visible nahi hai. Real deployment mein errors silently fail nahi hone chahiye, especially contact submission aur authentication flows mein.
+
+Recommended telemetry:
+
+Frontend:
+- JavaScript exceptions.
+- Route navigation failures.
+- Contact submission success/failure count.
+- Authentication failure count without logging passwords.
+- Asset loading failures.
+- Web vitals.
+
+Backend:
+- Request latency.
+- 4xx and 5xx rates.
+- Login failures.
+- Permission denials.
+- Contact delivery failures.
+- Database query latency.
+- Queue backlog if email processing asynchronous ho.
+
+Privacy rule: logs mein password, full message body, complete student contact details, fee data ya session token store na karein. User ID, hashed correlation ID aur safe metadata use karein. Error reporting vendor ko data processing requirements ke saath review karein.
+
+Useful alerts:
+- Contact submission failure rate threshold cross kare.
+- Auth failures unusual spike show karein.
+- 5xx rate increase ho.
+- External image failure rate high ho.
+- SSL/domain expiry approaching ho.
+- Database backup fail ho.
+- Storage threshold cross ho.
+
+Alert fatigue avoid karne ke liye severity aur runbook link attach karein. Har alert ka owner aur expected action documented ho.
+
+====================================================================
+38. INCIDENT RESPONSE AUR ROLLBACK PLAN
+====================================================================
+
+Production incident ke dauran ad-hoc changes avoid karein. Basic incident runbook ready hona chahiye.
+
+Scenario A: Authentication bypass discover hota hai.
+Immediate actions:
+1. Public admin route disable ya maintenance mode mein lein.
+2. Existing sessions invalidate karein.
+3. Backend credentials rotate karein.
+4. Access logs preserve karein.
+5. Scope assessment karein.
+6. Fix deploy karein.
+7. Affected users aur management ko policy ke mutabik notify karein.
+8. Post-incident review karein.
+
+Scenario B: Contact form delivery fail.
+Immediate actions:
+1. Form provider/API health check.
+2. Failed submissions ke logs identify karein.
+3. Temporary phone ya alternate contact CTA display karein.
+4. Retry queue ya replay process run karein.
+5. User-facing status accurate rakhein.
+6. Delivery restore ke baad end-to-end test karein.
+
+Scenario C: Bad deployment.
+Rollback options:
+- Netlify previous deploy restore.
+- Git revert through normal pull request.
+- Feature flag disable.
+- Database migration rollback only if tested.
+
+Frontend rollback easy hota hai, lekin database schema rollback risky hota hai. Destructive migration bina tested backup aur backward-compatible application version ke nahi chalani chahiye.
+
+Post-incident report mein timeline, impact, root cause, detection gap, correction aur preventive action include ho.
+
+====================================================================
+39. CONTENT GOVERNANCE AUR EDITORIAL QA
+====================================================================
+
+Education website par content correctness technical correctness jitni important hai. “100% Board Results”, “100% Placement Support”, affiliation, PCI approval, student counts aur years of legacy jaise claims publish hone se pehle authorized owner se verify hone chahiye.
+
+Editorial checklist:
+- Institution ka official legal name.
+- Correct spelling and transliteration.
+- Current address and map location.
+- Functional phone and email.
+- Approved logo and photographs.
+- Current admission dates.
+- Eligibility and duration.
+- Board/university/authority affiliation.
+- Fee and scholarship wording.
+- Placement claims with qualification.
+- Hindi translation review.
+- Alt text for every meaningful image.
+- Last reviewed date.
+
+Content records mein optionally `lastReviewedAt`, `reviewedBy` aur `sourceUrl` fields rakhe ja sakte hain. Isse stale data identify karna easy hoga.
+
+Hindi content mein English technical terms intentionally retained hain, lekin sentence grammar, terminology aur punctuation consistent hone chahiye. Language toggle ke baad page title, navigation, CTA, form fields, error messages aur content blocks sab expected language mein update hone chahiye. Fallback English acceptable hai only when documented, not silently for important admission details.
+
+====================================================================
+40. BROWSER AUR DEVICE COMPATIBILITY PLAN
+====================================================================
+
+Application History API, IntersectionObserver, matchMedia, requestAnimationFrame aur smooth scrolling jaise modern browser APIs use karti hai. Supported browser matrix define kiye bina production claim incomplete rahega.
+
+Minimum smoke matrix:
+- Latest Chrome desktop.
+- Latest Firefox desktop.
+- Latest Safari desktop.
+- Latest Edge desktop.
+- Android Chrome.
+- iOS Safari.
+- Low-width mobile viewport.
+- Tablet viewport.
+
+Checks:
+- Navbar hidden/show behavior.
+- Mobile menu body scroll lock.
+- Custom cursor only fine pointer par.
+- Form keyboard interaction.
+- Tables horizontal scroll.
+- Long institution names wrapping.
+- Hero image and text contrast.
+- Sticky section nav overlap.
+- Back-to-top position.
+- Reduced-motion preference.
+- Browser zoom at 200%.
+
+External fonts and image hotlinks slow networks par test karein. Offline ya blocked third-party origin case mein layout collapse nahi hona chahiye. Image dimensions reserve karne se cumulative layout shift reduce hoga.
+
+====================================================================
+41. FINAL ACTION LIST WITH OWNERSHIP
+====================================================================
+
+Engineering — before merge:
+1. Password bypass fix or demo mode restriction.
+2. Clean route links migrate.
+3. Contact form delivery implementation.
+4. Placeholder links remove.
+5. Query parameter behavior define.
+6. Add lint and test scripts.
+7. Add route/form/auth smoke tests.
+8. Add production configuration validation.
+
+Product/content owner — before launch:
+1. Demo versus live scope approve.
+2. Public stats verify.
+3. External URLs verify.
+4. Programme and admission copy approve.
+5. Hindi translations approve.
+6. Contact recipient approve.
+7. CRM actions scope approve.
+8. Privacy wording approve.
+
+Operations — before launch:
+1. Domain and SSL verify.
+2. Alert contacts configure.
+3. Backup schedule configure.
+4. Restore test complete.
+5. Deployment rollback test complete.
+6. Contact enquiry daily owner nominate.
+7. Incident runbook publish.
+
+QA — before launch:
+1. Full route matrix pass.
+2. Browser matrix pass.
+3. Keyboard/accessibility pass.
+4. Mobile responsive pass.
+5. Contact delivery pass.
+6. Admin authorization pass.
+7. External links pass.
+8. Performance baseline pass.
+
+====================================================================
+42. EXTENDED CONCLUSION
+====================================================================
+
+Is audit ka central conclusion simple hai: MLD project ka visual aur structural foundation promising hai, lekin current implementation ko “sab kuch perfect” nahi kaha ja sakta. Build aur type-check pass hone ke bawajood important behavior gaps exist karte hain. Public website par visitor ka trust contact form, admission links aur accurate content se banta hai. CRM par staff ka trust authentication, data persistence, permissions aur reliable workflows se banta hai.
+
+Aaj ke snapshot mein public website ka best description hai: content-rich React prototype with a clean-route migration in progress. Admin area ka best description hai: role-filtered mock dashboard shell, not a secure production CRM. Ye distinction stakeholders ko clearly batani chahiye.
+
+Agar team short-term demo banana chahti hai, to fastest safe path hai:
+- Admin ko demo-only clearly mark karein.
+- Mock credentials aur mock data disclosure add karein.
+- Broken internal links fix karein.
+- Contact form ko false success se replace karke clear demo message dikhayein, ya real provider connect karein.
+- Invalid external links remove karein.
+- Build and route smoke checks repeat karein.
+
+Agar team production system banana chahti hai, to implementation order security-first hona chahiye:
+- Backend authentication.
+- Backend authorization.
+- Real contact submission.
+- Data model and API.
+- CRUD workflows.
+- Audit and monitoring.
+- Automated tests.
+- Performance and asset ownership.
+
+Release approval ko sirf compiler output par base na karein. Successful production release tab mana jayega jab a real visitor admission enquiry successfully submit kar sake, correct confirmation receive kare, internal team message dekh sake, authorized staff login kar sake, unauthorized user data access na kar sake, aur deployment ke baad har canonical route refresh par open ho.
+
+Document ke findings actionable hain. Har P1 finding ke liye owner, due date, test case aur acceptance criteria assign karein. P2/P3 improvements ko roadmap mein rakhein, lekin unhe release communication mein hide na karein.
+
+FINAL STATUS:
+- Code compiles: YES.
+- Type-check passes: YES.
+- Dependency audit clean: YES.
+- Local SPA smoke passes: YES.
+- Automated regression coverage: NO.
+- Authentication production-safe: NO.
+- Contact delivery verified: NO.
+- CRM CRUD complete: NO.
+- Internal links fully consistent: NO.
+- Production readiness: NOT APPROVED.
+
+END OF AUDIT DOCUMENT
