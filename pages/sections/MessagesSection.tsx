@@ -41,12 +41,14 @@ export const MessagesSection: React.FC = () => {
           onMouseLeave={() => setPaused(false)}
         >
           {/* Quote card */}
-          <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-8 md:p-12 text-center">
+          <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-8 md:p-12 text-center overflow-hidden group hover:border-brand-orange/40 transition-colors duration-500">
             <div className="absolute -top-5 left-1/2 -translate-x-1/2">
-              <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl">
+              <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl pulse-glow">
                 <Icon id="quote" size={26} />
               </span>
             </div>
+            {/* Decorative corner */}
+            <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-brand-orange/20 blur-3xl float-slow" />
 
             {/* key to remount for animation */}
             <div key={message.id} className="rise">
@@ -58,7 +60,7 @@ export const MessagesSection: React.FC = () => {
               </blockquote>
 
               <div className="mt-8 flex items-center justify-center gap-4">
-                <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-brand-orange-light text-brand-orange-dark font-serif font-bold text-lg">
+                <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white font-serif font-bold text-lg shadow-lg shadow-brand-orange/30">
                   {message.name.charAt(0)}
                 </span>
                 <div className="text-left">
@@ -73,7 +75,7 @@ export const MessagesSection: React.FC = () => {
           <div className="mt-8 flex items-center justify-center gap-4">
             <button
               onClick={() => setActive((a) => (a - 1 + messages.length) % messages.length)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/10 text-white hover:bg-brand-orange transition-colors"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/10 text-white hover:bg-brand-orange hover:scale-110 transition-all duration-300"
               aria-label="Previous message"
             >
               <Icon id="chevron-left" size={20} />
@@ -85,8 +87,8 @@ export const MessagesSection: React.FC = () => {
                   key={m.id}
                   onClick={() => setActive(i)}
                   aria-label={`Show ${m.name} message`}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${
-                    i === active ? 'w-8 bg-brand-orange' : 'w-2.5 bg-white/30 hover:bg-white/60'
+                  className={`h-2.5 rounded-full transition-all duration-500 ${
+                    i === active ? 'w-10 bg-brand-orange shadow-lg shadow-brand-orange/40' : 'w-2.5 bg-white/30 hover:bg-white/60'
                   }`}
                 />
               ))}
@@ -94,7 +96,7 @@ export const MessagesSection: React.FC = () => {
 
             <button
               onClick={() => setActive((a) => (a + 1) % messages.length)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/10 text-white hover:bg-brand-orange transition-colors"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/10 text-white hover:bg-brand-orange hover:scale-110 transition-all duration-300"
               aria-label="Next message"
             >
               <Icon id="chevron-right" size={20} />

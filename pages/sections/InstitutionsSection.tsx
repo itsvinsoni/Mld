@@ -26,15 +26,17 @@ const InstitutionCard: React.FC<{ inst: Institution; index: number }> = ({ inst,
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:rotate-1"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
-        <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/95 text-brand-orange-dark backdrop-blur transition-transform duration-300 group-hover:scale-105 group-hover:bg-brand-orange group-hover:text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent transition-opacity duration-500 group-hover:opacity-90" />
+        {/* Decorative corner accent */}
+        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-brand-orange/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/95 text-brand-orange-dark backdrop-blur transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-orange group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-orange/40">
           {inst.typeLabel}
         </span>
         <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-white/95 text-xs">
           <Icon id="map-pin" size={14} />
           {inst.location}
         </span>
-        <span className="absolute top-3 right-3 inline-flex items-center justify-center h-9 w-9 rounded-full bg-white/95 text-brand-orange-dark backdrop-blur transition-all duration-300 translate-x-3 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-hover:bg-brand-orange group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-orange/40">
+        <span className="absolute top-3 right-3 inline-flex items-center justify-center h-9 w-9 rounded-full bg-white/95 text-brand-orange-dark backdrop-blur transition-all duration-500 translate-x-3 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-hover:bg-brand-orange group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-orange/40 hover:rotate-45">
           <Icon id="arrow-right" size={16} />
         </span>
       </a>
@@ -54,7 +56,7 @@ const InstitutionCard: React.FC<{ inst: Institution; index: number }> = ({ inst,
         <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap gap-2">
           <a
             href={`/institutions/${inst.slug}`}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all duration-300 hover:gap-2.5"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 hover:bg-brand-orange hover:text-white transition-all duration-300 hover:gap-2.5"
           >
             {t('insts.viewDetails', 'View Details')}
             <Icon id="arrow-right" size={12} />

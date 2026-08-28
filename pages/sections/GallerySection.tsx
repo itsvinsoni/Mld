@@ -94,7 +94,7 @@ const GalleryItem: React.FC<{ img: GalleryImage; index: number; onClick: () => v
     <button
       ref={ref}
       onClick={onClick}
-      className={`gallery-img shine group relative rounded-2xl overflow-hidden aspect-[4/3] card-glow border border-slate-100 bg-slate-100 ${className}`}
+      className={`gallery-img shine group relative rounded-2xl overflow-hidden w-full h-full card-glow border border-slate-100 bg-slate-100 ${className}`}
       style={{ transitionDelay: `${index * 60}ms` }}
       aria-label={`View ${img.caption}`}
     >
@@ -136,17 +136,27 @@ export const GallerySection: React.FC = () => {
   );
 
   return (
-    <section id="gallery" className="py-20 md:py-28 bg-[#F7F3EE]">
-      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+    <section id="gallery" className="relative py-20 md:py-28 bg-[#F7F3EE] overflow-hidden">
+      <div className="absolute -top-32 left-1/3 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none float-lg" />
+      <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
           label={t('gallery.label', 'Photo Gallery')}
           heading={t('gallery.heading', 'Life at MLD Memorial Sansthan')}
           subtext={t('gallery.subtext', 'Explore moments from our campuses, classrooms, laboratories, and celebrations.')}
         />
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[180px] md:auto-rows-[200px]">
           {gallery.map((img, i) => (
-            <GalleryItem key={img.id} img={img} index={i} onClick={() => setOpenIndex(i)} />
+            <div
+              key={img.id}
+              className={
+                // Vary heights for visual interest
+                (i === 0 || i === 5) ? 'row-span-2' : ''
+              }
+            >
+              <GalleryItem img={img} index={i} onClick={() => setOpenIndex(i)} />
+            </div>
           ))}
         </div>
       </div>

@@ -38,12 +38,12 @@ export const AboutPage: React.FC = () => {
                 title: t('aboutPage.vision', 'Our Vision'),
                 text: t('aboutPage.visionText', 'To be a leading educational society in Rajasthan, nurturing every student to discover their potential and contribute meaningfully to society.'),
               },
-            ].map((item) => (
-              <div key={item.title} className="bg-white rounded-2xl border border-slate-100 p-8 card-glow">
-                <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-brand-orange-light text-brand-orange mb-4">
+            ].map((item, i) => (
+              <div key={item.title} className="bg-white rounded-2xl border border-slate-100 p-8 card-glow group shine" style={{ animationDelay: `${i * 100}ms` }}>
+                <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-brand-orange-light text-brand-orange mb-4 group-hover:bg-brand-orange group-hover:text-white group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
                   <Icon id={item.icon} size={24} />
                 </span>
-                <h3 className="font-serif text-xl font-bold text-light-textPrimary">{item.title}</h3>
+                <h3 className="font-serif text-xl font-bold text-light-textPrimary group-hover:text-brand-orange transition-colors">{item.title}</h3>
                 <p className="mt-3 text-light-textSecondary leading-relaxed">{item.text}</p>
               </div>
             ))}
