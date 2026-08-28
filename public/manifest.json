@@ -1,0 +1,20 @@
+{
+  "name": "MLD Memorial Sansthan",
+  "short_name": "MLD",
+  "description": "Schools, Colleges & Diploma Institutes in Kekri, Ajmer, Rajasthan",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F3EE",
+  "theme_color": "#F97316",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/mld-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "en-IN",
+  "categories": ["education", "government"]
+}

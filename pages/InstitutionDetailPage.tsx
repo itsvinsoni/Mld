@@ -6,6 +6,7 @@ import type { Institution } from './data';
 import { useInstitutionBySlug, useInstitutions } from './dataI18n';
 import { useT } from './i18n';
 import { ContactCta } from './shared/ContactCta';
+import { SEO, buildEducationalOrgLd, buildBreadcrumbLd, SEO_SITE } from './SEO';
 
 const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
   const t = useT();
@@ -217,6 +218,31 @@ export const InstitutionDetailPage: React.FC<{ slug?: string }> = ({ slug }) => 
 
   return (
     <>
+      <SEO
+        config={{
+          title: `${inst.name} | MLD Memorial Sansthan, Kekri`,
+          description: inst.description,
+          path: `/institutions/${inst.slug}`,
+          keywords: [inst.name, `${inst.typeLabel} Kekri`, `${inst.typeLabel} Ajmer`, 'MLD institution', 'Rajasthan education'],
+          type: 'website',
+          image: inst.image,
+          jsonLd: [
+            buildEducationalOrgLd({
+              name: inst.name,
+              slug: inst.slug,
+              description: inst.description,
+              image: inst.image,
+              typeLabel: inst.typeLabel,
+              programs: inst.programs.map(p => p.name),
+            }),
+            buildBreadcrumbLd([
+              { name: 'Home', href: '/' },
+              { name: 'Institutions', href: '/institutions' },
+              { name: inst.name, href: `/institutions/${inst.slug}` },
+            ]),
+          ],
+        }}
+      />
       <InstitutionHero inst={inst} />
       <Highlights inst={inst} />
       <AboutBlock inst={inst} />

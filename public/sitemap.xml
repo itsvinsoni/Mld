@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://mldmemorialsansthan.com/</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://mldmemorialsansthan.com/"/>
+    <xhtml:link rel="alternate" hreflang="hi-IN" href="https://mldmemorialsansthan.com/?lang=hi"/>
+  </url>
+  <url>
+    <loc>https://mldmemorialsansthan.com/institutions</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mldmemorialsansthan.com/about</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mldmemorialsansthan.com/gallery</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mldmemorialsansthan.com/messages</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mldmemorialsansthan.com/contact</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Institutions -->
+  <url><loc>https://mldmemorialsansthan.com/institutions/balika-uchch-madhyamik-academy</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/institutions/mld-international-academy</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/institutions/uchch-madhyamik-academy</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/institutions/memorial-sansthan-colleges</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/institutions/live-stock-diploma</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/institutions/pharmacy-college</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/institutions/mahila-shikshan-prashikshan-mahavidyalay</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Top Programmes (high search value) -->
+  <url><loc>https://mldmemorialsansthan.com/courses/d-pharma</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/b-ed</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/live-stock-assistant-diploma</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/ba-arts</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/bsc-science</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/bcom-commerce</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/bba</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/bca</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/nursery-kindergarten</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/primary-school</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/middle-school</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/secondary</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/senior-secondary</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/pharmacology-basics</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/animal-husbandry-basics</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/dairy-poultry-management</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/ba-b-ed-integrated</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/bsc-b-ed-integrated</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/d-el-ed</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mldmemorialsansthan.com/courses/shiksha-shastri</loc><lastmod>2025-01-15</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+</urlset>

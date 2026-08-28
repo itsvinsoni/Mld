@@ -3,7 +3,9 @@ export enum UserRole {
     MANAGER = 'Co-Owners',
     HEAD = 'College Head',
     FACULTY = 'Faculty',
-    STUDENT = 'Student'
+    STUDENT = 'Student',
+    ACCOUNTANT = 'Accountant',
+    DIRECTOR = 'Director'
 }
 
 export interface User {
@@ -87,4 +89,21 @@ export interface Book {
     isbn: string;
     availableCopies: number;
     totalCopies: number;
+}
+
+/** A single subject's marks inside a result/mark-sheet. */
+export interface SubjectMark {
+    subject: string;
+    maxMarks: number;
+    obtained: number;
+}
+
+/** A student's exam result / mark-sheet entry. Percentage & grade are derived. */
+export interface Result {
+    id: string;
+    studentId: string;
+    examName: string;     // e.g. "Term 1", "Semester 1", "Annual"
+    year: string;         // e.g. "2024"
+    subjects: SubjectMark[];
+    // Derived on the fly: totalObtained, totalMax, percentage, grade
 }

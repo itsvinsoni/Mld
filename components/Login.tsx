@@ -13,8 +13,10 @@ interface LoginScreenProps {
  */
 const demoUsers: { role: UserRole; email: string }[] = [
     { role: Roles.ADMIN, email: 'badebauji@mld.com' },
+    { role: Roles.DIRECTOR, email: 'director@mld.com' },
     { role: Roles.MANAGER, email: 'avinash@mld.com' },
     { role: Roles.HEAD, email: 'head@mld.com' },
+    { role: Roles.ACCOUNTANT, email: 'accounts@mld.com' },
     { role: Roles.FACULTY, email: 'faculty@mld.com' },
     { role: Roles.STUDENT, email: 'student@mld.com' },
 ];

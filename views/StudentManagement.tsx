@@ -1,9 +1,26 @@
 import React, { useState } from 'react';
-import type { Student } from '../types';
+import type { Student, Result } from '../types';
 import { UserRole as Roles } from '../types';
 import { SearchIcon } from '../components/icons';
 import { Modal, ConfirmDialog, Field, fieldClass } from '../components/Modal';
 import { useCrm } from '../data/CrmProvider';
+
+function totals(subjects: Result['subjects']) {
+    const totalMax = subjects.reduce((s, m) => s + (Number(m.maxMarks) || 0), 0);
+    const obtained = subjects.reduce((s, m) => s + (Number(m.obtained) || 0), 0);
+    const percentage = totalMax > 0 ? Math.round((obtained / totalMax) * 100) : 0;
+    return { totalMax, obtained, percentage };
+}
+
+function gradeOf(percentage: number): string {
+    if (percentage >= 90) return 'A+';
+    if (percentage >= 80) return 'A';
+    if (percentage >= 70) return 'B+';
+    if (percentage >= 60) return 'B';
+    if (percentage >= 50) return 'C';
+    if (percentage >= 40) return 'D';
+    return 'F';
+}
 
 const emptyForm = {
     name: '',
@@ -17,15 +34,16 @@ const emptyForm = {
 };
 
 const StudentManagement: React.FC = () => {
-    const { students, courses, userRole, addStudent, updateStudent, deleteStudent } = useCrm();
+    const { students, courses, results, userRole, addStudent, updateStudent, deleteStudent } = useCrm();
     const [searchTerm, setSearchTerm] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [form, setForm] = useState({ ...emptyForm });
     const [deleteTarget, setDeleteTarget] = useState<Student | null>(null);
+    const [marksheetStudent, setMarksheetStudent] = useState<Student | null>(null);
 
-    const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD].includes(userRole);
-    const canDelete = [Roles.ADMIN, Roles.MANAGER].includes(userRole);
+    const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD, Roles.DIRECTOR].includes(userRole);
+    const canDelete = [Roles.ADMIN, Roles.MANAGER, Roles.DIRECTOR].includes(userRole);
 
     const filteredStudents = students.filter(student =>
         student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -132,6 +150,7 @@ const StudentManagement: React.FC = () => {
                                 <td className="px-6 py-4">{student.attendancePercentage}%</td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center space-x-3">
+                                        <button onClick={() => setMarksheetStudent(student)} className="text-emerald-600 hover:underline text-xs">Mark Sheet</button>
                                         <button onClick={() => openEdit(student)} className="text-brand-orange hover:underline text-xs">Edit</button>
                                         {canDelete && (
                                             <button onClick={() => setDeleteTarget(student)} className="text-red-500 hover:underline text-xs">Delete</button>
@@ -187,6 +206,56 @@ const StudentManagement: React.FC = () => {
                 title="Delete Student"
                 message={`Delete ${deleteTarget?.name ?? 'this student'} permanently? This cannot be undone.`}
             />
+
+            <Modal
+                open={!!marksheetStudent}
+                onClose={() => setMarksheetStudent(null)}
+                title={`Mark Sheet — ${marksheetStudent?.name ?? ''}`}
+                maxWidth="max-w-3xl"
+            >
+                {(() => {
+                    const myResults = results.filter(r => r.studentId === marksheetStudent?.id);
+                    if (myResults.length === 0) {
+                        return <p className="text-sm text-slate-500 dark:text-slate-400">No results have been recorded for this student yet.</p>;
+                    }
+                    return (
+                        <div className="space-y-6">
+                            {myResults.map(r => {
+                                const t = totals(r.subjects);
+                                const grade = gradeOf(t.percentage);
+                                return (
+                                    <div key={r.id} className="border border-light-border dark:border-dark-border rounded-xl p-4">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div>
+                                                <p className="font-semibold text-light-textPrimary dark:text-dark-textPrimary">{r.examName} ({r.year})</p>
+                                                <p className="text-xs text-brand-secondary">Roll {marksheetStudent?.rollNo}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-2xl font-bold text-brand-orange">{t.percentage}%</p>
+                                                <p className="text-xs font-medium text-light-textSecondary dark:text-dark-textSecondary">Grade {grade}</p>
+                                            </div>
+                                        </div>
+                                        <table className="w-full text-sm">
+                                            <thead className="text-xs uppercase text-slate-500 dark:text-slate-400 border-b border-light-border dark:border-dark-border">
+                                                <tr><th className="py-2 text-left">Subject</th><th className="py-2 text-right">Max</th><th className="py-2 text-right">Obtained</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                {r.subjects.map((s, i) => (
+                                                    <tr key={i} className="border-b border-light-border/50 dark:border-dark-border/50 last:border-0">
+                                                        <td className="py-2 text-light-textPrimary dark:text-dark-textPrimary">{s.subject}</td>
+                                                        <td className="py-2 text-right">{s.maxMarks}</td>
+                                                        <td className="py-2 text-right font-medium">{s.obtained}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    );
+                })()}
+            </Modal>
         </div>
     );
 };

@@ -346,7 +346,7 @@ export const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children
     <div className="min-h-screen bg-[#F7F3EE] text-light-textPrimary font-sans overflow-x-hidden">
       <ScrollProgress />
       <Navbar />
-      <main key={segments.join('/') || 'home'} className="page-in">{children}</main>
+      <main id="main-content" key={segments.join('/') || 'home'} className="page-in" role="main" aria-label="Main content">{children}</main>
       <Footer />
       <BackToTop />
     </div>

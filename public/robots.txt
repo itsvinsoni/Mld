@@ -1,0 +1,38 @@
+# MLD Memorial Sansthan — robots.txt
+# https://mldmemorialsansthan.com
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /crm
+Disallow: /api/
+
+# AI crawlers — explicit allow for AI search engines (ChatGPT, Perplexity, Claude, Gemini)
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemaps
+Sitemap: https://mldmemorialsansthan.com/sitemap.xml
+Sitemap: https://mldmemorialsansthan.com/sitemap-courses.xml
+Sitemap: https://mldmemorialsansthan.com/sitemap-institutions.xml
+
+# Host
+Host: https://mldmemorialsansthan.com

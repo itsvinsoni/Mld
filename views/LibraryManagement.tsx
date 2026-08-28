@@ -20,8 +20,8 @@ const LibraryManagement: React.FC = () => {
     const [deleteTarget, setDeleteTarget] = useState<Book | null>(null);
     const [returnTarget, setReturnTarget] = useState<{ studentId: string; bookId: string; bookName: string; studentName: string } | null>(null);
 
-    const canManage = [Roles.ADMIN, Roles.HEAD, Roles.FACULTY].includes(userRole);
-    const canDelete = [Roles.ADMIN].includes(userRole);
+    const canManage = [Roles.ADMIN, Roles.HEAD, Roles.FACULTY, Roles.DIRECTOR].includes(userRole);
+    const canDelete = [Roles.ADMIN, Roles.DIRECTOR].includes(userRole);
 
     const issuedBooks = useMemo(() => {
         return students.flatMap(student =>

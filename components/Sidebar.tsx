@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { UserRole } from '../types';
-import { DashboardIcon, StudentsIcon, FeesIcon, FacultyIcon, LibraryIcon, CoursesIcon, ReportsIcon, SettingsIcon, LogoutIcon } from './icons';
+import { DashboardIcon, StudentsIcon, FeesIcon, FacultyIcon, LibraryIcon, CoursesIcon, ReportsIcon, SettingsIcon, ResultsIcon, LogoutIcon } from './icons';
 
 interface SidebarProps {
     userRole: UserRole;
@@ -20,15 +20,16 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-    { key: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.FACULTY, UserRole.STUDENT] },
-    { key: 'colleges', label: 'Colleges', icon: <LibraryIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER] },
-    { key: 'courses', label: 'Courses', icon: <CoursesIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD] },
-    { key: 'students', label: 'Students', icon: <StudentsIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.FACULTY] },
-    { key: 'faculty', label: 'Faculty', icon: <FacultyIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD] },
-    { key: 'fees', label: 'Fees', icon: <FeesIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.STUDENT] },
-    { key: 'library', label: 'Library', icon: <LibraryIcon />, roles: [UserRole.ADMIN, UserRole.HEAD, UserRole.FACULTY] },
-    { key: 'reports', label: 'Reports', icon: <ReportsIcon />, roles: [UserRole.ADMIN] },
-    { key: 'settings', label: 'Settings', icon: <SettingsIcon />, roles: [UserRole.ADMIN] },
+    { key: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.FACULTY, UserRole.STUDENT, UserRole.ACCOUNTANT, UserRole.DIRECTOR] },
+    { key: 'colleges', label: 'Colleges', icon: <LibraryIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DIRECTOR] },
+    { key: 'courses', label: 'Courses', icon: <CoursesIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.DIRECTOR] },
+    { key: 'students', label: 'Students', icon: <StudentsIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.FACULTY, UserRole.ACCOUNTANT, UserRole.DIRECTOR] },
+    { key: 'faculty', label: 'Faculty', icon: <FacultyIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.DIRECTOR] },
+    { key: 'fees', label: 'Fees', icon: <FeesIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.STUDENT, UserRole.ACCOUNTANT, UserRole.DIRECTOR] },
+    { key: 'library', label: 'Library', icon: <LibraryIcon />, roles: [UserRole.ADMIN, UserRole.HEAD, UserRole.FACULTY, UserRole.DIRECTOR] },
+    { key: 'results', label: 'Results', icon: <ResultsIcon />, roles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HEAD, UserRole.FACULTY, UserRole.STUDENT, UserRole.ACCOUNTANT, UserRole.DIRECTOR] },
+    { key: 'reports', label: 'Reports', icon: <ReportsIcon />, roles: [UserRole.ADMIN, UserRole.ACCOUNTANT, UserRole.DIRECTOR] },
+    { key: 'settings', label: 'Settings', icon: <SettingsIcon />, roles: [UserRole.ADMIN, UserRole.DIRECTOR] },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ userRole, activeView, setActiveView, isCollapsed, onLogout, isMobileMenuOpen, setMobileMenuOpen }) => {

@@ -1,4 +1,4 @@
-import type { Student, Faculty, Fee, Notice, College, Course, Book, User } from '../types';
+import type { Student, Faculty, Fee, Notice, College, Course, Book, User, Result } from '../types';
 
 /**
  * CrmData
@@ -15,6 +15,7 @@ export interface CrmData {
     courses: Course[];
     books: Book[];
     notices: Notice[];
+    results: Result[];
 }
 
 /**

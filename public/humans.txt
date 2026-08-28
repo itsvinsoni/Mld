@@ -1,0 +1,18 @@
+/* TEAM */
+Built with care by the MLD Memorial Sansthan team & partners.
+Lead development, design, and content by the MLD web team.
+Location: Kekri, Ajmer, Rajasthan, India.
+
+/* THANKS */
+Shri C. P. Dubey (Chairman) — vision and guidance
+Shri Avinash Dubey (Director) — leadership
+All faculty, staff, students, and the Kekri community.
+
+/* SITE */
+Last update: 2025-01-15
+Standards: HTML5, CSS3, JavaScript (ES2020+), React 19
+Components: Vite, Tailwind CSS, Recharts
+Components are hand-built. The site is bilingual (English + Hindi).
+
+/* NOTE */
+This site is open-source friendly and built with accessibility, performance, and SEO in mind.

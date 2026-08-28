@@ -7,6 +7,8 @@ import { useInstitutionBySlug, useInstitutions } from './dataI18n';
 import { useProgram, useDeanMessage, useTestimonialsForProgram, type ProgramDetail } from './programDetails';
 import { useT } from './i18n';
 import { PageHero } from './sections/PageHero';
+import { SEO, buildCourseLd, buildBreadcrumbLd, buildFaqLd, SEO_SITE } from './SEO';
+import { FAQList } from './FAQ';
 
 const KeyFacts: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const t = useT();
@@ -708,6 +710,41 @@ export const ProgramDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
   return (
     <>
       <div className="reading-progress" style={{ width: `${readingPct}%` }} aria-hidden="true" />
+      <SEO
+        config={{
+          title: `${p.name} | ${p.duration} | MLD Memorial Sansthan, Kekri`,
+          description: p.shortDescription,
+          path: `/courses/${p.slug}`,
+          keywords: [p.name, `${p.name} Kekri`, `${p.name} Ajmer`, `${p.name} Rajasthan`, p.level, p.category, 'admission 2025', 'MLD programme'],
+          type: 'course',
+          image: p.image,
+          jsonLd: [
+            buildCourseLd({
+              name: p.name,
+              slug: p.slug,
+              description: p.shortDescription,
+              provider: 'MLD Memorial Sansthan',
+              duration: p.duration,
+              level: p.level,
+              mode: p.mode,
+              medium: p.medium,
+              image: p.image,
+            }),
+            buildBreadcrumbLd([
+              { name: 'Home', href: '/' },
+              { name: 'Institutions', href: '/institutions' },
+              { name: p.name, href: `/courses/${p.slug}` },
+            ]),
+            buildFaqLd([
+              { q: `What is ${p.name}?`, a: p.shortDescription },
+              { q: `How long is ${p.name}?`, a: `The duration of ${p.name} is ${p.duration}.` },
+              { q: `What is the eligibility for ${p.name}?`, a: p.eligibility },
+              { q: `What is the mode of study for ${p.name}?`, a: `${p.name} is offered ${p.mode} with ${p.medium} as the medium of instruction at MLD Memorial Sansthan, Kekri.` },
+              { q: `How to apply for ${p.name}?`, a: `Apply online via the enquiry form or in person at the MLD campus in Kekri. Submit documents, attend counselling, and complete fee payment to confirm admission.` },
+            ]),
+          ],
+        }}
+      />
       <SectionNav />
       <PageHero
         label={p.category}
@@ -741,6 +778,16 @@ export const ProgramDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
       <Testimonials p={p} />
       <OfferedAt p={p} />
       <AdmissionCta p={p} />
+      <FAQList
+        faqs={[
+          { q: `What is ${p.name}?`, a: p.shortDescription },
+          { q: `How long is ${p.name}?`, a: `The duration of ${p.name} at MLD Memorial Sansthan, Kekri is ${p.duration}.` },
+          { q: `What is the eligibility for ${p.name}?`, a: p.eligibility },
+          { q: `Is ${p.name} approved?`, a: `${p.name} is offered under MLD Memorial Sansthan, Kekri, an approved educational society. D.Pharma is approved by PCI; B.Ed by NCTE. Schools are affiliated to RBSE / CBSE.` },
+          { q: `What are the career options after ${p.name}?`, a: p.careerOptions.map((c) => c.role).join(', ') + '.' },
+          { q: `How to apply for ${p.name}?`, a: `Apply online via the enquiry form on this page, or visit the MLD campus in Kekri, Ajmer (Rajasthan). Submit your documents and complete the admission counselling and fee payment process.` },
+        ]}
+      />
     </>
   );
 };

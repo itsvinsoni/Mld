@@ -1,8 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from './icons';
 import { useT } from './i18n';
+import { SEO } from './SEO';
 
 export const NotFoundPage: React.FC = () => {
+  return (
+    <>
+      <SEO
+        config={{
+          title: '404 — Page Not Found | MLD Memorial Sansthan',
+          description: 'The page you are looking for does not exist or has been moved. Visit our home page or institutions page to find what you need.',
+          path: '/404',
+          noindex: true,
+        }}
+      />
+      <NotFoundContent />
+    </>
+  );
+};
+
+const NotFoundContent: React.FC = () => {
   const t = useT();
   const ref = useRef<HTMLDivElement | null>(null);
   const [mouse, setMouse] = useState({ x: 50, y: 50 });

@@ -15,8 +15,8 @@ const FacultyManagement: React.FC = () => {
     const [form, setForm] = useState({ ...emptyForm });
     const [deleteTarget, setDeleteTarget] = useState<Faculty | null>(null);
 
-    const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD].includes(userRole);
-    const canDelete = [Roles.ADMIN].includes(userRole);
+    const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD, Roles.DIRECTOR].includes(userRole);
+    const canDelete = [Roles.ADMIN, Roles.DIRECTOR].includes(userRole);
 
     const filteredFaculty = faculty.filter(f =>
         f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -18,6 +18,8 @@ export const AUTH_CREDENTIALS: AuthEntry[] = [
     { id: 'u4', name: 'Dr. Verma', email: 'head@mld.com', role: UserRole.HEAD, collegeId: 'c1', avatarUrl: 'https://picsum.photos/seed/verma/100/100', password: 'demo123' },
     { id: 'u5', name: 'Prof. Sharma', email: 'faculty@mld.com', role: UserRole.FACULTY, collegeId: 'c1', avatarUrl: 'https://picsum.photos/seed/sharma/100/100', password: 'demo123' },
     { id: 'u6', name: 'Rohan Kumar', email: 'student@mld.com', role: UserRole.STUDENT, collegeId: 'c1', avatarUrl: 'https://picsum.photos/seed/rohan/100/100', password: 'demo123' },
+    { id: 'u7', name: 'Accounts Officer', email: 'accounts@mld.com', role: UserRole.ACCOUNTANT, avatarUrl: 'https://picsum.photos/seed/accounts/100/100', password: 'demo123' },
+    { id: 'u8', name: 'Director MLD', email: 'director@mld.com', role: UserRole.DIRECTOR, avatarUrl: 'https://picsum.photos/seed/director/100/100', password: 'demo123' },
 ];
 
 /**

@@ -1,4 +1,4 @@
-import type { User, Student, Faculty, Fee, Notice, College, Course, Book } from './types';
+import type { User, Student, Faculty, Fee, Notice, College, Course, Book, Result } from './types';
 import { UserRole } from './types';
 
 export const MOCK_USERS: User[] = [
@@ -144,9 +144,13 @@ export const MOCK_NOTICES: Notice[] = [
 
 
 export const MOCK_COLLEGES: College[] = [
-    { id: 'c1', name: 'MLD Institute of Technology, Noida', location: 'Noida, UP', principal: 'Dr. R. K. Verma', studentCount: 1250, coursesOffered: 5 },
-    { id: 'c2', name: 'MLD College of Arts & Commerce, Delhi', location: 'Delhi', principal: 'Dr. Sunita Sharma', studentCount: 2100, coursesOffered: 8 },
-    { id: 'c3', name: 'MLD Pharmacy College, Meerut', location: 'Meerut, UP', principal: 'Dr. Alok Mishra', studentCount: 450, coursesOffered: 3 },
+    { id: 'c1', name: 'Shri Mishri Lal Dubey Memorial Sansthan Colleges, Kekri', location: 'Kekri, Ajmer', principal: 'Dr. R. K. Verma', studentCount: 2000, coursesOffered: 5 },
+    { id: 'c2', name: 'MLD International Academy', location: 'Kekri, Ajmer', principal: 'Mr. Suresh Sharma', studentCount: 700, coursesOffered: 5 },
+    { id: 'c3', name: 'Shri Mishri Lal Dubey Uchch Madhyamik Academy', location: 'Kekri, Ajmer', principal: 'Mr. Rajesh Meena', studentCount: 400, coursesOffered: 4 },
+    { id: 'c4', name: 'Shri Mishri Lal Dubey Balika Uchch Madhyamik Academy', location: 'Kekri, Ajmer', principal: 'Mrs. Rekha Choudhary', studentCount: 500, coursesOffered: 5 },
+    { id: 'c5', name: 'MLD Pharmacy College Training Institute, Kekri', location: 'Kekri (Ajmer)', principal: 'Dr. Alok Mishra', studentCount: 120, coursesOffered: 2 },
+    { id: 'c6', name: 'MLD Live Stock Assistant Diploma Training Institute, Kekri', location: 'Kekri (Ajmer)', principal: 'Dr. Sunita Rao', studentCount: 90, coursesOffered: 3 },
+    { id: 'c7', name: 'Shri Mishrilal Dubey Mahila Shikshan Prashikshan Mahavidyalay', location: 'Kekri, Ajmer', principal: 'Dr. Anjali Rao', studentCount: 300, coursesOffered: 5 },
 ];
 
 export const MOCK_COURSES: Course[] = [
@@ -171,4 +175,34 @@ export const MOCK_BOOKS: Book[] = [
     { id: 'b9', title: 'Eloquent JavaScript', author: 'Marijn Haverbeke', isbn: '978-1593279509', availableCopies: 12, totalCopies: 15 },
     { id: 'b10', title: 'Artificial Intelligence: A Modern Approach', author: 'Stuart Russell', isbn: '978-0136042594', availableCopies: 4, totalCopies: 6 },
     { id: 'b11', title: 'Cryptography and Network Security', author: 'William Stallings', isbn: '978-9332585225', availableCopies: 7, totalCopies: 10 },
+];
+
+export const MOCK_RESULTS: Result[] = [
+    { id: 'r1', studentId: 's1', examName: 'Term 1', year: '2024', subjects: [
+        { subject: 'Data Structures', maxMarks: 100, obtained: 88 },
+        { subject: 'Algorithms', maxMarks: 100, obtained: 82 },
+        { subject: 'Operating Systems', maxMarks: 100, obtained: 75 },
+        { subject: 'DBMS', maxMarks: 100, obtained: 90 },
+    ]},
+    { id: 'r2', studentId: 's1', examName: 'Term 2', year: '2024', subjects: [
+        { subject: 'Data Structures', maxMarks: 100, obtained: 91 },
+        { subject: 'Algorithms', maxMarks: 100, obtained: 86 },
+        { subject: 'Operating Systems', maxMarks: 100, obtained: 79 },
+        { subject: 'DBMS', maxMarks: 100, obtained: 93 },
+    ]},
+    { id: 'r3', studentId: 's2', examName: 'Semester 1', year: '2024', subjects: [
+        { subject: 'Thermodynamics', maxMarks: 100, obtained: 64 },
+        { subject: 'Fluid Mechanics', maxMarks: 100, obtained: 58 },
+        { subject: 'Engineering Drawing', maxMarks: 100, obtained: 72 },
+    ]},
+    { id: 'r4', studentId: 's3', examName: 'Annual', year: '2024', subjects: [
+        { subject: 'Circuit Analysis', maxMarks: 100, obtained: 77 },
+        { subject: 'Electronics', maxMarks: 100, obtained: 81 },
+        { subject: 'Power Systems', maxMarks: 100, obtained: 69 },
+    ]},
+    { id: 'r5', studentId: 's4', examName: 'Term 1', year: '2024', subjects: [
+        { subject: 'Computer Networks', maxMarks: 100, obtained: 95 },
+        { subject: 'Software Engg', maxMarks: 100, obtained: 89 },
+        { subject: 'Operating Systems', maxMarks: 100, obtained: 92 },
+    ]},
 ];

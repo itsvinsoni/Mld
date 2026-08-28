@@ -7,12 +7,31 @@ import { ABOUT_IMAGE } from './data';
 import { useAbout } from './dataI18n';
 import { useT } from './i18n';
 import { PageHero } from './sections/PageHero';
+import { SEO, buildBreadcrumbLd, SEO_SITE } from './SEO';
+import { FAQList } from './FAQ';
+
+const aboutFaqs = [
+  { q: 'When was MLD Memorial Sansthan founded?', a: 'MLD Memorial Sansthan was founded in 1998 by Shri Mishri Lal Dubey with the mission of providing accessible, quality education to students of Kekri and surrounding areas in Rajasthan.' },
+  { q: 'What is the vision of MLD Memorial Sansthan?', a: 'Our vision is to be a leading educational society in Rajasthan, nurturing every student to discover their potential and contribute meaningfully to society. We focus on academic excellence combined with character building and values.' },
+  { q: 'How many students study at MLD?', a: 'MLD Memorial Sansthan has over 5,000 students across its 7+ institutions, ranging from Nursery to Senior Secondary, undergraduate, professional (D.Pharma, B.Ed), and vocational (Livestock Assistant Diploma) programmes.' },
+  { q: 'What makes MLD different from other institutions?', a: 'MLD stands out for its commitment to value-based education, experienced and dedicated faculty, modern facilities, affordable fees, scholarship support, safe and disciplined campuses, and a focus on the holistic development of every student.' },
+];
 
 export const AboutPage: React.FC = () => {
   const ABOUT = useAbout();
   const t = useT();
   return (
     <>
+      <SEO
+        config={{
+          title: 'About MLD Memorial Sansthan | Mission, Vision & Leadership — Kekri, Ajmer',
+          description: 'MLD Memorial Sansthan, founded in 1998 in Kekri (Ajmer, Rajasthan), runs 7+ institutions with a vision of accessible, value-based education. Mission: empower students to excel academically and grow into responsible citizens.',
+          path: '/about',
+          keywords: ['about MLD', 'MLD history', 'MLD mission vision', 'educational society Rajasthan', 'Kekri education trust'],
+          type: 'website',
+          jsonLd: [buildBreadcrumbLd([{ name: 'Home', href: '/' }, { name: 'About', href: '/about' }])],
+        }}
+      />
       <PageHero
         label={t('aboutPage.label', 'About Us')}
         title={<>{t('aboutPage.headingPre', 'A Legacy of ')}<span className="text-orange-gradient">{t('aboutPage.headingHi', 'Quality Education')}</span></>}
@@ -54,6 +73,7 @@ export const AboutPage: React.FC = () => {
       </section>
 
       <ContactCta />
+      <FAQList faqs={aboutFaqs} />
     </>
   );
 };

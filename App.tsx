@@ -12,6 +12,7 @@ import FacultyManagement from './views/FacultyManagement';
 import LibraryManagement from './views/LibraryManagement';
 import ReportsView from './views/ReportsView';
 import SettingsView from './views/SettingsView';
+import ResultManagement from './views/ResultManagement';
 import { PublicLayout } from './pages/PublicLayout';
 import { HomePage } from './pages/HomePage';
 import { InstitutionsPage } from './pages/InstitutionsPage';
@@ -89,6 +90,7 @@ const CrmApp: React.FC = () => {
             case 'faculty': return <FacultyManagement />;
             case 'library': return <LibraryManagement />;
             case 'reports': return <ReportsView />;
+            case 'results': return <ResultManagement />;
             case 'settings': return <SettingsView />;
             default:
                 return (

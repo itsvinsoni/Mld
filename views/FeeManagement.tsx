@@ -13,8 +13,8 @@ const FeeManagement: React.FC = () => {
     const [form, setForm] = useState({ ...emptyForm });
     const [deleteTarget, setDeleteTarget] = useState<Fee | null>(null);
 
-    const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD].includes(userRole);
-    const canDelete = [Roles.ADMIN, Roles.MANAGER].includes(userRole);
+    const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD, Roles.ACCOUNTANT, Roles.DIRECTOR].includes(userRole);
+    const canDelete = [Roles.ADMIN, Roles.MANAGER, Roles.ACCOUNTANT, Roles.DIRECTOR].includes(userRole);
 
     const feeRecords = fees.map(fee => {
         const student = students.find(s => s.id === fee.studentId);

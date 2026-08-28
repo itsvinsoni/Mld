@@ -1,0 +1,4 @@
+Contact: mailto:security@mldmemorialsansthan.com
+Expires: 2026-12-31T23:59:59z
+Preferred-Languages: en, hi
+Canonical: https://mldmemorialsansthan.com/.well-known/security.txt

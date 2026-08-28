@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { UserRole } from '../types';
-import type { User, Student, Faculty, Fee, Notice, College, Course, Book, BookIssue } from '../types';
+import type { User, Student, Faculty, Fee, Notice, College, Course, Book, BookIssue, Result } from '../types';
 import type { CrmData } from './db';
 import { makeId } from './db';
 import { adapter, seedData } from './index';
@@ -37,6 +37,7 @@ interface CrmContextValue {
     courses: Course[];
     books: Book[];
     notices: Notice[];
+    results: Result[];
 
     // auth
     currentUser: User | null;
@@ -78,6 +79,11 @@ interface CrmContextValue {
     // library issue / return (updates both the student and the book together)
     issueBook: (studentId: string, book: Book) => void;
     returnBook: (studentId: string, bookId: string) => void;
+
+    // results / mark-sheet
+    addResult: (r: Omit<Result, 'id'>) => void;
+    updateResult: (id: string, patch: Partial<Result>) => void;
+    deleteResult: (id: string) => void;
 }
 
 const CrmContext = createContext<CrmContextValue | undefined>(undefined);
@@ -325,6 +331,31 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         [persist]
     );
 
+    // -------------------------- RESULTS -----------------------------
+    const addResult = useCallback(
+        (r: Omit<Result, 'id'>) => {
+            persist({ ...dataRef.current, results: [...dataRef.current.results, { ...r, id: makeId('r') }] });
+        },
+        [persist]
+    );
+
+    const updateResult = useCallback(
+        (id: string, patch: Partial<Result>) => {
+            persist({
+                ...dataRef.current,
+                results: dataRef.current.results.map((res) => (res.id === id ? { ...res, ...patch } : res)),
+            });
+        },
+        [persist]
+    );
+
+    const deleteResult = useCallback(
+        (id: string) => {
+            persist({ ...dataRef.current, results: dataRef.current.results.filter((res) => res.id !== id) });
+        },
+        [persist]
+    );
+
     const value = useMemo<CrmContextValue>(
         () => ({
             data,
@@ -335,6 +366,7 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             courses: data.courses,
             books: data.books,
             notices: data.notices,
+            results: data.results,
             currentUser,
             userRole: currentUser?.role ?? UserRole.ADMIN,
             login,
@@ -360,6 +392,9 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             deleteBook,
             issueBook,
             returnBook,
+            addResult,
+            updateResult,
+            deleteResult,
         }),
         [
             data,
@@ -387,6 +422,9 @@ export const CrmProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             deleteBook,
             issueBook,
             returnBook,
+            addResult,
+            updateResult,
+            deleteResult,
         ]
     );
 

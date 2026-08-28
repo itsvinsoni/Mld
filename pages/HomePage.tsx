@@ -9,6 +9,8 @@ import { ABOUT_IMAGE } from './data';
 import { useAbout, useGallery, useInstitutions, useMessages } from './dataI18n';
 import { useT } from './i18n';
 import { Magnetic } from './effects';
+import { SEO, buildFaqLd, buildItemListLd, buildBreadcrumbLd, SEO_SITE } from './SEO';
+import { FAQList } from './FAQ';
 
 const InstitutionsPreview: React.FC = () => {
   const t = useT();
@@ -251,9 +253,47 @@ const ContactCta: React.FC = () => {
   );
 };
 
+/* ---------- Home FAQ (for SEO + AI search) ---------- */
+const homeFaqs = [
+  { q: 'Where is MLD Memorial Sansthan located?', a: 'MLD Memorial Sansthan is located in Kekri, Ajmer district, Rajasthan, India (PIN 305404). It runs 7+ educational institutions in and around Kekri serving students from across the district.' },
+  { q: 'Is MLD Memorial Sansthan a university?', a: 'No. MLD Memorial Sansthan is an educational society (sansthan), not a university. The colleges run under the Sansthan are affiliated to recognised universities; D.Pharma is approved by PCI, B.Ed by NCTE, and schools are affiliated to RBSE / CBSE.' },
+  { q: 'What courses does MLD offer?', a: 'MLD offers D.Pharma (Diploma in Pharmacy), B.Ed (Bachelor of Education), D.El.Ed, Shiksha Shastri, BA, BSc, BCom, BBA, BCA, Live Stock Assistant Diploma, and schooling from Nursery to Senior Secondary in Science, Commerce and Arts streams.' },
+  { q: 'Is D.Pharma at MLD approved?', a: 'Yes. The D.Pharma programme at MLD Pharmacy College is approved by the Pharmacy Council of India (PCI). Graduates are eligible to register with the State Pharmacy Council and work as Registered Pharmacists in retail, hospital, and community pharmacy.' },
+  { q: 'Is B.Ed at MLD approved?', a: 'Yes. The B.Ed programme at MLD Mahila Shikshan Prashikshan Mahavidyalay is approved by the National Council for Teacher Education (NCTE). Graduates are eligible to appear for REET, CTET, and other teaching eligibility tests.' },
+  { q: 'How to apply for admission at MLD?', a: 'The admission process is: (1) Check eligibility, (2) Apply online via the enquiry form or in person at the campus, (3) Submit documents for verification, (4) Attend counselling / merit list process, (5) Pay fees and complete enrolment.' },
+  { q: 'Does MLD provide hostel and transport?', a: 'Yes. MLD provides separate hostels for boys and girls with warden, mess, and CCTV security. Transport facility is available from nearby towns. The campus has Wi-Fi, smart classrooms, modern labs, library, and sports facilities.' },
+  { q: 'Are scholarships available at MLD?', a: 'Yes. MLD offers Merit Scholarships (80%+ in qualifying exam), Need-Based Aid, Girl-Child Scholarships, and Education Loan Guidance from nationalised banks. Contact the admissions office for current schemes.' },
+];
+
 export const HomePage: React.FC = () => {
+  const institutions = useInstitutions();
+  const seoJsonLd = [
+    buildFaqLd(homeFaqs),
+    buildItemListLd(institutions.map((i) => ({
+      name: i.name,
+      url: `${SEO_SITE.SITE_URL}/institutions/${i.slug}`,
+      image: i.image,
+      description: i.description,
+    }))),
+  ];
+
   return (
     <>
+      <SEO
+        config={{
+          title: SEO_SITE.DEFAULT_TITLE,
+          description: SEO_SITE.DEFAULT_DESC,
+          path: '/',
+          keywords: [
+            'MLD Memorial Sansthan', 'MLD Kekri', 'D.Pharma college Kekri', 'B.Ed college Kekri',
+            'schools in Kekri', 'best college Ajmer', 'BBA BCA college Rajasthan',
+            'livestock diploma Rajasthan', 'pharmacy college Rajasthan', 'education society Kekri',
+            'admission 2025', 'PCI approved D.Pharma', 'NCTE approved B.Ed',
+          ],
+          type: 'website',
+          jsonLd: seoJsonLd,
+        }}
+      />
       <HeroSection />
       <StatsStrip />
       <InstitutionsPreview />
@@ -261,6 +301,11 @@ export const HomePage: React.FC = () => {
       <GalleryPreview />
       <MessagesPreview />
       <ContactCta />
+      <FAQList
+        faqs={homeFaqs}
+        heading="Frequently Asked Questions"
+        sub="Everything you need to know about admissions, courses, and life at MLD Memorial Sansthan."
+      />
     </>
   );
 };

@@ -8,6 +8,7 @@ import {
     MOCK_COURSES,
     MOCK_BOOKS,
     MOCK_NOTICES,
+    MOCK_RESULTS,
 } from '../constants';
 
 /**
@@ -19,7 +20,7 @@ import {
  * `data/index.ts` — the rest of the app is unchanged.
  */
 
-const DATA_KEY = 'mld-crm:data:v1';
+const DATA_KEY = 'mld-crm:data:v2';
 const SESSION_KEY = 'mld-crm:session:v1';
 
 export function seedData(): CrmData {
@@ -31,6 +32,7 @@ export function seedData(): CrmData {
         courses: MOCK_COURSES,
         books: MOCK_BOOKS,
         notices: MOCK_NOTICES,
+        results: MOCK_RESULTS,
     };
 }
 

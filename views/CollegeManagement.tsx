@@ -15,8 +15,8 @@ const CollegeManagement: React.FC = () => {
     const [form, setForm] = useState({ ...emptyForm });
     const [deleteTarget, setDeleteTarget] = useState<College | null>(null);
 
-    const canEdit = [Roles.ADMIN, Roles.MANAGER].includes(userRole);
-    const canDelete = [Roles.ADMIN].includes(userRole);
+    const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.DIRECTOR].includes(userRole);
+    const canDelete = [Roles.ADMIN, Roles.DIRECTOR].includes(userRole);
 
     const filteredColleges = colleges.filter(college =>
         college.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -119,7 +119,7 @@ const CollegeManagement: React.FC = () => {
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Field label="College Name"><input className={fieldClass} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. MLD Institute of Technology" /></Field>
-                    <Field label="Location"><input className={fieldClass} value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} placeholder="e.g. Noida, UP" /></Field>
+                    <Field label="Location"><input className={fieldClass} value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} placeholder="e.g. Kekri, Ajmer" /></Field>
                     <Field label="Principal"><input className={fieldClass} value={form.principal} onChange={e => setForm({ ...form, principal: e.target.value })} placeholder="e.g. Dr. R. K. Verma" /></Field>
                     <Field label="Student Count"><input type="number" min={0} className={fieldClass} value={form.studentCount} onChange={e => setForm({ ...form, studentCount: Number(e.target.value) })} /></Field>
                     <Field label="Courses Offered"><input type="number" min={0} className={fieldClass} value={form.coursesOffered} onChange={e => setForm({ ...form, coursesOffered: Number(e.target.value) })} /></Field>
