@@ -3,15 +3,19 @@ import { AboutSection } from './sections/AboutSection';
 import { StatsStrip } from './sections/HeroSection';
 import { ContactCta } from './shared/ContactCta';
 import { Icon } from './icons';
-import { ABOUT, ABOUT_IMAGE } from './data';
+import { ABOUT_IMAGE } from './data';
+import { useAbout } from './dataI18n';
+import { useT } from './i18n';
 import { PageHero } from './sections/PageHero';
 
 export const AboutPage: React.FC = () => {
+  const ABOUT = useAbout();
+  const t = useT();
   return (
     <>
       <PageHero
-        label="About Us"
-        title={<>A Legacy of <span className="text-orange-gradient">Quality Education</span></>}
+        label={t('aboutPage.label', 'About Us')}
+        title={<>{t('aboutPage.headingPre', 'A Legacy of ')}<span className="text-orange-gradient">{t('aboutPage.headingHi', 'Quality Education')}</span></>}
         subtitle={ABOUT.paragraph}
         image={ABOUT_IMAGE}
       />
@@ -26,13 +30,13 @@ export const AboutPage: React.FC = () => {
             {[
               {
                 icon: 'award' as const,
-                title: 'Our Mission',
-                text: 'To provide accessible, quality education that empowers students to excel academically and grow into responsible citizens of tomorrow.',
+                title: t('aboutPage.mission', 'Our Mission'),
+                text: t('aboutPage.missionText', 'To provide accessible, quality education that empowers students to excel academically and grow into responsible citizens of tomorrow.'),
               },
               {
                 icon: 'landmark' as const,
-                title: 'Our Vision',
-                text: 'To be a leading educational society in Rajasthan, nurturing every student to discover their potential and contribute meaningfully to society.',
+                title: t('aboutPage.vision', 'Our Vision'),
+                text: t('aboutPage.visionText', 'To be a leading educational society in Rajasthan, nurturing every student to discover their potential and contribute meaningfully to society.'),
               },
             ].map((item) => (
               <div key={item.title} className="bg-white rounded-2xl border border-slate-100 p-8 card-glow">

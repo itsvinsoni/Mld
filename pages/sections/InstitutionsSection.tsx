@@ -2,12 +2,14 @@ import React from 'react';
 import { Icon } from '../icons';
 import { useReveal } from '../hooks';
 import { useTilt } from '../effects';
+import { useT } from '../i18n';
 import { SectionHeading } from '../SectionHeading';
 import { INSTITUTIONS, type Institution } from '../data';
 
 const InstitutionCard: React.FC<{ inst: Institution; index: number }> = ({ inst, index }) => {
   const { ref, className } = useReveal('up');
   const { ref: tiltRef, style: tiltStyle } = useTilt<HTMLDivElement>(5);
+  const t = useT();
   const delay = index * 80;
 
   return (
@@ -54,7 +56,7 @@ const InstitutionCard: React.FC<{ inst: Institution; index: number }> = ({ inst,
             href={`/institutions/${inst.slug}`}
             className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all duration-300 hover:gap-2.5"
           >
-            View Details
+            {t('insts.viewDetails', 'View Details')}
             <Icon id="arrow-right" size={12} />
           </a>
           {inst.actions.slice(0, 1).map((action) => (
@@ -95,13 +97,14 @@ const Marquee: React.FC = () => {
 };
 
 export const InstitutionsSection: React.FC = () => {
+  const t = useT();
   return (
     <section id="institutions" className="py-20 md:py-28 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
-          label="Our Institutions"
-          heading="Institutions Run by the Sansthan"
-          subtext="From schools to colleges and vocational institutes, we run a diverse family of educational institutions committed to quality and values."
+          label={t('insts.label', 'Our Institutions')}
+          heading={t('insts.heading', 'Institutions Run by the Sansthan')}
+          subtext={t('insts.subtext', 'From schools to colleges and vocational institutes, we run a diverse family of educational institutions committed to quality and values.')}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">

@@ -2,6 +2,9 @@
 // Each entry corresponds to a program offered by one or more MLD institutions
 // and renders at /courses/[slug].
 
+import { PROGRAM_DETAILS_HI, DEAN_MESSAGES_HI, TESTIMONIALS_HI, FALLBACK_HI } from './programDetailsHi';
+import type { Lang } from './i18n';
+
 export interface ProgramCareer {
   role: string;
   description: string;
@@ -1307,8 +1310,12 @@ export const PROGRAM_DETAILS: ProgramDetail[] = [
   },
 ];
 
-export const getProgramBySlug = (slug?: string) =>
-  PROGRAM_DETAILS.find((p) => p.slug === slug);
+export const getProgramBySlug = (slug?: string, lang?: 'en' | 'hi') => {
+  const p = PROGRAM_DETAILS.find((x) => x.slug === slug);
+  if (!p) return undefined;
+  if (lang === 'hi') return localizeProgram(p, 'hi');
+  return p;
+};
 
 export const getProgramsByInstitution = (institutionSlug: string) =>
   PROGRAM_DETAILS.filter((p) => p.institutionSlugs.includes(institutionSlug));
@@ -1369,8 +1376,15 @@ export const DEAN_MESSAGES: Record<string, DeanMessage> = {
   },
 };
 
-export const getDeanMessage = (institutionSlug: string): DeanMessage | undefined =>
-  DEAN_MESSAGES[institutionSlug];
+export const getDeanMessage = (institutionSlug: string, lang?: Lang): DeanMessage | undefined => {
+  const base = DEAN_MESSAGES[institutionSlug];
+  if (!base) return undefined;
+  if (lang === 'hi') {
+    const hi = DEAN_MESSAGES_HI[institutionSlug];
+    if (hi) return { name: hi.name, title: hi.title, message: hi.message };
+  }
+  return base;
+};
 
 // ---------------------------------------------------------------
 // Student / Alumni testimonials — a shared, curated pool.
@@ -1381,6 +1395,7 @@ export const getDeanMessage = (institutionSlug: string): DeanMessage | undefined
 // ---------------------------------------------------------------
 
 export interface Testimonial {
+  id: string;
   name: string;
   program: string;
   batch: string;
@@ -1390,53 +1405,53 @@ export interface Testimonial {
 
 export const TESTIMONIALS: Testimonial[] = [
   // --- Pharmacy ---
-  { name: 'Priya Sharma', program: 'D.Pharma', batch: 'Batch of 2023', category: 'Pharmacy',
+  { id: 't1', name: 'Priya Sharma', program: 'D.Pharma', batch: 'Batch of 2023', category: 'Pharmacy',
     quote: 'The pharmaceutics and pharmacology labs at MLD gave me real hands-on skills. I cleared the State Pharmacy Council registration on my first attempt and now work as a registered pharmacist in Ajmer.' },
-  { name: 'Rakesh Meena', program: 'D.Pharma', batch: 'Batch of 2022', category: 'Pharmacy',
+  { id: 't2', name: 'Rakesh Meena', program: 'D.Pharma', batch: 'Batch of 2022', category: 'Pharmacy',
     quote: 'What I valued most was the patient-counselling practice and the faculty\u2019s personal attention. The D.Pharma programme prepared me well for both retail and hospital pharmacy.' },
-  { name: 'Suman Yadav', program: 'Pharmacology Basics', batch: 'Batch of 2023', category: 'Pharmacy',
+  { id: 't3', name: 'Suman Yadav', program: 'Pharmacology Basics', batch: 'Batch of 2023', category: 'Pharmacy',
     quote: 'The short certificate gave me a clear understanding of how medicines work and confirmed that I wanted to pursue D.Pharma. The MLD faculty guided me through the next steps.' },
-  { name: 'Anil Verma', program: 'D.Pharma', batch: 'Batch of 2021', category: 'Pharmacy',
+  { id: 't4', name: 'Anil Verma', program: 'D.Pharma', batch: 'Batch of 2021', category: 'Pharmacy',
     quote: 'After D.Pharma from MLD, I joined a leading pharma company in the QA team. The practical training and the discipline I learned here made the transition smooth.' },
 
   // --- Education (B.Ed, D.El.Ed, integrated, Shiksha Shastri) ---
-  { name: 'Kavita Joshi', program: 'B.Ed.', batch: 'Batch of 2023', category: 'Education',
+  { id: 't5', name: 'Kavita Joshi', program: 'B.Ed.', batch: 'Batch of 2023', category: 'Education',
     quote: 'The 16 weeks of practice teaching in real schools was the highlight of the B.Ed. programme. By the time I sat for REET, I had already taught in classrooms for four months. MLD prepared me for the real thing.' },
-  { name: 'Meena Kumari', program: 'D.El.Ed.', batch: 'Batch of 2022', category: 'Education',
+  { id: 't6', name: 'Meena Kumari', program: 'D.El.Ed.', batch: 'Batch of 2022', category: 'Education',
     quote: 'I come from a small village near Kekri, and MLD gave me the chance to become a trained primary teacher. The REET coaching and supportive faculty made all the difference. I now teach at a government school in my district.' },
-  { name: 'Pooja Dubey', program: 'B.A. / B.Ed. (Integrated)', batch: 'Batch of 2024', category: 'Education',
+  { id: 't7', name: 'Pooja Dubey', program: 'B.A. / B.Ed. (Integrated)', batch: 'Batch of 2024', category: 'Education',
     quote: 'Completing my B.A. and B.Ed. together in four years saved me a whole year. The MLD campus is safe, the hostel is comfortable, and the teachers treat every student like family.' },
-  { name: 'Sunita Rathore', program: 'B.Ed.', batch: 'Batch of 2021', category: 'Education',
+  { id: 't8', name: 'Sunita Rathore', program: 'B.Ed.', batch: 'Batch of 2021', category: 'Education',
     quote: 'The pedagogy classes and the psychology lab at MLD helped me understand how children learn. Today I confidently teach Class 8 students, and I owe a lot of that to my training here.' },
 
   // --- Livestock ---
-  { name: 'Ramesh Chaudhary', program: 'Live Stock Assistant Diploma', batch: 'Batch of 2023', category: 'Livestock',
+  { id: 't9', name: 'Ramesh Chaudhary', program: 'Live Stock Assistant Diploma', batch: 'Batch of 2023', category: 'Livestock',
     quote: 'The field training and the tie-ups with local dairy cooperatives gave me real experience. After completing the diploma, I started my own small dairy unit with a government-subsidy loan. MLD made it possible.' },
-  { name: 'Sangeeta Gurjar', program: 'Dairy & Poultry Management', batch: 'Batch of 2022', category: 'Livestock',
+  { id: 't10', name: 'Sangeeta Gurjar', program: 'Dairy & Poultry Management', batch: 'Batch of 2022', category: 'Livestock',
     quote: 'The 6-month certificate was exactly what I needed. I learned the practical side of poultry and dairy farming, and today I run a small poultry unit that supports my family.' },
-  { name: 'Manoj Yadav', program: 'Live Stock Assistant Diploma', batch: 'Batch of 2021', category: 'Livestock',
+  { id: 't11', name: 'Manoj Yadav', program: 'Live Stock Assistant Diploma', batch: 'Batch of 2021', category: 'Livestock',
     quote: 'I am now working with the Department of Animal Husbandry in a field dispensary. The diploma from MLD and the exam preparation from the faculty helped me clear the government recruitment.' },
 
   // --- Undergraduate (B.A., B.Sc., B.Com, BBA, BCA) ---
-  { name: 'Vikas Sharma', program: 'B.Sc. (PCM)', batch: 'Batch of 2024', category: 'Undergraduate',
+  { id: 't12', name: 'Vikas Sharma', program: 'B.Sc. (PCM)', batch: 'Batch of 2024', category: 'Undergraduate',
     quote: 'The Physics and Chemistry labs at MLD are well-equipped, and the teachers are very approachable. I cleared JEE Main after Class 12 and am now pursuing B.Tech — MLD gave me the foundation.' },
-  { name: 'Neha Jain', program: 'BBA', batch: 'Batch of 2023', category: 'Undergraduate',
+  { id: 't13', name: 'Neha Jain', program: 'BBA', batch: 'Batch of 2023', category: 'Undergraduate',
     quote: 'BBA at MLD was not just theory — we did case studies, presentations, and a live project with a local business. That practical exposure gave me an edge in my MBA interviews.' },
-  { name: 'Arjun Singh', program: 'BCA', batch: 'Batch of 2024', category: 'Undergraduate',
+  { id: 't14', name: 'Arjun Singh', program: 'BCA', batch: 'Batch of 2024', category: 'Undergraduate',
     quote: 'I learned programming in C, Java, Python, and web development with real lab time. After BCA, I joined an IT company as a junior developer. The MLD computer lab and faculty made this possible.' },
-  { name: 'Priyanka Meena', program: 'B.Com', batch: 'Batch of 2022', category: 'Undergraduate',
+  { id: 't15', name: 'Priyanka Meena', program: 'B.Com', batch: 'Batch of 2022', category: 'Undergraduate',
     quote: 'The accounts and tax coaching at MLD, combined with the library, helped me clear the CA Foundation on my first attempt. I am now an article assistant at a CA firm in Jaipur.' },
-  { name: 'Rohit Kumar', program: 'B.A.', batch: 'Batch of 2023', category: 'Undergraduate',
+  { id: 't16', name: 'Rohit Kumar', program: 'B.A.', batch: 'Batch of 2023', category: 'Undergraduate',
     quote: 'My B.A. at MLD, along with the guidance from teachers for the SSC exam, helped me secure a government clerical post. The affordable fees and the supportive campus made higher education possible for me.' },
 
   // --- School ---
-  { name: 'Ananya Sharma', program: 'Senior Secondary (Class 12, Science)', batch: 'Batch of 2024', category: 'School',
+  { id: 't17', name: 'Ananya Sharma', program: 'Senior Secondary (Class 12, Science)', batch: 'Batch of 2024', category: 'School',
     quote: 'The MLD teachers made Physics and Chemistry genuinely interesting. The regular mock tests and the personal mentoring helped me score 91% in Class 12 boards and crack a good engineering college.' },
-  { name: 'Harsh Rajawat', program: 'Senior Secondary (Class 12, Commerce)', batch: 'Batch of 2023', category: 'School',
+  { id: 't18', name: 'Harsh Rajawat', program: 'Senior Secondary (Class 12, Commerce)', batch: 'Batch of 2023', category: 'School',
     quote: 'I joined the commerce stream at MLD in Class 11. The Accounts and Business Studies teachers are excellent, and they also guided me for the CA Foundation. I am now a CA student.' },
-  { name: 'Ritu Yadav', program: 'Middle School (Class 8)', batch: 'Batch of 2024', category: 'School',
+  { id: 't19', name: 'Ritu Yadav', program: 'Middle School (Class 8)', batch: 'Batch of 2024', category: 'School',
     quote: 'I love coming to school. The science experiments, the computer lab, and the annual function make learning so much fun. My teachers are very supportive.' },
-  { name: 'Aman Khan', program: 'Secondary (Class 10, RBSE)', batch: 'Batch of 2024', category: 'School',
+  { id: 't20', name: 'Aman Khan', program: 'Secondary (Class 10, RBSE)', batch: 'Batch of 2024', category: 'School',
     quote: 'The board exam preparation and the doubt-clearing sessions at MLD helped me score 92% in Class 10. The teachers stay after school to help students who need extra time.' },
 ];
 
@@ -1464,7 +1479,52 @@ export const getTestimonialCategory = (
   }
 };
 
-export const getTestimonialsForProgram = (p: ProgramDetail): Testimonial[] => {
+export const getTestimonialsForProgram = (p: ProgramDetail, lang?: Lang): Testimonial[] => {
   const cat = getTestimonialCategory(p);
-  return TESTIMONIALS.filter((t) => t.category === cat).slice(0, 3);
+  const list = TESTIMONIALS.filter((t) => t.category === cat).slice(0, 3);
+  if (lang !== 'hi') return list;
+  return list.map((t) => {
+    const hi = TESTIMONIALS_HI[t.id];
+    if (!hi) return t;
+    return { ...t, name: hi.name, role: hi.role, quote: hi.quote };
+  });
 };
+
+/* ---------- Localization helpers (merge HI text into EN program) ---------- */
+function localizeProgram(p: ProgramDetail, lang: Lang): ProgramDetail {
+  if (lang !== 'hi') return p;
+  const hi = PROGRAM_DETAILS_HI[p.slug] || FALLBACK_HI;
+  return {
+    ...p,
+    shortDescription: hi.shortDescription || p.shortDescription,
+    overview: hi.overview || p.overview,
+    whatYouLearn: hi.whatYouLearn || p.whatYouLearn,
+    highlights: hi.highlights || p.highlights,
+    careerOptions: hi.careerOptions
+      ? hi.careerOptions.map((c) => ({ ...c, icon: '' }))
+      : p.careerOptions,
+    whyMLD: hi.whyMLD || p.whyMLD,
+    facilities: hi.facilities
+      ? hi.facilities.map((f) => ({ ...f }))
+      : p.facilities,
+  };
+}
+
+/* ---------- Hooks (language-aware) ---------- */
+import { useLang } from './i18n';
+
+export function useProgram(slug?: string): ProgramDetail | undefined {
+  const { lang } = useLang();
+  return getProgramBySlug(slug, lang);
+}
+
+export function useDeanMessage(institutionSlug: string): DeanMessage | undefined {
+  const { lang } = useLang();
+  return getDeanMessage(institutionSlug, lang);
+}
+
+export function useTestimonialsForProgram(p: ProgramDetail | undefined): Testimonial[] {
+  const { lang } = useLang();
+  if (!p) return [];
+  return getTestimonialsForProgram(p, lang);
+}

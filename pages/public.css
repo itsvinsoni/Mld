@@ -15,6 +15,16 @@
 html { scroll-behavior: smooth; }
 body { background-color: var(--warm-bg); color: var(--brand-ink); }
 
+/* ---------- Bilingual: Hindi font activation ---------- */
+body.lang-hi, body.lang-hi .font-sans { font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; }
+body.lang-hi .font-serif { font-family: 'Tiro Devanagari Hindi', 'Playfair Display', serif; }
+body.lang-hi .font-poppins { font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif; }
+/* Keep numeric / Latin (English) words in Devanagari text aligned well */
+body.lang-hi .stat-number { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; }
+/* English utility classes always stay in Latin font */
+.font-hindi { font-family: 'Noto Sans Devanagari', 'Inter', sans-serif !important; }
+.font-hindiSerif { font-family: 'Tiro Devanagari Hindi', 'Playfair Display', serif !important; }
+
 /* ---------- Custom scrollbar ---------- */
 ::-webkit-scrollbar { width: 11px; }
 ::-webkit-scrollbar-track { background: #f1ede7; }

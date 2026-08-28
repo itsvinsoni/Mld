@@ -5,19 +5,23 @@ import { InstitutionCard } from './sections/InstitutionsSection';
 import { SectionHeading } from './SectionHeading';
 import { Icon } from './icons';
 import { useReveal } from './hooks';
-import { INSTITUTIONS, GALLERY, MESSAGES, ABOUT, ABOUT_IMAGE } from './data';
+import { ABOUT_IMAGE } from './data';
+import { useAbout, useGallery, useInstitutions, useMessages } from './dataI18n';
+import { useT } from './i18n';
 
 const InstitutionsPreview: React.FC = () => {
+  const t = useT();
+  const institutions = useInstitutions();
   return (
     <section className="py-20 md:py-28 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
-          label="Our Institutions"
-          heading="Institutions Run by the Sansthan"
-          subtext="From schools to colleges and vocational institutes, discover the diverse family of institutions under the MLD Memorial Sansthan."
+          label={t('insts.label', 'Our Institutions')}
+          heading={t('insts.heading', 'Institutions Run by the Sansthan')}
+          subtext={t('insts.subtext', 'From schools to colleges and vocational institutes, discover the diverse family of institutions under the MLD Memorial Sansthan.')}
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {INSTITUTIONS.slice(0, 6).map((inst, i) => (
+          {institutions.slice(0, 6).map((inst, i) => (
             <InstitutionCard key={inst.id} inst={inst} index={i} />
           ))}
         </div>
@@ -26,7 +30,7 @@ const InstitutionsPreview: React.FC = () => {
             href="/institutions"
             className="btn-orange inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-base"
           >
-            View All Institutions
+            {t('insts.viewAll', 'View All Institutions')}
             <Icon id="arrow-right" size={18} />
           </a>
         </div>
@@ -37,6 +41,8 @@ const InstitutionsPreview: React.FC = () => {
 
 const AboutPreview: React.FC = () => {
   const { ref, className } = useReveal('left');
+  const ABOUT = useAbout();
+  const t = useT();
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
@@ -60,7 +66,7 @@ const AboutPreview: React.FC = () => {
           </div>
 
           <div>
-            <span className="section-label mb-3">Why Choose Us</span>
+            <span className="section-label mb-3">{t('about.label', 'Why Choose Us')}</span>
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-light-textPrimary leading-tight">
               {ABOUT.heading}
             </h2>
@@ -85,7 +91,7 @@ const AboutPreview: React.FC = () => {
               href="/about"
               className="mt-8 inline-flex items-center gap-2 font-semibold text-brand-orange hover:text-brand-orange-dark transition"
             >
-              Learn More About Us
+              {t('about.learnMore', 'Learn More About Us')}
               <Icon id="arrow-right" size={16} />
             </a>
           </div>
@@ -96,26 +102,28 @@ const AboutPreview: React.FC = () => {
 };
 
 const GalleryPreview: React.FC = () => {
+  const t = useT();
+  const gallery = useGallery();
   return (
     <section className="py-20 md:py-28 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div>
-            <span className="section-label mb-3">Photo Gallery</span>
+            <span className="section-label mb-3">{t('gallery.label', 'Photo Gallery')}</span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
-              Life at MLD Memorial Sansthan
+              {t('gallery.heading', 'Life at MLD Memorial Sansthan')}
             </h2>
           </div>
           <a
             href="/gallery"
             className="inline-flex items-center gap-2 font-semibold text-brand-orange hover:text-brand-orange-dark transition shrink-0"
           >
-            View Full Gallery
+            {t('gallery.viewAll', 'View Full Gallery')}
             <Icon id="arrow-right" size={16} />
           </a>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {GALLERY.slice(0, 4).map((img, i) => (
+          {gallery.slice(0, 4).map((img, i) => (
             <a
               key={img.id}
               href="/gallery"
@@ -144,12 +152,14 @@ const GalleryPreview: React.FC = () => {
 };
 
 const MessagesPreview: React.FC = () => {
-  const first = MESSAGES[0];
+  const t = useT();
+  const messages = useMessages();
+  const first = messages[0];
   return (
     <section className="py-20 md:py-28 bg-slate-900 text-white relative overflow-hidden">
       <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-brand-orange/15 blur-3xl" />
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8 relative">
-        <SectionHeading label="Messages from Leadership" heading="Voices of Leadership" light />
+        <SectionHeading label={t('msg.label', 'Messages from Leadership')} heading={t('msg.heading', 'Voices of Leadership')} light />
         <div className="max-w-4xl mx-auto bg-white/[0.04] border border-white/10 rounded-3xl p-8 md:p-12 text-center">
           <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl mx-auto mb-4">
             <Icon id="quote" size={26} />
@@ -173,7 +183,7 @@ const MessagesPreview: React.FC = () => {
             href="/messages"
             className="inline-flex items-center gap-2 font-semibold text-white/80 hover:text-brand-orange transition"
           >
-            Read All Messages
+            {t('msg.viewAll', 'Read All Messages')}
             <Icon id="arrow-right" size={16} />
           </a>
         </div>
@@ -183,6 +193,7 @@ const MessagesPreview: React.FC = () => {
 };
 
 const ContactCta: React.FC = () => {
+  const t = useT();
   return (
     <section className="py-20 md:py-24 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
@@ -191,13 +202,13 @@ const ContactCta: React.FC = () => {
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <span className="inline-flex items-center gap-2 text-white/90 text-xs font-bold uppercase tracking-widest">
-                <Icon id="sparkles" size={16} /> Admission & Careers
+                <Icon id="sparkles" size={16} /> {t('contactCta.eyebrow', 'Admission & Careers')}
               </span>
               <h2 className="mt-3 font-serif text-3xl md:text-4xl font-bold leading-tight">
-                Begin your journey with MLD Memorial Sansthan
+                {t('contactCta.heading2', 'Begin your journey with MLD Memorial Sansthan')}
               </h2>
               <p className="mt-3 text-white/90 max-w-md">
-                Have a question about admissions, courses, or careers? Our team is here to help.
+                {t('contactCta.subtext', 'Have a question about admissions, courses, or careers? Our team is here to help.')}
               </p>
             </div>
             <div className="flex flex-wrap gap-3 lg:justify-end">
@@ -205,14 +216,14 @@ const ContactCta: React.FC = () => {
                 href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-brand-orange font-bold hover:bg-brand-orange-light transition-colors"
               >
-                Contact Us
+                {t('contactCta.button', 'Contact Us')}
                 <Icon id="arrow-right" size={18} />
               </a>
               <a
                 href="/institutions"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/15 border border-white/30 text-white font-bold hover:bg-white/25 transition-colors"
               >
-                Explore Institutions
+                {t('insts.viewAll', 'Explore Institutions')}
                 <Icon id="external" size={18} />
               </a>
             </div>

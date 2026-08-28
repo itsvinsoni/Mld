@@ -10,16 +10,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              serif: ['Playfair Display', 'serif'],
-              poppins: ['Poppins', 'sans-serif'],
+              sans: ['Inter', 'Noto Sans Devanagari', 'sans-serif'],
+              serif: ['Playfair Display', 'Tiro Devanagari Hindi', 'serif'],
+              poppins: ['Poppins', 'Noto Sans Devanagari', 'sans-serif'],
+              hindi: ['Noto Sans Devanagari', 'Inter', 'sans-serif'],
+              hindiSerif: ['Tiro Devanagari Hindi', 'Playfair Display', 'serif'],
             },
             colors: {
               // CRM brand — orange primary (white + orange theme)

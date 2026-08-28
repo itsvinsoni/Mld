@@ -1,11 +1,15 @@
 import React from 'react';
 import { Icon } from '../icons';
 import { useReveal } from '../hooks';
-import { ABOUT, ABOUT_IMAGE } from '../data';
+import { ABOUT_IMAGE } from '../data';
+import { useAbout } from '../dataI18n';
+import { useT } from '../i18n';
 
 export const AboutSection: React.FC = () => {
   const left = useReveal('left');
   const right = useReveal('right');
+  const ABOUT = useAbout();
+  const t = useT();
 
   return (
     <section id="about" className="py-20 md:py-28 bg-white">
@@ -39,7 +43,7 @@ export const AboutSection: React.FC = () => {
 
           {/* Content */}
           <div ref={left.ref} className={`order-1 lg:order-2 ${left.className}`}>
-            <span className="section-label mb-3">About Us</span>
+            <span className="section-label mb-3">{t('about.label', ABOUT.label)}</span>
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-light-textPrimary leading-tight mt-2">
               {ABOUT.heading}
             </h2>

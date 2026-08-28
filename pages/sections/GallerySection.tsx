@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Icon } from '../icons';
 import { useReveal } from '../hooks';
 import { SectionHeading } from '../SectionHeading';
-import { GALLERY, type GalleryImage } from '../data';
+import { GALLERY as GALLERY_EN, type GalleryImage } from '../data';
+import { useGallery } from '../dataI18n';
+import { useT } from '../i18n';
 
 export const Lightbox: React.FC<{
   images: GalleryImage[];
@@ -121,27 +123,29 @@ const GalleryItem: React.FC<{ img: GalleryImage; index: number; onClick: () => v
 
 export const GallerySection: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const gallery = useGallery();
+  const t = useT();
 
   const next = useCallback(
-    () => setOpenIndex((i) => (i === null ? null : (i + 1) % GALLERY.length)),
-    [],
+    () => setOpenIndex((i) => (i === null ? null : (i + 1) % gallery.length)),
+    [gallery.length],
   );
   const prev = useCallback(
-    () => setOpenIndex((i) => (i === null ? null : (i - 1 + GALLERY.length) % GALLERY.length)),
-    [],
+    () => setOpenIndex((i) => (i === null ? null : (i - 1 + gallery.length) % gallery.length)),
+    [gallery.length],
   );
 
   return (
     <section id="gallery" className="py-20 md:py-28 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
-          label="Photo Gallery"
-          heading="Life at MLD Memorial Sansthan"
-          subtext="Explore moments from our campuses, classrooms, laboratories, and celebrations."
+          label={t('gallery.label', 'Photo Gallery')}
+          heading={t('gallery.heading', 'Life at MLD Memorial Sansthan')}
+          subtext={t('gallery.subtext', 'Explore moments from our campuses, classrooms, laboratories, and celebrations.')}
         />
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {GALLERY.map((img, i) => (
+          {gallery.map((img, i) => (
             <GalleryItem key={img.id} img={img} index={i} onClick={() => setOpenIndex(i)} />
           ))}
         </div>
@@ -149,7 +153,7 @@ export const GallerySection: React.FC = () => {
 
       {openIndex !== null && (
         <Lightbox
-          images={GALLERY}
+          images={gallery}
           index={openIndex}
           onClose={() => setOpenIndex(null)}
           onPrev={prev}

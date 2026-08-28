@@ -2,18 +2,21 @@ import React from 'react';
 import { Icon } from './icons';
 import { useReveal } from './hooks';
 import { SectionHeading } from './SectionHeading';
-import { getInstitutionBySlug, type Institution } from './data';
-import { getProgramBySlug, getDeanMessage, getTestimonialsForProgram, type ProgramDetail } from './programDetails';
+import { type Institution } from './data';
+import { useInstitutionBySlug, useInstitutions } from './dataI18n';
+import { useProgram, useDeanMessage, useTestimonialsForProgram, type ProgramDetail } from './programDetails';
+import { useT } from './i18n';
 import { PageHero } from './sections/PageHero';
 
 const KeyFacts: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const facts = [
-    { icon: 'clock' as const, label: 'Duration', value: p.duration },
-    { icon: 'award' as const, label: 'Level', value: p.level },
-    { icon: 'book' as const, label: 'Eligibility', value: p.eligibility },
-    { icon: 'monitor' as const, label: 'Mode', value: p.mode },
-    { icon: 'globe' as const, label: 'Medium', value: p.medium },
-    { icon: 'star' as const, label: 'Category', value: p.category },
+    { icon: 'clock' as const, label: t('prog.fact.duration', 'Duration'), value: p.duration },
+    { icon: 'award' as const, label: t('prog.fact.level', 'Level'), value: p.level },
+    { icon: 'book' as const, label: t('prog.fact.eligibility', 'Eligibility'), value: p.eligibility },
+    { icon: 'monitor' as const, label: t('prog.fact.mode', 'Mode'), value: p.mode },
+    { icon: 'globe' as const, label: t('prog.fact.medium', 'Medium'), value: p.medium },
+    { icon: 'star' as const, label: t('prog.fact.category', 'Category'), value: p.category },
   ];
   return (
     <div className="relative -mt-12 z-10">
@@ -46,13 +49,14 @@ const KeyFacts: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const Overview: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="lg:col-span-1">
-            <span className="section-label mb-3">Programme Overview</span>
+            <span className="section-label mb-3">{t('prog.overview', 'Programme Overview')}</span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
               About this <span className="text-orange-gradient">programme</span>
             </h2>
@@ -70,6 +74,7 @@ const Overview: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const Highlights: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`relative py-14 md:py-16 bg-[#F7F3EE] border-y border-slate-100 overflow-hidden ${className}`}>
@@ -93,11 +98,12 @@ const Highlights: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const WhatYouLearn: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <SectionHeading label="Curriculum" heading="What you will learn" />
+        <SectionHeading label={t('prog.curriculum', 'Curriculum')} heading={t('prog.whatLearn', 'What you will learn')} />
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
           {p.whatYouLearn.map((item, i) => (
             <div
@@ -117,6 +123,7 @@ const WhatYouLearn: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const CareerCard: React.FC<{ c: ProgramDetail['careerOptions'][number]; index: number }> = ({ c, index }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <div
@@ -142,10 +149,11 @@ const CareerCard: React.FC<{ c: ProgramDetail['careerOptions'][number]; index: n
 };
 
 const Careers: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   return (
     <section className="py-16 md:py-20 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <SectionHeading label="Career Pathways" heading="Where this programme can take you" />
+        <SectionHeading label={t('prog.career', "Career Pathways")} heading={t('prog.careerSub', "Where this programme can take you")} />
         <p className="mt-5 max-w-3xl text-light-textSecondary text-base md:text-lg leading-relaxed">
           Graduates of {p.name} go on to rewarding careers across {p.careerOptions.length === 1 ? 'the field' : 'multiple high-growth fields'}. Here are the most popular career paths you can pursue.
         </p>
@@ -176,26 +184,46 @@ const DOCUMENTS = [
   'Entrance / merit scorecard (where applicable)',
 ];
 
+const ADMISSION_STEPS_HELPER = (
+  t: (k: string, f?: string) => string,
+) => [
+  { n: '1', icon: 'check' as const, title: t('prog.step.check', 'Check Eligibility'), text: t('prog.step.checkText', 'Review the eligibility criteria (qualification, minimum marks, age) for the course.') },
+  { n: '2', icon: 'monitor' as const, title: t('prog.step.apply', 'Apply Online / Enquire'), text: t('prog.step.applyText', 'Fill the online enquiry or application form on our admissions portal with your details.') },
+  { n: '3', icon: 'book' as const, title: t('prog.step.docs', 'Document Verification'), text: t('prog.step.docsText', 'Submit required documents (marksheets, ID, photos, transfer/migration certificate) for verification.') },
+  { n: '4', icon: 'award' as const, title: t('prog.step.counsel', 'Counselling & Selection'), text: t('prog.step.counselText', 'Attend counselling/merit-list process (and entrance test, where applicable) for seat allotment.') },
+  { n: '5', icon: 'graduation' as const, title: t('prog.step.fee', 'Fee Payment & Admission'), text: t('prog.step.feeText', 'Pay the admission fee, complete enrolment, and join the programme on the notified date.') },
+];
+
 const AdmissionProcess: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
+  const ADMISSION_STEPS_LOCAL = ADMISSION_STEPS_HELPER(t);
+  const DOCUMENTS_LOCAL = [
+    t('prog.doc.1', '10th & 12th marksheets and certificates'),
+    t('prog.doc.2', 'Transfer / Migration certificate (if applicable)'),
+    t('prog.doc.3', 'Aadhaar card / valid photo ID'),
+    t('prog.doc.4', 'Recent passport-size photographs'),
+    t('prog.doc.5', 'Category / Domicile certificate (if applicable)'),
+    t('prog.doc.6', 'Entrance / merit scorecard (where applicable)'),
+  ];
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <span className="section-label mb-3">Admissions</span>
+            <span className="section-label mb-3">{t('prog.admission', 'Admissions')}</span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
-              How to <span className="text-orange-gradient">get admitted</span>
+              {t('prog.howToGet', 'How to get admitted')}
             </h2>
             <span className="orange-divider mt-5" />
             <div className="mt-6 bg-white rounded-2xl p-6 border border-slate-100 card-glow">
-              <div className="text-[11px] uppercase tracking-widest font-bold text-brand-orange mb-2">Eligibility</div>
+              <div className="text-[11px] uppercase tracking-widest font-bold text-brand-orange mb-2">{t('prog.eligibilityLbl', 'Eligibility')}</div>
               <p className="text-light-textPrimary font-medium leading-relaxed">{p.eligibility}</p>
             </div>
             <div className="mt-6">
-              <h3 className="font-serif text-lg font-bold text-light-textPrimary">Documents you'll need</h3>
+              <h3 className="font-serif text-lg font-bold text-light-textPrimary">{t('prog.docs', "Documents you'll need")}</h3>
               <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {DOCUMENTS.map((d) => (
+                {DOCUMENTS_LOCAL.map((d) => (
                   <li key={d} className="flex items-start gap-2 text-sm text-light-textSecondary">
                     <Icon id="check" size={16} className="text-brand-orange mt-0.5 shrink-0" />
                     <span>{d}</span>
@@ -206,7 +234,7 @@ const AdmissionProcess: React.FC<{ p: ProgramDetail }> = ({ p }) => {
           </div>
           <div>
             <ol className="space-y-4">
-              {ADMISSION_STEPS.map((s, i) => (
+              {ADMISSION_STEPS_LOCAL.map((s, i) => (
                 <li
                   key={s.n}
                   className="flex items-start gap-4 bg-white rounded-2xl p-5 border border-slate-100 card-glow"
@@ -239,9 +267,10 @@ const AdmissionProcess: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const DeanMessage: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
-  const inst = getInstitutionBySlug(p.institutionSlugs[0]);
-  const dm = getDeanMessage(p.institutionSlugs[0]);
+  const inst = useInstitutionBySlug(p.institutionSlugs[0]);
+  const dm = useDeanMessage(p.institutionSlugs[0]);
   if (!inst || !dm) return null;
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
@@ -249,7 +278,7 @@ const DeanMessage: React.FC<{ p: ProgramDetail }> = ({ p }) => {
         <div className="bg-[#F7F3EE] rounded-3xl p-8 md:p-12 border border-slate-100">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <div className="lg:col-span-1">
-              <span className="section-label mb-3">From the Principal's Desk</span>
+              <span className="section-label mb-3">{t('prog.dean', "From the Principal's Desk")}</span>
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-light-textPrimary leading-tight">
                 A message from <span className="text-orange-gradient">{inst.shortName}</span>
               </h2>
@@ -285,13 +314,14 @@ const SCHOLARSHIP_POINTS = [
 ];
 
 const Scholarship: React.FC = () => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
           <div>
-            <span className="section-label mb-3">Scholarships & Fees</span>
+            <span className="section-label mb-3">{t('prog.scholarship', 'Scholarships & Fees')}</span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
               Affordable education, <span className="text-orange-gradient">real support</span>.
             </h2>
@@ -334,12 +364,13 @@ const CAMPUS_LIFE = [
 ];
 
 const CampusLife: React.FC = () => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`py-14 md:py-16 bg-white border-y border-slate-100 ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="section-label mb-3">Life at MLD</span>
+          <span className="section-label mb-3">{t('prog.campusLife', 'Life at MLD')}</span>
           <h2 className="font-serif text-2xl md:text-3xl font-bold text-light-textPrimary leading-tight">
             More than a classroom.
           </h2>
@@ -360,14 +391,15 @@ const CampusLife: React.FC = () => {
 };
 
 const Testimonials: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
-  const items = getTestimonialsForProgram(p);
+  const items = useTestimonialsForProgram(p);
   if (items.length === 0) return null;
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto">
-          <span className="section-label mb-3">Voices of Our Students</span>
+          <span className="section-label mb-3">{t('prog.testimonials', 'Voices of Our Students')}</span>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
             Hear from our <span className="text-orange-gradient">alumni</span>.
           </h2>
@@ -411,12 +443,13 @@ const PILLARS = [
 ];
 
 const WhyMLD: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
-          <span className="section-label mb-3">Why MLD</span>
+          <span className="section-label mb-3">{t('prog.whyMld', 'Why MLD')}</span>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
             Why choose <span className="text-orange-gradient">MLD</span> for {p.name}?
           </h2>
@@ -459,11 +492,12 @@ const WhyMLD: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const Facilities: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   const { ref, className } = useReveal('up');
   return (
     <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <SectionHeading label="Facilities" heading="What you'll have access to" />
+        <SectionHeading label={t('prog.facilities', "Facilities")} heading="What you'll have access to" />
         <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {p.facilities.map((f) => (
             <div
@@ -483,14 +517,16 @@ const Facilities: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const OfferedAt: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
+  const allInstitutions = useInstitutions();
   const institutions = p.institutionSlugs
-    .map((s) => getInstitutionBySlug(s))
+    .map((s) => allInstitutions.find((i) => i.slug === s))
     .filter(Boolean) as Institution[];
   if (institutions.length === 0) return null;
   return (
     <section className="py-16 md:py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <SectionHeading label="Offered At" heading="Where you can study this programme" />
+        <SectionHeading label={t('prog.offeredAt', "Offered At")} heading="Where you can study this programme" />
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {institutions.map((inst) => (
             <a
@@ -532,6 +568,7 @@ const OfferedAt: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 const AdmissionCta: React.FC<{ p: ProgramDetail }> = ({ p }) => {
+  const t = useT();
   return (
     <section className="py-16 md:py-20 bg-slate-900 text-white">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8 text-center">
@@ -541,10 +578,10 @@ const AdmissionCta: React.FC<{ p: ProgramDetail }> = ({ p }) => {
           <span className="w-8 h-px bg-brand-orange" />
         </span>
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold leading-tight max-w-3xl mx-auto">
-          Start your journey in <span className="text-orange-gradient">{p.name}</span> today.
+          {t('prog.ctaHeading', 'Ready to start your journey?')}
         </h2>
         <p className="mt-5 text-white/80 text-base md:text-lg max-w-2xl mx-auto">
-          Apply online, request a brochure, or speak to our admissions team for eligibility, fee structure, and the next batch start date.
+          {t('prog.ctaSub', 'Apply online, request a brochure, or speak to our admissions team for eligibility, fee structure, and the next batch start date.')}
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center flex-wrap">
           <a
@@ -553,7 +590,7 @@ const AdmissionCta: React.FC<{ p: ProgramDetail }> = ({ p }) => {
             rel="noopener noreferrer"
             className="btn-orange inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-base"
           >
-            Apply Now
+            {t('prog.apply', 'Apply Now')}
             <Icon id="external" size={16} />
           </a>
           <a
@@ -561,7 +598,7 @@ const AdmissionCta: React.FC<{ p: ProgramDetail }> = ({ p }) => {
             className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-base font-semibold text-white border-2 border-white/40 hover:bg-white hover:text-slate-900 transition-colors"
           >
             <Icon id="book" size={16} />
-            Download Brochure
+            {t('prog.brochure', 'Download Brochure')}
           </a>
           <a
             href="/contact"
@@ -577,13 +614,14 @@ const AdmissionCta: React.FC<{ p: ProgramDetail }> = ({ p }) => {
 };
 
 export const ProgramDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
-  const p = getProgramBySlug(slug);
+  const t = useT();
+  const p = useProgram(slug);
 
   if (!p) {
     return (
       <section className="pt-40 pb-20 text-center min-h-[60vh]">
-        <h1 className="font-serif text-4xl font-bold text-light-textPrimary">Programme Not Found</h1>
-        <p className="mt-4 text-light-textSecondary">Could not find the programme you were looking for.</p>
+        <h1 className="font-serif text-4xl font-bold text-light-textPrimary">{t('prog.notFound', 'Programme Not Found')}</h1>
+        <p className="mt-4 text-light-textSecondary">{t('prog.notFoundSub', 'Could not find the programme you were looking for.')}</p>
         <a
           href="/institutions"
           className="btn-orange mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full"

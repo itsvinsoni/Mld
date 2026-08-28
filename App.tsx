@@ -24,6 +24,9 @@ import { ContactPage } from './pages/ContactPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProgramDetailPage } from './pages/ProgramDetailPage';
 import { useRoute, getSegments, navigate, installLinkInterceptor } from './pages/router';
+import { LanguageProvider } from './pages/i18n';
+// Ensure translations are registered
+import './pages/translations';
 
 type Theme = 'light' | 'dark';
 
@@ -176,7 +179,7 @@ const App: React.FC = () => {
         page = <NotFoundPage />;
     }
 
-    return <PublicLayout>{page}</PublicLayout>;
+    return <LanguageProvider><PublicLayout>{page}</PublicLayout></LanguageProvider>;
 };
 
 export default App;

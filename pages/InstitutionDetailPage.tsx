@@ -2,10 +2,13 @@ import React from 'react';
 import { Icon } from './icons';
 import { useReveal } from './hooks';
 import { SectionHeading } from './SectionHeading';
-import { INSTITUTIONS, getInstitutionBySlug, type Institution } from './data';
+import type { Institution } from './data';
+import { useInstitutionBySlug, useInstitutions } from './dataI18n';
+import { useT } from './i18n';
 import { ContactCta } from './shared/ContactCta';
 
 const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
+  const t = useT();
   return (
     <section className="relative pt-32 md:pt-40 pb-16 overflow-hidden text-white">
       <div className="absolute inset-0">
@@ -15,9 +18,9 @@ const InstitutionHero: React.FC<{ inst: Institution }> = ({ inst }) => {
       </div>
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <nav className="flex items-center gap-2 text-sm text-white/80 mb-6">
-          <a href="/" className="hover:text-white transition">Home</a>
+          <a href="/" className="hover:text-white transition">{t('nav.home', 'Home')}</a>
           <Icon id="chevron-right" size={14} />
-          <a href="/institutions" className="hover:text-white transition">Institutions</a>
+          <a href="/institutions" className="hover:text-white transition">{t('nav.institutions', 'Institutions')}</a>
           <Icon id="chevron-right" size={14} />
           <span className="text-white">{inst.shortName}</span>
         </nav>
@@ -79,14 +82,15 @@ const Highlights: React.FC<{ inst: Institution }> = ({ inst }) => {
 
 const AboutBlock: React.FC<{ inst: Institution }> = ({ inst }) => {
   const { ref, className } = useReveal('left');
+  const t = useT();
   return (
     <section className="py-16 md:py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div ref={ref} className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${className}`}>
           <div>
-            <span className="section-label mb-3">About {inst.shortName}</span>
+            <span className="section-label mb-3">{t('instDetail.about', 'About')} {inst.shortName}</span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
-              A Closer Look at Our Institution
+              {t('instDetail.heading', 'A Closer Look at Our Institution')}
             </h2>
             <span className="orange-divider mt-5" />
             <p className="mt-6 text-light-textSecondary text-base md:text-lg leading-relaxed">
@@ -114,10 +118,15 @@ const AboutBlock: React.FC<{ inst: Institution }> = ({ inst }) => {
 
 const Programs: React.FC<{ inst: Institution }> = ({ inst }) => {
   const { ref, className } = useReveal('up');
+  const t = useT();
   return (
     <section className="py-16 md:py-20 bg-[#F7F3EE]">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <SectionHeading label="Programmes" heading={`Courses & Programs`} subtext={`Programmes offered at ${inst.shortName}.`} />
+        <SectionHeading
+          label={t('instDetail.programs', 'Programmes')}
+          heading={t('instDetail.programsHeading', 'Courses & Programs')}
+          subtext={`${t('instDetail.programsSub', 'Programmes offered at')} ${inst.shortName}.`}
+        />
         <div ref={ref} className={`max-w-4xl mx-auto space-y-3 ${className}`}>
           {inst.programs.map((p, i) => (
             <a
@@ -154,11 +163,12 @@ const Programs: React.FC<{ inst: Institution }> = ({ inst }) => {
 };
 
 const OtherInstitutions: React.FC<{ current: Institution }> = ({ current }) => {
-  const others = INSTITUTIONS.filter((i) => i.id !== current.id).slice(0, 3);
+  const others = useInstitutions().filter((i) => i.id !== current.id).slice(0, 3);
+  const t = useT();
   return (
     <section className="py-16 md:py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
-        <SectionHeading label="Explore More" heading="Other Institutions" />
+        <SectionHeading label={t('instDetail.exploreMore', 'Explore More')} heading={t('instDetail.other', 'Other Institutions')} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {others.map((inst) => (
             <a
@@ -190,15 +200,16 @@ const OtherInstitutions: React.FC<{ current: Institution }> = ({ current }) => {
 };
 
 export const InstitutionDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
-  const inst = getInstitutionBySlug(slug);
+  const inst = useInstitutionBySlug(slug);
+  const t = useT();
 
   if (!inst) {
     return (
       <section className="pt-40 pb-20 text-center min-h-[60vh]">
-        <h1 className="font-serif text-4xl font-bold text-light-textPrimary">Institution Not Found</h1>
-        <p className="mt-4 text-light-textSecondary">Could not find the institution you were looking for.</p>
+        <h1 className="font-serif text-4xl font-bold text-light-textPrimary">{t('instDetail.notFound', 'Institution Not Found')}</h1>
+        <p className="mt-4 text-light-textSecondary">{t('instDetail.notFoundSub', 'Could not find the institution you were looking for.')}</p>
         <a href="/institutions" className="btn-orange mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full">
-          View All Institutions <Icon id="arrow-right" size={18} />
+          {t('insts.viewAll', 'View All Institutions')} <Icon id="arrow-right" size={18} />
         </a>
       </section>
     );

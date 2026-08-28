@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Icon } from '../icons';
 import { useReveal } from '../hooks';
 import { SectionHeading } from '../SectionHeading';
-import { MESSAGES } from '../data';
+import { useMessages } from '../dataI18n';
+import { useT } from '../i18n';
 
 export const MessagesSection: React.FC = () => {
   const { ref, className } = useReveal('up');
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const messages = useMessages();
+  const t = useT();
 
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setActive((a) => (a + 1) % MESSAGES.length), 6000);
+    const id = setInterval(() => setActive((a) => (a + 1) % messages.length), 6000);
     return () => clearInterval(id);
-  }, [paused]);
+  }, [paused, messages.length]);
 
-  const message = MESSAGES[active];
+  const message = messages[active];
 
   return (
     <section id="messages" className="py-20 md:py-28 bg-slate-900 text-white relative overflow-hidden">
@@ -25,9 +28,9 @@ export const MessagesSection: React.FC = () => {
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
-          label="Messages from Leadership"
-          heading="Voices of Leadership"
-          subtext="Guidance and vision from the leaders who shape MLD Memorial Sansthan."
+          label={t('msg.label', 'Messages from Leadership')}
+          heading={t('msg.heading', 'Voices of Leadership')}
+          subtext={t('msg.subtext', 'Guidance and vision from the leaders who shape MLD Memorial Sansthan.')}
           light
         />
 
@@ -69,7 +72,7 @@ export const MessagesSection: React.FC = () => {
           {/* Controls / dots */}
           <div className="mt-8 flex items-center justify-center gap-4">
             <button
-              onClick={() => setActive((a) => (a - 1 + MESSAGES.length) % MESSAGES.length)}
+              onClick={() => setActive((a) => (a - 1 + messages.length) % messages.length)}
               className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/10 text-white hover:bg-brand-orange transition-colors"
               aria-label="Previous message"
             >
@@ -77,7 +80,7 @@ export const MessagesSection: React.FC = () => {
             </button>
 
             <div className="flex items-center gap-2">
-              {MESSAGES.map((m, i) => (
+              {messages.map((m, i) => (
                 <button
                   key={m.id}
                   onClick={() => setActive(i)}
@@ -90,7 +93,7 @@ export const MessagesSection: React.FC = () => {
             </div>
 
             <button
-              onClick={() => setActive((a) => (a + 1) % MESSAGES.length)}
+              onClick={() => setActive((a) => (a + 1) % messages.length)}
               className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-white/10 text-white hover:bg-brand-orange transition-colors"
               aria-label="Next message"
             >

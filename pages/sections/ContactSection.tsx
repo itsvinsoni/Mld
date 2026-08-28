@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Icon } from '../icons';
 import { useReveal } from '../hooks';
 import { SITE, HERO } from '../data';
+import { useT } from '../i18n';
 
 const inputClass =
   'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-light-textPrimary placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-brand-orange transition';
@@ -9,6 +10,7 @@ const inputClass =
 export const ContactSection: React.FC = () => {
   const { ref, className } = useReveal('up');
   const [submitted, setSubmitted] = useState(false);
+  const t = useT();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,27 +29,27 @@ export const ContactSection: React.FC = () => {
             <div>
               <span className="inline-flex items-center gap-2 text-white/90 text-xs font-bold uppercase tracking-widest">
                 <Icon id="sparkles" size={16} />
-                Admission & Careers
+                {t('contactCta.eyebrow', 'Admission & Careers')}
               </span>
               <h2 className="mt-3 font-serif text-3xl md:text-4xl font-bold leading-tight">
-                Begin your journey with MLD Memorial Sansthan
+                {t('contactCta.heading2', 'Begin your journey with MLD Memorial Sansthan')}
               </h2>
               <p className="mt-3 text-white/90 max-w-md">
-                {HERO.notice}
+                {t('contactCta.notice', HERO.notice)}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
                   href={`mailto:${SITE.email}`}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-brand-orange font-bold hover:bg-brand-orange-light transition-colors"
                 >
-                  Admission Enquiry
+                  {t('contactCta.admission', 'Admission Enquiry')}
                   <Icon id="arrow-right" size={18} />
                 </a>
                 <a
                   href={`mailto:${SITE.email}?subject=Job%20Application`}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/15 border border-white/30 text-white font-bold hover:bg-white/25 transition-colors"
                 >
-                  Apply for Job
+                  {t('contactCta.job', 'Apply for Job')}
                   <Icon id="external" size={18} />
                 </a>
               </div>
@@ -74,22 +76,21 @@ export const ContactSection: React.FC = () => {
         {/* Enquiry form */}
         <div ref={ref} className={`grid grid-cols-1 lg:grid-cols-2 gap-12 ${className}`}>
           <div>
-            <span className="section-label mb-3">Contact Us</span>
+            <span className="section-label mb-3">{t('contactPage.label', 'Contact Us')}</span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-light-textPrimary leading-tight">
-              We'd love to hear from you
+              {t('contactPage.heading', "We'd love to hear from you")}
             </h2>
             <span className="orange-divider mt-5" />
             <p className="mt-5 text-light-textSecondary text-base md:text-lg leading-relaxed max-w-md">
-              Have a question about admissions, courses, or careers? Send us a message and our team
-              will get back to you shortly.
+              {t('contactPage.sub', 'Have a question about admissions, courses, or careers? Send us a message and our team will get back to you shortly.')}
             </p>
 
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-5">
               {[
-                { icon: 'map-pin' as const, title: 'Visit Us', sub: SITE.location },
-                { icon: 'phone' as const, title: 'Call Us', sub: SITE.phone },
-                { icon: 'mail' as const, title: 'Email Us', sub: SITE.email },
-                { icon: 'clock' as const, title: 'Office Hours', sub: 'Mon – Sat, 9 AM – 5 PM' },
+                { icon: 'map-pin' as const, title: t('contactPage.visit', 'Visit Us'), sub: t('brand.location', SITE.location) },
+                { icon: 'phone' as const, title: t('contactPage.phone', 'Call Us'), sub: SITE.phone },
+                { icon: 'mail' as const, title: t('contactPage.email', 'Email Us'), sub: SITE.email },
+                { icon: 'clock' as const, title: t('contactPage.hours', 'Office Hours'), sub: t('contactPage.hoursVal', 'Mon – Sat, 9 AM – 5 PM') },
               ].map((c) => (
                 <div key={c.title} className="bg-white rounded-2xl border border-slate-100 p-5 card-glow">
                   <span className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-brand-orange-light text-brand-orange mb-3">
@@ -109,42 +110,42 @@ export const ContactSection: React.FC = () => {
                 <span className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-orange-light text-brand-orange mb-4">
                   <Icon id="check" size={32} />
                 </span>
-                <h3 className="font-serif text-2xl font-bold text-light-textPrimary">Thank you!</h3>
-                <p className="mt-2 text-light-textSecondary">Your message has been received. We'll be in touch soon.</p>
+                <h3 className="font-serif text-2xl font-bold text-light-textPrimary">{t('contactPage.form.thanks', 'Thank you!')}</h3>
+                <p className="mt-2 text-light-textSecondary">{t('contactPage.form.thanksSub', "Your message has been received. We'll be in touch soon.")}</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="font-serif text-xl font-bold text-light-textPrimary mb-2">Send an Enquiry</h3>
+                <h3 className="font-serif text-xl font-bold text-light-textPrimary mb-2">{t('contactPage.form.sendEnquiry', 'Send an Enquiry')}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-light-textPrimary mb-1.5">Full Name</label>
-                    <input type="text" required placeholder="Your name" className={inputClass} />
+                    <label className="block text-sm font-medium text-light-textPrimary mb-1.5">{t('contactPage.form.name', 'Full Name')}</label>
+                    <input type="text" required placeholder={t('contactPage.form.namePh', 'Your name')} className={inputClass} />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-light-textPrimary mb-1.5">Phone</label>
-                    <input type="tel" required placeholder="Your phone number" className={inputClass} />
+                    <label className="block text-sm font-medium text-light-textPrimary mb-1.5">{t('contactPage.form.phone', 'Phone')}</label>
+                    <input type="tel" required placeholder={t('contactPage.form.phonePh', 'Your phone number')} className={inputClass} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-light-textPrimary mb-1.5">Email</label>
+                  <label className="block text-sm font-medium text-light-textPrimary mb-1.5">{t('contactPage.form.email', 'Email')}</label>
                   <input type="email" required placeholder="you@example.com" className={inputClass} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-light-textPrimary mb-1.5">I'm interested in</label>
+                  <label className="block text-sm font-medium text-light-textPrimary mb-1.5">{t('contactPage.form.interested', "I'm interested in")}</label>
                   <select className={inputClass} defaultValue="">
-                    <option value="" disabled>Select an option</option>
-                    <option>Admission Enquiry</option>
-                    <option>Job Application</option>
-                    <option>General Question</option>
-                    <option>Other</option>
+                    <option value="" disabled>{t('contactPage.form.select', 'Select an option')}</option>
+                    <option>{t('contactPage.form.optAdmission', 'Admission Enquiry')}</option>
+                    <option>{t('contactPage.form.optJob', 'Job Application')}</option>
+                    <option>{t('contactPage.form.optGeneral', 'General Question')}</option>
+                    <option>{t('contactPage.form.optOther', 'Other')}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-light-textPrimary mb-1.5">Message</label>
-                  <textarea rows={4} required placeholder="Write your message..." className={inputClass} />
+                  <label className="block text-sm font-medium text-light-textPrimary mb-1.5">{t('contactPage.form.message', 'Message')}</label>
+                  <textarea rows={4} required placeholder={t('contactPage.form.messagePh', 'Write your message...')} className={inputClass} />
                 </div>
                 <button type="submit" className="btn-orange w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base">
-                  Send Message
+                  {t('contactPage.form.send', 'Send Message')}
                   <Icon id="arrow-right" size={18} />
                 </button>
               </form>
