@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from './icons';
 import { useReveal } from './hooks';
 import { SectionHeading } from './SectionHeading';
@@ -151,7 +151,7 @@ const CareerCard: React.FC<{ c: ProgramDetail['careerOptions'][number]; index: n
 const Careers: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const t = useT();
   return (
-    <section className="py-16 md:py-20 bg-[#F7F3EE]">
+    <section id="sec-careers" className="py-16 md:py-20 bg-[#F7F3EE] section-anchor">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading label={t('prog.career', "Career Pathways")} heading={t('prog.careerSub', "Where this programme can take you")} />
         <p className="mt-5 max-w-3xl text-light-textSecondary text-base md:text-lg leading-relaxed">
@@ -524,7 +524,7 @@ const OfferedAt: React.FC<{ p: ProgramDetail }> = ({ p }) => {
     .filter(Boolean) as Institution[];
   if (institutions.length === 0) return null;
   return (
-    <section className="py-16 md:py-20 bg-white">
+    <section id="sec-offered" className="py-16 md:py-20 bg-white section-anchor">
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading label={t('prog.offeredAt', "Offered At")} heading="Where you can study this programme" />
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -613,9 +613,82 @@ const AdmissionCta: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   );
 };
 
+const SECTION_IDS = ['sec-overview', 'sec-highlights', 'sec-what', 'sec-careers', 'sec-admission', 'sec-why', 'sec-scholarship', 'sec-facilities', 'sec-testimonials'];
+
+const SectionNav: React.FC = () => {
+  const t = useT();
+  const [show, setShow] = useState(false);
+  const [active, setActive] = useState('');
+  useEffect(() => {
+    const onScroll = () => {
+      setShow(window.scrollY > 500);
+      let current = '';
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el) {
+          const r = el.getBoundingClientRect();
+          if (r.top - 140 <= 0 && r.bottom > 140) current = id;
+        }
+      }
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  if (!show) return null;
+  const labels: Record<string, string> = {
+    'sec-overview': t('sec.overview', 'Overview'),
+    'sec-highlights': t('sec.highlights', 'Highlights'),
+    'sec-what': t('sec.what', 'Curriculum'),
+    'sec-careers': t('sec.careers', 'Careers'),
+    'sec-admission': t('sec.admission', 'Admissions'),
+    'sec-why': t('sec.why', 'Why MLD'),
+    'sec-scholarship': t('sec.scholarship', 'Scholarships'),
+    'sec-facilities': t('sec.facilities', 'Facilities'),
+    'sec-testimonials': t('sec.testimonials', 'Testimonials'),
+  };
+  return (
+    <nav
+      aria-label="Section navigation"
+      className="sticky top-16 md:top-20 z-40 bg-white/80 backdrop-blur-lg border-b border-slate-100 shadow-sm"
+    >
+      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-2 overflow-x-auto py-3 scrollbar-hide">
+          {SECTION_IDS.map((id) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 ${
+                active === id
+                  ? 'bg-brand-orange text-white shadow-md shadow-brand-orange/30'
+                  : 'text-slate-600 hover:bg-brand-orange-light hover:text-brand-orange-dark'
+              }`}
+            >
+              {labels[id]}
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+};
+
 export const ProgramDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
   const t = useT();
   const p = useProgram(slug);
+  const [readingPct, setReadingPct] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const pct = max > 0 ? Math.min(100, (h.scrollTop / max) * 100) : 0;
+      setReadingPct(pct);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [slug]);
 
   if (!p) {
     return (
@@ -634,6 +707,8 @@ export const ProgramDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
 
   return (
     <>
+      <div className="reading-progress" style={{ width: `${readingPct}%` }} aria-hidden="true" />
+      <SectionNav />
       <PageHero
         label={p.category}
         title={
@@ -646,6 +721,11 @@ export const ProgramDetailPage: React.FC<{ slug?: string }> = ({ slug }) => {
         }
         subtitle={p.shortDescription}
         image={p.image}
+        breadcrumb={[
+          { label: t('bc.home', 'Home'), href: '/' },
+          { label: t('bc.courses', 'Courses'), href: '/institutions' },
+          { label: p.name, href: `/courses/${p.slug}` },
+        ]}
       />
       <KeyFacts p={p} />
       <DeanMessage p={p} />

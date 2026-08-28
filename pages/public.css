@@ -528,6 +528,10 @@ body.lang-hi .stat-number { font-family: 'Inter', 'Noto Sans Devanagari', sans-s
 }
 .spotlight:hover::before { opacity: 1; }
 
+/* ---------- Scrollbar hide (for horizontal nav) ---------- */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* ---------- Wave divider ---------- */
 @keyframes wave {
   0% { transform: translateX(0); }
