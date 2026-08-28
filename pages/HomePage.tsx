@@ -11,6 +11,7 @@ import { useT } from './i18n';
 import { Magnetic } from './effects';
 import { SEO, buildFaqLd, buildItemListLd, buildBreadcrumbLd, SEO_SITE } from './SEO';
 import { FAQList } from './FAQ';
+import { LazyMount } from './Skeletons';
 
 const InstitutionsPreview: React.FC = () => {
   const t = useT();
@@ -297,10 +298,10 @@ export const HomePage: React.FC = () => {
       <HeroSection />
       <StatsStrip />
       <InstitutionsPreview />
-      <AboutPreview />
-      <GalleryPreview />
-      <MessagesPreview />
-      <ContactCta />
+      <LazyMount minHeight={600}><AboutPreview /></LazyMount>
+      <LazyMount minHeight={500}><GalleryPreview /></LazyMount>
+      <LazyMount minHeight={500}><MessagesPreview /></LazyMount>
+      <LazyMount minHeight={400}><ContactCta /></LazyMount>
       <FAQList
         faqs={homeFaqs}
         heading="Frequently Asked Questions"

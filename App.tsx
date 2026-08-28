@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import type { UserRole } from './types';
 import LoginScreen from './components/Login';
 import Sidebar from './components/Sidebar';
@@ -14,15 +14,17 @@ import ReportsView from './views/ReportsView';
 import SettingsView from './views/SettingsView';
 import ResultManagement from './views/ResultManagement';
 import { PublicLayout } from './pages/PublicLayout';
-import { HomePage } from './pages/HomePage';
-import { InstitutionsPage } from './pages/InstitutionsPage';
-import { InstitutionDetailPage } from './pages/InstitutionDetailPage';
-import { AboutPage } from './pages/AboutPage';
-import { GalleryPage } from './pages/GalleryPage';
-import { MessagesPage } from './pages/MessagesPage';
-import { ContactPage } from './pages/ContactPage';
-import { NotFoundPage } from './pages/NotFoundPage';
-import { ProgramDetailPage } from './pages/ProgramDetailPage';
+import { PageSkeleton } from './pages/Skeletons';
+// Lazy-load all public pages (Claude-style: small initial bundle, snappy nav)
+const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
+const InstitutionsPage = lazy(() => import('./pages/InstitutionsPage').then(m => ({ default: m.InstitutionsPage })));
+const InstitutionDetailPage = lazy(() => import('./pages/InstitutionDetailPage').then(m => ({ default: m.InstitutionDetailPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const GalleryPage = lazy(() => import('./pages/GalleryPage').then(m => ({ default: m.GalleryPage })));
+const MessagesPage = lazy(() => import('./pages/MessagesPage').then(m => ({ default: m.MessagesPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+const ProgramDetailPage = lazy(() => import('./pages/ProgramDetailPage').then(m => ({ default: m.ProgramDetailPage })));
 import { useRoute, getSegments, navigate, installLinkInterceptor } from './pages/router';
 import { LanguageProvider } from './pages/i18n';
 import { CrmProvider, useCrm } from './data/CrmProvider';
@@ -165,7 +167,15 @@ const CrmApp: React.FC = () => {
         page = <NotFoundPage />;
     }
 
-    return <LanguageProvider><PublicLayout>{page}</PublicLayout></LanguageProvider>;
+    return (
+      <LanguageProvider>
+        <PublicLayout>
+          <Suspense fallback={<PageSkeleton label="Loading page" />}>
+            {page}
+          </Suspense>
+        </PublicLayout>
+      </LanguageProvider>
+    );
 };
 
 const App: React.FC = () => (
