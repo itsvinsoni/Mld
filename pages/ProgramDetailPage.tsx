@@ -52,7 +52,7 @@ const Overview: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const t = useT();
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
+    <section id="sec-overview" ref={ref} className={`py-16 md:py-20 bg-white ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="lg:col-span-1">
@@ -77,7 +77,7 @@ const Highlights: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const t = useT();
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`relative py-14 md:py-16 bg-[#F7F3EE] border-y border-slate-100 overflow-hidden ${className}`}>
+    <section id="sec-highlights" ref={ref} className={`relative py-14 md:py-16 bg-[#F7F3EE] border-y border-slate-100 overflow-hidden ${className} section-anchor`}>
       <div className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(rgba(249,115,22,0.08) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -101,7 +101,7 @@ const WhatYouLearn: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const t = useT();
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
+    <section id="sec-what" ref={ref} className={`py-16 md:py-20 bg-white ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading label={t('prog.curriculum', 'Curriculum')} heading={t('prog.whatLearn', 'What you will learn')} />
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -207,7 +207,7 @@ const AdmissionProcess: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   ];
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
+    <section id="sec-admission" ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
@@ -273,7 +273,7 @@ const DeanMessage: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const dm = useDeanMessage(p.institutionSlugs[0]);
   if (!inst || !dm) return null;
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
+    <section id="sec-dean" ref={ref} className={`py-16 md:py-20 bg-white ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="bg-[#F7F3EE] rounded-3xl p-8 md:p-12 border border-slate-100">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -317,7 +317,7 @@ const Scholarship: React.FC = () => {
   const t = useT();
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
+    <section id="sec-scholarship" ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
           <div>
@@ -367,7 +367,7 @@ const CampusLife: React.FC = () => {
   const t = useT();
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`py-14 md:py-16 bg-white border-y border-slate-100 ${className}`}>
+    <section id="sec-campus" ref={ref} className={`py-14 md:py-16 bg-white border-y border-slate-100 ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto">
           <span className="section-label mb-3">{t('prog.campusLife', 'Life at MLD')}</span>
@@ -396,7 +396,7 @@ const Testimonials: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const items = useTestimonialsForProgram(p);
   if (items.length === 0) return null;
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
+    <section id="sec-testimonials" ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto">
           <span className="section-label mb-3">{t('prog.testimonials', 'Voices of Our Students')}</span>
@@ -446,7 +446,7 @@ const WhyMLD: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const t = useT();
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-white ${className}`}>
+    <section id="sec-why" ref={ref} className={`py-16 md:py-20 bg-white ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
           <span className="section-label mb-3">{t('prog.whyMld', 'Why MLD')}</span>
@@ -495,7 +495,7 @@ const Facilities: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const t = useT();
   const { ref, className } = useReveal('up');
   return (
-    <section ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className}`}>
+    <section id="sec-facilities" ref={ref} className={`py-16 md:py-20 bg-[#F7F3EE] ${className} section-anchor`}>
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading label={t('prog.facilities', "Facilities")} heading="What you'll have access to" />
         <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
