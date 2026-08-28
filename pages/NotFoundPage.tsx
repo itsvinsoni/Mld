@@ -25,7 +25,9 @@ export const NotFoundPage: React.FC = () => {
           background: `radial-gradient(600px circle at ${mouse.x}% ${mouse.y}%, rgba(249,115,22,0.18), transparent 60%)`,
         }}
       />
-      <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-brand-orange/15 blur-3xl float-slow" />
+      <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-brand-orange/15 blur-3xl float-slow gpu" />
+      <div className="absolute inset-0 bg-dots-warm opacity-50 pointer-events-none" />
+      <div className="absolute -bottom-20 -left-20 h-80 w-80 rounded-full bg-amber-400/15 blur-3xl float-lg gpu" />
       <div className="absolute inset-0" />
 
       <div className="relative mx-auto max-w-2xl px-4 text-center">

@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
 import type { UserRole } from '../types';
-import { MOCK_USERS } from '../constants';
+import { UserRole as Roles } from '../types';
+import { useCrm } from '../data/CrmProvider';
 
 interface LoginScreenProps {
-    onLogin: (email: string, pass: string) => boolean;
     onBackToSite?: () => void;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onBackToSite }) => {
+/**
+ * Demo credentials shown as quick-login buttons.
+ * The manual form validates the password too — the older version ignored it.
+ */
+const demoUsers: { role: UserRole; email: string }[] = [
+    { role: Roles.ADMIN, email: 'badebauji@mld.com' },
+    { role: Roles.MANAGER, email: 'avinash@mld.com' },
+    { role: Roles.HEAD, email: 'head@mld.com' },
+    { role: Roles.FACULTY, email: 'faculty@mld.com' },
+    { role: Roles.STUDENT, email: 'student@mld.com' },
+];
+
+const LoginScreen: React.FC<LoginScreenProps> = ({ onBackToSite }) => {
+    const { login, loginAsRole } = useCrm();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -15,25 +28,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onBackToSite }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        if (!onLogin(email, 'demo123')) {
-            setError('Invalid credentials. Please use the demo buttons.');
+        if (!login(email, password)) {
+            setError('Invalid email or password.');
         }
     };
 
     const handleDemoLogin = (role: UserRole) => {
-        const user = MOCK_USERS.find(u => u.role === role);
-        if(user) {
-            onLogin(user.email, 'demo123');
-        }
-    }
-
-    const demoUsers = [
-        { role: 'Admin', email: 'badebauji@mld.com' },
-        { role: 'Co-Owners', email: 'avinash@mld.com' },
-        { role: 'College Head', email: 'head@mld.com' },
-        { role: 'Faculty', email: 'faculty@mld.com' },
-        { role: 'Student', email: 'student@mld.com' },
-    ];
+        setError('');
+        loginAsRole(role);
+    };
 
     return (
         <div className="min-h-screen bg-light-background dark:bg-dark-background flex items-center justify-center p-4">
@@ -63,7 +66,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onBackToSite }) => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full px-4 py-2 bg-slate-200 dark:bg-slate-700 border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
-                                placeholder="e.g., admin@college.com"
+                                placeholder="e.g., badebauji@mld.com"
+                                autoComplete="username"
                             />
                         </div>
                         <div className="mb-6">
@@ -77,6 +81,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onBackToSite }) => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full px-4 py-2 bg-slate-200 dark:bg-slate-700 border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
                                 placeholder="••••••••"
+                                autoComplete="current-password"
                             />
                         </div>
                         {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
@@ -88,12 +93,14 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onBackToSite }) => {
                         </button>
                     </form>
                     <div className="mt-6">
-                        <p className="text-center text-sm text-slate-500 dark:text-slate-500 mb-4">Or log in with a demo account:</p>
+                        <p className="text-center text-sm text-slate-500 dark:text-slate-500 mb-4">
+                            Or log in with a demo account (password: <code className="text-brand-orange">demo123</code>):
+                        </p>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {demoUsers.map(user => (
                                 <button
                                     key={user.role}
-                                    onClick={() => handleDemoLogin(user.role as UserRole)}
+                                    onClick={() => handleDemoLogin(user.role)}
                                     className="text-xs text-center py-2 px-1 border border-light-border dark:border-dark-border rounded-md text-light-textSecondary dark:text-dark-textSecondary hover:bg-slate-100 dark:hover:bg-slate-700 transition"
                                 >
                                     {user.role}

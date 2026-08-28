@@ -149,7 +149,7 @@ export const BackToTop: React.FC = () => {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Back to top"
-      className="back-top fixed bottom-6 right-6 z-50 inline-flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-2xl shadow-brand-orange/40 hover:shadow-brand-orange/60 hover:scale-110 transition-all duration-300"
+      className="back-top fixed bottom-6 right-6 z-50 inline-flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-2xl shadow-brand-orange/40 hover:shadow-brand-orange/60 hover:scale-110 transition-all duration-300 pulse-ring"
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="18 15 12 9 6 15" />

@@ -7,7 +7,7 @@ import type { AuthEntry } from './db';
  * IMPORTANT: This is a DEMO. Passwords are stored in plaintext here so the
  * login form actually validates them (the previous code ignored the password
  * entirely — a release-blocking bug). In production, never ship plaintext
- * credentials: move auth to Firebase Auth (or any identity provider) and keep
+ * credentials: move auth to Supabase Auth (or any identity provider) and keep
  * only the token/session client-side. When the Firebase adapter lands, this
  * module is replaced by Firebase Auth; nothing else changes.
  */

@@ -1,13 +1,6 @@
 import React, { useMemo } from 'react';
-import type { Student, Fee, Faculty, Course } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
-
-interface ReportsViewProps {
-    students: Student[];
-    fees: Fee[];
-    faculty: Faculty[];
-    courses: Course[];
-}
+import { useCrm } from '../data/CrmProvider';
 
 const ChartCard: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
     <div className="bg-light-surface dark:bg-dark-surface p-6 rounded-2xl shadow-lg">
@@ -18,7 +11,8 @@ const ChartCard: React.FC<{ title: string; children: React.ReactNode }> = ({ tit
     </div>
 );
 
-const ReportsView: React.FC<ReportsViewProps> = ({ students, fees, faculty, courses }) => {
+const ReportsView: React.FC = () => {
+    const { students, fees, faculty, courses } = useCrm();
     const studentCourseData = useMemo(() => {
         const courseCounts: { [key: string]: number } = {};
         students.forEach(student => {

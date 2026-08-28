@@ -15,7 +15,7 @@ import {
  *
  * The demo keeps its data in the browser so that the CRM is genuinely usable:
  * adds, edits and deletes persist and survive a page refresh, without any
- * backend. When Firebase lands, swap this out for `firebaseAdapter` in
+ * backend. When Supabase lands, swap this out for `supabaseAdapter` in
  * `data/index.ts` — the rest of the app is unchanged.
  */
 

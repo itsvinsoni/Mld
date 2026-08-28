@@ -78,6 +78,7 @@ const Highlights: React.FC<{ p: ProgramDetail }> = ({ p }) => {
   const { ref, className } = useReveal('up');
   return (
     <section id="sec-highlights" ref={ref} className={`relative py-14 md:py-16 bg-[#F7F3EE] border-y border-slate-100 overflow-hidden ${className} section-anchor`}>
+      <div className="absolute inset-0 opacity-40 pointer-events-none" style={{ backgroundImage: 'radial-gradient(rgba(249,115,22,0.08) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {p.highlights.map((h, i) => (
@@ -650,7 +651,7 @@ const SectionNav: React.FC = () => {
   return (
     <nav
       aria-label="Section navigation"
-      className="sticky top-16 md:top-20 z-40 bg-white border-b border-slate-100 shadow-sm"
+      className="sticky top-16 md:top-20 z-40 bg-white/85 backdrop-blur-md border-b border-slate-100 shadow-sm"
     >
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto py-3 scrollbar-hide">

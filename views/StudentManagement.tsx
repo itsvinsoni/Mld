@@ -1,17 +1,31 @@
 import React, { useState } from 'react';
-import type { Student, UserRole } from '../types';
+import type { Student } from '../types';
 import { UserRole as Roles } from '../types';
 import { SearchIcon } from '../components/icons';
+import { Modal, ConfirmDialog, Field, fieldClass } from '../components/Modal';
+import { useCrm } from '../data/CrmProvider';
 
-interface StudentManagementProps {
-    students: Student[];
-    userRole: UserRole;
-}
+const emptyForm = {
+    name: '',
+    rollNo: '',
+    course: 'Computer Science',
+    batch: '2024',
+    admissionDate: '',
+    feeStatus: 'Pending' as Student['feeStatus'],
+    attendancePercentage: 90,
+    contact: '',
+};
 
-const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRole }) => {
+const StudentManagement: React.FC = () => {
+    const { students, courses, userRole, addStudent, updateStudent, deleteStudent } = useCrm();
     const [searchTerm, setSearchTerm] = useState('');
-    
+    const [modalOpen, setModalOpen] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [form, setForm] = useState({ ...emptyForm });
+    const [deleteTarget, setDeleteTarget] = useState<Student | null>(null);
+
     const canEdit = [Roles.ADMIN, Roles.MANAGER, Roles.HEAD].includes(userRole);
+    const canDelete = [Roles.ADMIN, Roles.MANAGER].includes(userRole);
 
     const filteredStudents = students.filter(student =>
         student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -27,6 +41,43 @@ const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRol
         }
     };
 
+    const openAdd = () => {
+        setEditingId(null);
+        setForm({ ...emptyForm, course: courses[0]?.name || 'Computer Science' });
+        setModalOpen(true);
+    };
+
+    const openEdit = (student: Student) => {
+        setEditingId(student.id);
+        setForm({
+            name: student.name,
+            rollNo: student.rollNo,
+            course: student.course,
+            batch: student.batch,
+            admissionDate: student.admissionDate,
+            feeStatus: student.feeStatus,
+            attendancePercentage: student.attendancePercentage,
+            contact: student.contact,
+        });
+        setModalOpen(true);
+    };
+
+    const handleSave = () => {
+        if (!form.name.trim() || !form.rollNo.trim()) return;
+        const payload = { ...form, name: form.name.trim(), rollNo: form.rollNo.trim(), booksIssued: [] };
+        if (editingId) {
+            updateStudent(editingId, payload);
+        } else {
+            addStudent(payload);
+        }
+        setModalOpen(false);
+    };
+
+    const handleDelete = () => {
+        if (deleteTarget) deleteStudent(deleteTarget.id);
+        setDeleteTarget(null);
+    };
+
     return (
         <div className="bg-light-surface dark:bg-dark-surface p-6 rounded-2xl shadow-lg">
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
@@ -39,11 +90,11 @@ const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRol
                             placeholder="Search students..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-700 border border-light-border dark:border-dark-border text-light-textPrimary dark:text-dark-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-orange"
+                            className={fieldClass}
                         />
                     </div>
                     {canEdit && (
-                        <button className="bg-brand-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-orange-dark transition duration-300 whitespace-nowrap">
+                        <button onClick={openAdd} className="bg-brand-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-orange-dark transition duration-300 whitespace-nowrap">
                             + Add Student
                         </button>
                     )}
@@ -80,16 +131,62 @@ const StudentManagement: React.FC<StudentManagementProps> = ({ students, userRol
                                 </td>
                                 <td className="px-6 py-4">{student.attendancePercentage}%</td>
                                 <td className="px-6 py-4">
-                                    <div className="flex items-center space-x-2">
-                                        <button className="text-blue-500 hover:underline text-xs">View</button>
-                                        {canEdit && <button className="text-brand-orange hover:underline text-xs">Edit</button>}
+                                    <div className="flex items-center space-x-3">
+                                        <button onClick={() => openEdit(student)} className="text-brand-orange hover:underline text-xs">Edit</button>
+                                        {canDelete && (
+                                            <button onClick={() => setDeleteTarget(student)} className="text-red-500 hover:underline text-xs">Delete</button>
+                                        )}
                                     </div>
                                 </td>
                             </tr>
                         ))}
+                        {filteredStudents.length === 0 && (
+                            <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">No students found.</td></tr>
+                        )}
                     </tbody>
                 </table>
             </div>
+
+            <Modal
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                title={editingId ? 'Edit Student' : 'Add Student'}
+                footer={
+                    <>
+                        <button onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition">Cancel</button>
+                        <button onClick={handleSave} className="bg-brand-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-orange-dark transition duration-300">Save</button>
+                    </>
+                }
+            >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Field label="Full Name"><input className={fieldClass} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. Priya Sharma" /></Field>
+                    <Field label="Roll No"><input className={fieldClass} value={form.rollNo} onChange={e => setForm({ ...form, rollNo: e.target.value })} placeholder="e.g. CS101" /></Field>
+                    <Field label="Course">
+                        <select className={fieldClass} value={form.course} onChange={e => setForm({ ...form, course: e.target.value })}>
+                            {courses.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                        </select>
+                    </Field>
+                    <Field label="Batch"><input className={fieldClass} value={form.batch} onChange={e => setForm({ ...form, batch: e.target.value })} /></Field>
+                    <Field label="Admission Date"><input type="date" className={fieldClass} value={form.admissionDate} onChange={e => setForm({ ...form, admissionDate: e.target.value })} /></Field>
+                    <Field label="Fee Status">
+                        <select className={fieldClass} value={form.feeStatus} onChange={e => setForm({ ...form, feeStatus: e.target.value as Student['feeStatus'] })}>
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Partial">Partial</option>
+                        </select>
+                    </Field>
+                    <Field label="Attendance %"><input type="number" min={0} max={100} className={fieldClass} value={form.attendancePercentage} onChange={e => setForm({ ...form, attendancePercentage: Number(e.target.value) })} /></Field>
+                    <Field label="Contact"><input className={fieldClass} value={form.contact} onChange={e => setForm({ ...form, contact: e.target.value })} placeholder="e.g. 555-0101" /></Field>
+                </div>
+            </Modal>
+
+            <ConfirmDialog
+                open={!!deleteTarget}
+                onClose={() => setDeleteTarget(null)}
+                onConfirm={handleDelete}
+                title="Delete Student"
+                message={`Delete ${deleteTarget?.name ?? 'this student'} permanently? This cannot be undone.`}
+            />
         </div>
     );
 };

@@ -26,7 +26,7 @@ export interface CrmData {
  * Add/Edit/Delete actually work and survive a page refresh.
  *
  * Later, when you want a real database, implement this same interface with a
- * Firebase/Firestore adapter (`data/firebaseAdapter.ts`) and choose it in
+ * Supabase/Postgres adapter (`data/supabaseAdapter.ts`) and choose it in
  * `data/index.ts`. Nothing else in the app needs to change, which is the whole
  * point of building the seam now rather than hard-wiring localStorage.
  *
@@ -44,8 +44,8 @@ export interface StorageAdapter {
 /**
  * SessionAdapter (auth-focused slice of the same seam)
  * ----------------------------------------------------
- * Keeps the logged-in user across refreshes. A future Firebase adapter can
- * back this with Firestore/Auth persistence instead of localStorage.
+ * Keeps the logged-in user across refreshes. A future Supabase adapter can
+ * back this with Supabase Auth persistence instead of localStorage.
  */
 export interface SessionStore {
     loadSession(): User | null;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export const PageHero: React.FC<{
   label: string;
@@ -8,14 +8,45 @@ export const PageHero: React.FC<{
   align?: 'center' | 'left';
   breadcrumb?: { label: string; href: string }[];
 }> = ({ label, title, subtitle, image, align = 'center', breadcrumb }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [mouse, setMouse] = useState({ x: 50, y: 50 });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    let mx = 50, my = 50;
+    const onMove = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      mx = ((e.clientX - r.left) / r.width) * 100;
+      my = ((e.clientY - r.top) / r.height) * 100;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        setMouse({ x: mx, y: my });
+        raf = 0;
+      });
+    };
+    el.addEventListener('mousemove', onMove, { passive: true });
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
   return (
-    <section className="relative pt-32 md:pt-40 pb-16 overflow-hidden text-white">
+    <section ref={ref} className="relative pt-32 md:pt-40 pb-16 overflow-hidden text-white">
       <div className="absolute inset-0">
-        <img src={image} alt="" className="w-full h-full object-cover" />
+        <img src={image} alt="" className="w-full h-full object-cover kenburns will-change-transform" />
         <div className="absolute inset-0 bg-slate-900/65" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/30 to-slate-900/65" />
-        {/* Single subtle orb */}
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-orange/20 blur-3xl pointer-events-none float-slow" />
+        {/* Mouse-follow glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(500px circle at ${mouse.x}% ${mouse.y}%, rgba(249,115,22,0.22), transparent 60%)`,
+          }}
+        />
+        {/* Orbs */}
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-orange/25 blur-3xl pointer-events-none float-slow gpu" />
+        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-amber-400/15 blur-3xl pointer-events-none float-lg gpu" />
       </div>
       <div
         className={`relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8 ${

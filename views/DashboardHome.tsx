@@ -1,15 +1,6 @@
 import React from 'react';
-import type { Student, Faculty, Notice, Fee, User } from '../types';
-import { UserRole } from '../types';
+import { useCrm } from '../data/CrmProvider';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-interface DashboardHomeProps {
-    students: Student[];
-    faculty: Faculty[];
-    notices: Notice[];
-    fees: Fee[];
-    user: User;
-}
 
 interface MetricCardProps {
     title: string;
@@ -25,21 +16,19 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, change }) => (
     </div>
 );
 
-const DashboardHome: React.FC<DashboardHomeProps> = ({ students, faculty, notices, fees, user }) => {
+const DashboardHome: React.FC = () => {
+    const { students, faculty, notices, fees, currentUser: user } = useCrm();
+
     const totalStudents = students.length;
     const totalFaculty = faculty.length;
     const totalFeesCollected = fees.reduce((acc, fee) => acc + fee.amountPaid, 0);
     const pendingDues = fees.reduce((acc, fee) => acc + fee.remainingDue, 0);
 
-    const visibleNotices = notices.filter(n => n.visibleTo.includes(user.role));
+    const visibleNotices = notices.filter(n => user && n.visibleTo.includes(user.role));
 
     const formatCurrencyShort = (amount: number) => {
-        if (amount >= 100000) {
-            return `₹${(amount / 100000).toFixed(1)}L`;
-        }
-        if (amount >= 1000) {
-            return `₹${(amount / 1000).toFixed(0)}k`;
-        }
+        if (amount >= 100000) return `₹${(amount / 100000).toFixed(1)}L`;
+        if (amount >= 1000) return `₹${(amount / 1000).toFixed(0)}k`;
         return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
     };
 
@@ -56,10 +45,12 @@ const DashboardHome: React.FC<DashboardHomeProps> = ({ students, faculty, notice
     const tickColor = theme === 'dark' ? '#94a3b8' : '#64748B';
     const gridColor = theme === 'dark' ? '#475569' : '#E2E8F0';
 
+    if (!user) return null;
+
     return (
         <div className="space-y-8">
             <h1 className="text-3xl font-bold text-light-textPrimary dark:text-dark-textPrimary">Welcome, {user.name.split(' ')[0]}!</h1>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <MetricCard title="Total Students" value={totalStudents} />
                 <MetricCard title="Total Faculty" value={totalFaculty} />
@@ -77,7 +68,7 @@ const DashboardHome: React.FC<DashboardHomeProps> = ({ students, faculty, notice
                                 <XAxis dataKey="name" tick={{ fill: tickColor }} />
                                 <YAxis tick={{ fill: tickColor }} />
                                 <Tooltip
-                                    cursor={{fill: 'rgba(125,125,125,0.1)'}}
+                                    cursor={{ fill: 'rgba(125,125,125,0.1)' }}
                                     contentStyle={{
                                         background: theme === 'dark' ? '#1f2937' : '#ffffff',
                                         border: `1px solid ${gridColor}`,
@@ -100,6 +91,9 @@ const DashboardHome: React.FC<DashboardHomeProps> = ({ students, faculty, notice
                                 <p className="text-xs text-brand-secondary">{notice.date}</p>
                             </div>
                         ))}
+                        {visibleNotices.length === 0 && (
+                            <p className="text-sm text-slate-500 dark:text-slate-400">No notices for your role.</p>
+                        )}
                     </div>
                 </div>
             </div>

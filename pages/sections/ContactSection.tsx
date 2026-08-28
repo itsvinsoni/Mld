@@ -20,7 +20,8 @@ export const ContactSection: React.FC = () => {
 
   return (
     <section id="contact" className="relative py-20 md:py-28 bg-[#F7F3EE] overflow-hidden">
-      <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
+      <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-slow gpu" />
+      <div className="absolute -bottom-32 left-0 h-72 w-72 rounded-full bg-amber-400/8 blur-3xl pointer-events-none float-lg gpu" />
       <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         {/* CTA banner */}
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white p-8 md:p-14 mb-16 shadow-2xl shadow-brand-orange/20">
@@ -110,7 +111,7 @@ export const ContactSection: React.FC = () => {
           <div className="bg-white rounded-3xl border border-slate-100 p-6 md:p-8 shadow-xl card-glow">
             {submitted ? (
               <div className="h-full min-h-[320px] flex flex-col items-center justify-center text-center scale-in">
-                <span className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-orange text-white mb-4 shadow-lg shadow-brand-orange/40">
+                <span className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-brand-orange text-white mb-4 shadow-lg shadow-brand-orange/40 pulse-glow">
                   <Icon id="check" size={32} />
                 </span>
                 <h3 className="font-serif text-2xl font-bold text-light-textPrimary">{t('contactPage.form.thanks', 'Thank you!')}</h3>

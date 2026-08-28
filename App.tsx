@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { User, UserRole } from './types';
-import { MOCK_USERS, MOCK_STUDENTS, MOCK_FACULTY, MOCK_NOTICES, MOCK_FEES, MOCK_COLLEGES, MOCK_COURSES, MOCK_BOOKS } from './constants';
+import type { UserRole } from './types';
 import LoginScreen from './components/Login';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -25,20 +24,31 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { ProgramDetailPage } from './pages/ProgramDetailPage';
 import { useRoute, getSegments, navigate, installLinkInterceptor } from './pages/router';
 import { LanguageProvider } from './pages/i18n';
+import { CrmProvider, useCrm } from './data/CrmProvider';
 // Ensure translations are registered
 import './pages/translations';
 
 type Theme = 'light' | 'dark';
 
-const App: React.FC = () => {
+const CrmApp: React.FC = () => {
     const route = useRoute();
     const segments = getSegments(route);
 
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const { currentUser, logout } = useCrm();
+
     const [activeView, setActiveView] = useState<string>('dashboard');
     const [isSidebarCollapsed, setSidebarCollapsed] = useState(true);
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [theme, setTheme] = useState<Theme>('light');
+
+    // Reset to the dashboard whenever a user signs in.
+    const wasLoggedIn = React.useRef(!!currentUser);
+    useEffect(() => {
+        if (currentUser && !wasLoggedIn.current) {
+            setActiveView('dashboard');
+        }
+        wasLoggedIn.current = !!currentUser;
+    }, [currentUser]);
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -58,20 +68,10 @@ const App: React.FC = () => {
         }
     }, [segments]);
 
-    const handleLogin = (email: string, pass: string): boolean => {
-        const user = MOCK_USERS.find(u => u.email === email);
-        if (user) {
-            // In a real app, you'd verify the password hash
-            setCurrentUser(user);
-            setActiveView('dashboard');
-            return true;
-        }
-        return false;
-    };
-
     const handleLogout = () => {
-        setCurrentUser(null);
+        logout();
         navigate('/');
+        setActiveView('dashboard');
     };
 
     const handleBackToSite = () => {
@@ -80,68 +80,52 @@ const App: React.FC = () => {
 
     const renderActiveView = () => {
         if (!currentUser) return null;
-
-        const sharedProps = {
-            students: MOCK_STUDENTS,
-            faculty: MOCK_FACULTY,
-            notices: MOCK_NOTICES,
-            fees: MOCK_FEES,
-            user: currentUser
-        };
-
         switch (activeView) {
-            case 'dashboard':
-                return <DashboardHome {...sharedProps} />;
-            case 'students':
-                return <StudentManagement students={MOCK_STUDENTS} userRole={currentUser.role} />;
-            case 'fees':
-                return <FeeManagement fees={MOCK_FEES} students={MOCK_STUDENTS} userRole={currentUser.role} />;
-            case 'colleges':
-                return <CollegeManagement colleges={MOCK_COLLEGES} userRole={currentUser.role} />;
-            case 'courses':
-                return <CourseManagement courses={MOCK_COURSES} userRole={currentUser.role} />;
-            case 'faculty':
-                return <FacultyManagement faculty={MOCK_FACULTY} userRole={currentUser.role} />;
-            case 'library':
-                return <LibraryManagement books={MOCK_BOOKS} students={MOCK_STUDENTS} userRole={currentUser.role} />;
-            case 'reports':
-                return <ReportsView students={MOCK_STUDENTS} fees={MOCK_FEES} faculty={MOCK_FACULTY} courses={MOCK_COURSES} />;
-            case 'settings':
-                return <SettingsView user={currentUser} />;
+            case 'dashboard': return <DashboardHome />;
+            case 'students': return <StudentManagement />;
+            case 'fees': return <FeeManagement />;
+            case 'colleges': return <CollegeManagement />;
+            case 'courses': return <CourseManagement />;
+            case 'faculty': return <FacultyManagement />;
+            case 'library': return <LibraryManagement />;
+            case 'reports': return <ReportsView />;
+            case 'settings': return <SettingsView />;
             default:
-                return <div className="p-6">
-                  <h1 className="text-2xl font-bold">Page not found</h1>
-                  <p>The view '{activeView}' is not yet implemented.</p>
-                </div>;
+                return (
+                    <div className="p-6">
+                        <h1 className="text-2xl font-bold">Page not found</h1>
+                        <p>The view '{activeView}' is not yet implemented.</p>
+                    </div>
+                );
         }
     };
 
     // -------- CRM / ADMIN (#/admin) --------
     if (segments[0] === 'admin') {
         if (!currentUser) {
-            return <LoginScreen onLogin={handleLogin} onBackToSite={handleBackToSite} />;
+            return <LoginScreen onBackToSite={handleBackToSite} />;
         }
         return (
             <div className="flex h-screen bg-light-background dark:bg-dark-background font-sans text-light-textPrimary dark:text-dark-textPrimary">
                 {isMobileMenuOpen && (
-                    <div 
+                    <div
                         className="fixed inset-0 bg-black/50 z-20 md:hidden"
                         onClick={() => setMobileMenuOpen(false)}
                     ></div>
                 )}
-                <Sidebar 
-                    userRole={currentUser.role} 
-                    activeView={activeView} 
-                    setActiveView={setActiveView} 
+                <Sidebar
+                    userRole={currentUser.role as UserRole}
+                    activeView={activeView}
+                    setActiveView={setActiveView}
                     isCollapsed={isSidebarCollapsed}
                     isMobileMenuOpen={isMobileMenuOpen}
                     setMobileMenuOpen={setMobileMenuOpen}
                     onLogout={handleLogout}
                 />
                 <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'}`}>
-                    <Header 
-                        userName={currentUser.name} 
-                        userRole={currentUser.role}
+                    <Header
+                        userName={currentUser.name}
+                        userRole={currentUser.role as UserRole}
                         isSidebarCollapsed={isSidebarCollapsed}
                         toggleSidebar={() => setSidebarCollapsed(!isSidebarCollapsed)}
                         toggleMobileNav={() => setMobileMenuOpen(!isMobileMenuOpen)}
@@ -181,5 +165,11 @@ const App: React.FC = () => {
 
     return <LanguageProvider><PublicLayout>{page}</PublicLayout></LanguageProvider>;
 };
+
+const App: React.FC = () => (
+    <CrmProvider>
+        <CrmApp />
+    </CrmProvider>
+);
 
 export default App;

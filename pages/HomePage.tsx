@@ -15,7 +15,9 @@ const InstitutionsPreview: React.FC = () => {
   const institutions = useInstitutions();
   return (
     <section className="relative py-20 md:py-28 bg-[#F7F3EE] overflow-hidden">
-      <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
+      <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-slow gpu" />
+      <div className="absolute inset-0 bg-dots-warm opacity-40 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none float-lg gpu" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading
           label={t('insts.label', 'Our Institutions')}
@@ -45,7 +47,9 @@ const AboutPreview: React.FC = () => {
   return (
     <section className="relative py-20 md:py-28 bg-white overflow-hidden">
       <div className="absolute inset-0" />
-      <div className="absolute -top-20 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
+      <div className="absolute -top-20 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-slow gpu" />
+      <div className="absolute inset-0 bg-dots-warm opacity-40 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none float-lg gpu" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div ref={ref} className={`relative ${className}`}>
@@ -60,7 +64,7 @@ const AboutPreview: React.FC = () => {
               <div className="absolute -bottom-4 -left-4 w-32 h-32 rounded-2xl border-2 border-brand-orange/40 -z-0" />
             </div>
             <div className="absolute -bottom-6 -right-3 float-slow z-10">
-              <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center">
+              <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center pulse-glow">
                 <div className="text-4xl font-serif font-bold">{ABOUT.badgeValue}</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-widest">{ABOUT.badgeLabel}</div>
               </div>
@@ -109,7 +113,8 @@ const GalleryPreview: React.FC = () => {
   const gallery = useGallery();
   return (
     <section className="relative py-20 md:py-28 bg-[#F7F3EE] overflow-hidden">
-      <div className="absolute -top-32 left-1/3 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
+      <div className="absolute -top-32 left-1/3 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-slow gpu" />
+      <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none float-lg gpu" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div>
@@ -163,12 +168,13 @@ const MessagesPreview: React.FC = () => {
   const first = messages[0];
   return (
     <section className="relative py-20 md:py-28 bg-slate-900 text-white overflow-hidden">
-      <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-brand-orange/15 blur-3xl float-slow" />
+      <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-brand-orange/15 blur-3xl float-slow gpu" />
+      <div className="absolute inset-0 bg-dots-dark opacity-30 pointer-events-none" />
       <div className="absolute inset-0" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <SectionHeading label={t('msg.label', 'Messages from Leadership')} heading={t('msg.heading', 'Voices of Leadership')} light />
         <div className="max-w-4xl mx-auto relative bg-white/[0.04] border border-white/10 rounded-3xl p-8 md:p-12 text-center overflow-hidden group hover:border-brand-orange/40 transition-colors duration-500">
-          <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl mx-auto mb-4">
+          <span className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white shadow-xl mx-auto mb-4 pulse-glow">
             <Icon id="quote" size={26} />
           </span>
           <div className="text-brand-orange text-xs font-bold uppercase tracking-widest">{first.headline}</div>
@@ -207,7 +213,8 @@ const ContactCta: React.FC = () => {
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white p-8 md:p-14 shadow-2xl shadow-brand-orange/20">
           <div className="absolute -right-10 -top-10 h-52 w-52 rounded-full bg-white/10 blur-2xl float-slow" />
           <div className="absolute right-20 bottom-0 h-28 w-28 rounded-full bg-white/10 blur-xl float-lg" />
-          <div className="absolute -left-20 top-1/2 h-40 w-40 rounded-full bg-amber-300/15 blur-3xl float-xl" />
+          <div className="absolute -left-20 top-1/2 h-40 w-40 rounded-full bg-amber-300/15 blur-3xl float-slow gpu" />
+          <div className="absolute right-10 -top-10 h-32 w-32 rounded-full bg-white/10 blur-2xl float-lg" />
           <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>

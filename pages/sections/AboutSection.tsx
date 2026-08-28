@@ -15,7 +15,9 @@ export const AboutSection: React.FC = () => {
     <section id="about" className="relative py-20 md:py-28 bg-white overflow-hidden">
       {/* Background ornaments */}
       <div className="absolute inset-0" />
-      <div className="absolute -top-20 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-xl" />
+      <div className="absolute -top-20 right-0 h-96 w-96 rounded-full bg-brand-orange/5 blur-3xl pointer-events-none float-slow gpu" />
+      <div className="absolute inset-0 bg-dots-warm opacity-40 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl pointer-events-none float-lg gpu" />
       <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Visual */}
@@ -34,7 +36,7 @@ export const AboutSection: React.FC = () => {
 
             {/* Floating badge */}
             <div className="absolute -bottom-6 -right-3 md:-right-6 float-slow z-10">
-              <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center">
+              <div className="bg-gradient-to-br from-brand-orange to-brand-orange-dark text-white rounded-3xl px-6 py-5 shadow-2xl text-center pulse-glow">
                 <div className="text-4xl font-serif font-bold">{ABOUT.badgeValue}</div>
                 <div className="mt-1 text-xs font-medium uppercase tracking-widest">
                   {ABOUT.badgeLabel}

@@ -6,7 +6,7 @@ import type { StorageAdapter, SessionStore } from './db';
  *
  * ⚠️ Live switch for the future database:
  *   const adapter = localStorageAdapter;                       // demo (now)
- *   const adapter = firebaseAdapter;                           // after Firebase lands
+ *   const adapter = supabaseAdapter;                           // after Supabase lands
  *
  * Both implement the same `StorageAdapter & SessionStore` interface, so the
  * store and every view keep working untouched.
@@ -17,4 +17,4 @@ export * from './db';
 export { localStorageAdapter } from './localStorageAdapter';
 export { seedData } from './localStorageAdapter';
 export { verifyCredentials, findUserByRole, toPublicUser, AUTH_CREDENTIALS } from './auth';
-export { firebaseAdapter } from './firebaseAdapter';
+export { supabaseAdapter } from './supabaseAdapter';
