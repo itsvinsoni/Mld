@@ -9,6 +9,8 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Cache node_modules between builds for faster deploy times.
-[[plugins]]
-  package = "@netlify/plugin-cache-npm"
+# NOTE: The previous `[[plugins]] @netlify/plugin-cache-npm` block was the cause
+# of the deploy failure. That package does NOT exist on the npm registry, so
+# Netlify could not resolve it. node_modules caching is an OPTIONAL performance
+# tweak (enable it in the Netlify site UI > Build & deploy > Caching) and is not
+# required for the build. Removing it lets `npm run build` run normally.

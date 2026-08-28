@@ -25,7 +25,7 @@ function gradeOf(percentage: number): string {
 const emptyForm = {
     name: '',
     rollNo: '',
-    course: 'Computer Science',
+    course: 'BCA (Computer Applications)',
     batch: '2024',
     admissionDate: '',
     feeStatus: 'Pending' as Student['feeStatus'],
@@ -61,7 +61,7 @@ const StudentManagement: React.FC = () => {
 
     const openAdd = () => {
         setEditingId(null);
-        setForm({ ...emptyForm, course: courses[0]?.name || 'Computer Science' });
+        setForm({ ...emptyForm, course: courses[0]?.name || 'BCA (Computer Applications)' });
         setModalOpen(true);
     };
 

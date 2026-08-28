@@ -5,7 +5,7 @@ import { SearchIcon } from '../components/icons';
 import { Modal, ConfirmDialog, Field, fieldClass } from '../components/Modal';
 import { useCrm } from '../data/CrmProvider';
 
-const emptyForm = { name: '', course: 'Computer Science', contact: '', syllabusProgress: 80 };
+const emptyForm = { name: '', course: 'BCA (Computer Applications)', contact: '', syllabusProgress: 80 };
 
 const FacultyManagement: React.FC = () => {
     const { faculty, courses, userRole, addFaculty, updateFaculty, deleteFaculty } = useCrm();
@@ -31,7 +31,7 @@ const FacultyManagement: React.FC = () => {
 
     const openAdd = () => {
         setEditingId(null);
-        setForm({ ...emptyForm, course: courses[0]?.name || 'Computer Science' });
+        setForm({ ...emptyForm, course: courses[0]?.name || 'BCA (Computer Applications)' });
         setModalOpen(true);
     };
 

@@ -122,7 +122,7 @@ const CourseManagement: React.FC = () => {
                 }
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Field label="Course Name"><input className={fieldClass} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. Computer Science" /></Field>
+                    <Field label="Course Name"><input className={fieldClass} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. BCA (Computer Applications)" /></Field>
                     <Field label="Code"><input className={fieldClass} value={form.code} onChange={e => setForm({ ...form, code: e.target.value })} placeholder="e.g. CSE" /></Field>
                     <Field label="Department"><input className={fieldClass} value={form.department} onChange={e => setForm({ ...form, department: e.target.value })} placeholder="e.g. Engineering" /></Field>
                     <Field label="Duration (Years)"><input type="number" min={1} className={fieldClass} value={form.durationYears} onChange={e => setForm({ ...form, durationYears: Number(e.target.value) })} /></Field>
