@@ -13,6 +13,8 @@ export const ContactPage: React.FC = () => {
         title={<>{t('contactPage.titlePre', 'Get in ')}<span className="text-orange-gradient">{t('contactPage.titleHi', 'Touch')}</span></>}
         subtitle={t('contactPage.sub', "Have a question about admissions, courses, or careers? We'd love to hear from you.")}
         image={HERO_IMAGES[1]}
+
+        breadcrumb={[{ label: t('bc.home', 'Home'), href: '/' }, { label: t('bc.contact', 'Contact'), href: '/contact' }]}
       />
 
       <ContactSection />

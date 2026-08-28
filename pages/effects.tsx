@@ -261,3 +261,95 @@ export function useScrollSpy(ids: string[], offset = 120) {
   }, [ids.join('|'), offset]);
   return active;
 }
+
+/* ===================== CustomCursor (desktop only) ===================== */
+export const CustomCursor: React.FC = () => {
+  const dotRef = useRef<HTMLDivElement | null>(null);
+  const ringRef = useRef<HTMLDivElement | null>(null);
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    // Only enable on devices with a fine pointer (desktop)
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(pointer: fine) and (hover: hover)');
+    setEnabled(mq.matches);
+    const onChange = () => setEnabled(mq.matches);
+    mq.addEventListener?.('change', onChange);
+    return () => mq.removeEventListener?.('change', onChange);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+    let dotX = 0, dotY = 0, ringX = 0, ringY = 0;
+    let mx = 0, my = 0;
+    let raf = 0;
+    const onMove = (e: MouseEvent) => { mx = e.clientX; my = e.clientY; };
+    window.addEventListener('mousemove', onMove);
+    const loop = () => {
+      dotX += (mx - dotX) * 0.7;
+      dotY += (my - dotY) * 0.7;
+      ringX += (mx - ringX) * 0.18;
+      ringY += (my - ringY) * 0.18;
+      if (dotRef.current) dotRef.current.style.transform = `translate3d(${dotX}px, ${dotY}px, 0)`;
+      if (ringRef.current) ringRef.current.style.transform = `translate3d(${ringX - 16}px, ${ringY - 16}px, 0)`;
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled) return;
+    const onOver = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      const isLink = t.closest('a, button, [data-hover]');
+      if (ringRef.current) {
+        if (isLink) ringRef.current.classList.add('cursor-grow');
+        else ringRef.current.classList.remove('cursor-grow');
+      }
+    };
+    document.addEventListener('mouseover', onOver);
+    return () => document.removeEventListener('mouseover', onOver);
+  }, [enabled]);
+
+  if (!enabled) return null;
+  return (
+    <>
+      <div
+        ref={dotRef}
+        className="custom-cursor-dot"
+        style={{ position: 'fixed', top: 0, left: 0, width: 6, height: 6, borderRadius: '50%', background: '#F97316', pointerEvents: 'none', zIndex: 9999, mixBlendMode: 'difference' }}
+      />
+      <div
+        ref={ringRef}
+        className="custom-cursor-ring"
+        style={{ position: 'fixed', top: 0, left: 0, width: 32, height: 32, borderRadius: '50%', border: '1.5px solid #F97316', pointerEvents: 'none', zIndex: 9998, transition: 'width 0.3s, height 0.3s, border-color 0.3s' }}
+      />
+      <style>{`
+        .custom-cursor-ring.cursor-grow { width: 56px !important; height: 56px !important; border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.08); }
+        @media (pointer: fine) and (hover: hover) { html, body { cursor: none; } a, button, [data-hover] { cursor: none; } }
+      `}</style>
+    </>
+  );
+};
+
+/* ===================== Preloader (initial shimmer) ===================== */
+export const Preloader: React.FC<{ done: boolean }> = ({ done }) => {
+  if (done) return null;
+  return (
+    <div className="fixed inset-0 z-[200] bg-[#F7F3EE] flex flex-col items-center justify-center pointer-events-none">
+      <div className="relative">
+        <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-brand-orange to-brand-orange-dark flex items-center justify-center text-white font-serif font-bold text-2xl shadow-2xl shadow-brand-orange/40 pulse-glow">
+          M
+        </div>
+        <div className="absolute -inset-2 rounded-3xl border-2 border-brand-orange/30 ring-spin" />
+      </div>
+      <div className="mt-6 w-32 h-1 rounded-full bg-slate-200 overflow-hidden">
+        <div className="h-full w-1/2 bg-gradient-to-r from-brand-orange to-brand-orange-dark rounded-full shimmer" style={{ backgroundSize: '200% 100%' }} />
+      </div>
+    </div>
+  );
+};

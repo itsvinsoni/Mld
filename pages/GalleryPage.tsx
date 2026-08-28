@@ -14,6 +14,8 @@ export const GalleryPage: React.FC = () => {
         title={<>{t('galleryPage.titlePre', 'Life at ')}<span className="text-orange-gradient">{t('galleryPage.titleHi', 'MLD Memorial Sansthan')}</span></>}
         subtitle={t('galleryPage.sub', 'Explore moments from our campuses, classrooms, laboratories, sports, and celebrations.')}
         image={HERO_IMAGES[4]}
+
+        breadcrumb={[{ label: t('bc.home', 'Home'), href: '/' }, { label: t('bc.gallery', 'Gallery'), href: '/gallery' }]}
       />
 
       <GallerySection />

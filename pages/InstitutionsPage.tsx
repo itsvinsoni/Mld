@@ -15,6 +15,8 @@ export const InstitutionsPage: React.FC = () => {
         title={<>{t('instsPage.titlePre', 'Discover Our ')}<span className="text-orange-gradient">{t('instsPage.titleHi', 'Institutions')}</span></>}
         subtitle={t('instsPage.sub', 'From schools to colleges and vocational institutes, explore every institution under the MLD Memorial Sansthan family.')}
         image={HERO_IMAGES[2]}
+
+        breadcrumb={[{ label: t('bc.home', 'Home'), href: '/' }, { label: t('bc.institutions', 'Institutions'), href: '/institutions' }]}
       />
 
       <InstitutionsSection />

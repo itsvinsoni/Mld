@@ -18,6 +18,8 @@ export const AboutPage: React.FC = () => {
         title={<>{t('aboutPage.headingPre', 'A Legacy of ')}<span className="text-orange-gradient">{t('aboutPage.headingHi', 'Quality Education')}</span></>}
         subtitle={ABOUT.paragraph}
         image={ABOUT_IMAGE}
+
+        breadcrumb={[{ label: t('bc.home', 'Home'), href: '/' }, { label: t('bc.about', 'About'), href: '/about' }]}
       />
 
       <AboutSection />

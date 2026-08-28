@@ -14,6 +14,8 @@ export const MessagesPage: React.FC = () => {
         title={<>{t('msgPage.titlePre', 'Voices of ')}<span className="text-orange-gradient">{t('msgPage.titleHi', 'Leadership')}</span></>}
         subtitle={t('msgPage.sub', 'Guidance and vision from the leaders who shape MLD Memorial Sansthan.')}
         image={HERO_IMAGES[6]}
+
+        breadcrumb={[{ label: t('bc.home', 'Home'), href: '/' }, { label: t('bc.messages', 'Messages'), href: '/messages' }]}
       />
 
       <MessagesSection />
